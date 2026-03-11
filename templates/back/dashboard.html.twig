@@ -1,0 +1,53 @@
+
+{% extends 'back/base.html.twig' %}
+
+{% block title %}Back-office - Carrosserie Lino{% endblock %}
+
+{% block back_content %}
+<h1 class="mb-4">Tableau de bord</h1>
+<p class="lead">Bienvenue, {{ app.user.nom|default(app.user.email) }}.</p>
+<p class="mb-4">
+    <a href="{{ path('app_logout') }}" class="btn btn-outline-primary">Voir le site (déconnexion)</a>
+</p>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Horaires</h5>
+                <p class="card-text">Gérer les horaires d'ouverture du garage.</p>
+                <a href="{{ path('app_back_horaires_index') }}" class="btn btn-primary">Gérer les horaires</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Avis clients</h5>
+                <p class="card-text">Ajouter et modifier les avis affichés sur le site.</p>
+                <a href="{{ path('app_back_avis_index') }}" class="btn btn-primary">Gérer les avis</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Messages</h5>
+                <p class="card-text">Messages à date bornée (ex. fermeture exceptionnelle).</p>
+                <a href="{{ path('app_back_message_index') }}" class="btn btn-primary">Gérer les messages</a>
+            </div>
+        </div>
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Utilisateurs</h5>
+                <p class="card-text">Gérer les comptes (admin, Propriétaire).</p>
+                <a href="{{ path('app_back_user_index') }}" class="btn btn-primary">Gérer les utilisateurs</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

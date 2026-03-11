@@ -1,0 +1,32 @@
+# Use the front controller as index file.
+DirectoryIndex index.php
+
+# Disabling MultiViews prevents unwanted negotiation.
+Options -MultiViews
+
+# Enable SymLinksIfOwnerMatch for RewriteRule
+<IfModule mod_rewrite.c>
+    Options +SymLinksIfOwnerMatch
+    RewriteEngine On
+
+    # Determine the RewriteBase automatically
+    RewriteCond %{REQUEST_URI}::$0 ^(/.+)/(.*)::\2$
+    RewriteRule .* - [E=BASE:%1]
+
+    # Sets the HTTP_AUTHORIZATION header removed by Apache
+    RewriteCond %{HTTP:Authorization} .+
+    RewriteRule ^ - [E=HTTP_AUTHORIZATION:%0]
+
+    # Redirect to URI without front controller to prevent duplicate content
+    RewriteCond %{ENV:REDIRECT_STATUS} =""
+    RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=308,L]
+
+    # If the requested filename exists, serve it. Otherwise rewrite to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ %{ENV:BASE}/index.php [L]
+</IfModule>
+
+# Fallback when mod_rewrite is not available
+<IfModule !mod_rewrite.c>
+    RedirectMatch 307 ^/$ /index.php/
+</IfModule>

@@ -1,0 +1,59 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}Modifier {{ horaires.jour|capitalize }} - Horaires{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block back_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Modifier les horaires — {{ horaires.jour|capitalize }}</h1>
+    <a href="{{ path('app_back_horaires_index') }}" class="btn btn-outline-secondary">
+        ← Retour aux horaires
+    </a>
+</div>
+
+{{ form_start(form, { 'attr': { 'class': 'needs-validation' } }) }}
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-success text-white py-3">
+        <h5 class="card-title mb-0">{{ horaires.jour|capitalize }}</h5>
+        <small class="opacity-75">Modifier les horaires d'ouverture pour ce jour</small>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-4">
+            <div class="col-12">
+                {{ form_row(form.jour, {
+                    'row_attr': { 'class': 'mb-0' },
+                    'attr': { 'class': 'form-select' }
+                }) }}
+                <small class="form-text text-muted">Le jour ne peut pas être modifié.</small>
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.heureDebut, {
+                    'row_attr': { 'class': 'mb-0' },
+                    'attr': { 'class': 'form-control' },
+                    'help': 'Heure d\'ouverture (vide si fermé)'
+                }) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.heureFin, {
+                    'row_attr': { 'class': 'mb-0' },
+                    'attr': { 'class': 'form-control' },
+                    'help': 'Heure de fermeture (vide si fermé)'
+                }) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.commentaire, {
+                    'row_attr': { 'class': 'mb-0' },
+                    'attr': { 'class': 'form-control', 'placeholder': 'Ex. : Fermé, Congés annuels, etc.', 'rows': 2 }
+                }) }}
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{{ path('app_back_horaires_index') }}" class="btn btn-outline-secondary">Annuler</a>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+{% endblock %}

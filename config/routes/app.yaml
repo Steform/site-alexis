@@ -1,0 +1,92 @@
+# Public
+app_home:
+  path: /
+  controller: App\Controller\Public\HomeController::index
+  methods: GET
+
+# Security
+app_login:
+  path: /login
+  controller: App\Controller\SecurityController::login
+  methods: [GET, POST]
+
+app_logout:
+  path: /logout
+  controller: App\Controller\SecurityController::logout
+  methods: GET
+
+# Back-office
+app_back_dashboard:
+  path: /back
+  controller: App\Controller\Back\DashboardController::index
+  methods: GET
+
+app_back_horaires_index:
+  path: /back/horaires
+  controller: App\Controller\Back\HorairesController::index
+  methods: GET
+
+app_back_horaires_edit:
+  path: /back/horaires/{id}/edit
+  controller: App\Controller\Back\HorairesController::edit
+  methods: [GET, POST]
+
+app_back_avis_index:
+  path: /back/avis
+  controller: App\Controller\Back\AvisController::index
+  methods: GET
+
+app_back_avis_new:
+  path: /back/avis/new
+  controller: App\Controller\Back\AvisController::new
+  methods: [GET, POST]
+
+app_back_avis_edit:
+  path: /back/avis/{id}/edit
+  controller: App\Controller\Back\AvisController::edit
+  methods: [GET, POST]
+
+app_back_avis_delete:
+  path: /back/avis/{id}/delete
+  controller: App\Controller\Back\AvisController::delete
+  methods: POST
+
+app_back_message_index:
+  path: /back/messages
+  controller: App\Controller\Back\MessageController::index
+  methods: GET
+
+app_back_message_new:
+  path: /back/messages/new
+  controller: App\Controller\Back\MessageController::new
+  methods: [GET, POST]
+
+app_back_message_edit:
+  path: /back/messages/{id}/edit
+  controller: App\Controller\Back\MessageController::edit
+  methods: [GET, POST]
+
+app_back_message_delete:
+  path: /back/messages/{id}/delete
+  controller: App\Controller\Back\MessageController::delete
+  methods: POST
+
+app_back_user_index:
+  path: /back/users
+  controller: App\Controller\Back\UserController::index
+  methods: GET
+
+app_back_user_new:
+  path: /back/users/new
+  controller: App\Controller\Back\UserController::new
+  methods: [GET, POST]
+
+app_back_user_edit:
+  path: /back/users/{id}/edit
+  controller: App\Controller\Back\UserController::edit
+  methods: [GET, POST]
+
+app_back_user_delete:
+  path: /back/users/{id}/delete
+  controller: App\Controller\Back\UserController::delete
+  methods: POST

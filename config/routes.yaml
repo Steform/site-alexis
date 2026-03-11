@@ -1,0 +1,4 @@
+# https://symfony.com/doc/current/routing.html
+app:
+  resource: routes/
+  type: directory

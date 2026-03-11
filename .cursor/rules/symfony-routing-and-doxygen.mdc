@@ -1,0 +1,36 @@
+---
+description: Centraliser les routes Symfony et utiliser Doxygen pour la documentation PHP
+alwaysApply: true
+---
+
+## Centralisation des routes Symfony
+
+- **Déclaration des routes**  
+  - Déclarer **toutes les routes applicatives Symfony** dans les fichiers YAML de configuration, **pas** via les attributs `#[Route]` dans les contrôleurs.
+  - Utiliser un fichier dédié pour les routes applicatives (`config/routes/app.yaml`) et regrouper les routes par domaine (public, sécurité, back-office, etc.).
+  - Laisser les routes techniques fournies par Symfony ou les bundles (`web_profiler`, erreurs, sécurité, etc.) dans les fichiers dédiés du dossier `config/routes/` (par exemple `web_profiler.yaml`, `framework.yaml`, `security.yaml`).
+
+- **Évolution du routage**  
+  - Lors de la création d’un nouveau contrôleur ou d’une nouvelle action, **ajouter systématiquement** la route correspondante dans le fichier de routes centralisé approprié (par exemple `config/routes/app.yaml`) en respectant la convention existante (noms de routes, préfixes, ordre pour les routes avec paramètres).
+  - Ne jamais réintroduire d’attributs `#[Route]` dans les contrôleurs de ce projet.
+
+## Documentation Doxygen pour le code PHP
+
+- **Utilisation systématique de Doxygen**  
+  - Toutes les **nouvelles fonctions** et **nouvelles méthodes** PHP doivent être documentées avec un bloc Doxygen complet immédiatement au-dessus de leur définition.
+  - Le bloc Doxygen doit au minimum inclure :
+    - `@brief` pour décrire le rôle de la fonction.
+    - Un tag pour **chaque paramètre** (par exemple `@param`).
+    - Un tag pour la **valeur de retour** (par exemple `@return`), même si c’est `void`.
+    - `@date` avec la date de création de la fonction.
+    - `@author`
+
+- **Conventions de contenu**  
+  - **Langue** : le contenu des blocs Doxygen (descriptions, `@brief`, etc.) doit être rédigé **en anglais**.
+  - **Auteur** : utiliser systématiquement `Stephane H.` pour le tag d’auteur.
+  - **Nom de tags** : rester cohérent avec les tags déjà utilisés dans le projet (par exemple `@param type $name description`, `@return type description`).
+
+- **Gestion de la date dans Doxygen**  
+  - Lors de la création d’un nouveau bloc Doxygen, remplir le tag `@date` avec la **date système locale de la machine** au moment de l’écriture (format libre tant qu’il reste cohérent dans le projet, par exemple `2026-03-11`).
+  - Cette même convention (date système locale) s’applique lorsque la date est mentionnée dans d’éventuelles règles, documentations internes ou commentaires liés à Doxygen.
+

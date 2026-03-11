@@ -1,0 +1,52 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}Utilisateurs - Back-office{% endblock %}
+
+{% block back_content %}
+<h1 class="mb-4">Utilisateurs</h1>
+
+<p>
+    <a href="{{ path('app_back_user_new') }}" class="btn btn-primary">Créer un utilisateur</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.nom|default('—') }}</td>
+            <td>{{ u.email }}</td>
+            <td>
+                {% for role in u.roles %}
+                    {% if role == 'ROLE_ADMIN' %}
+                        <span class="badge bg-danger">Admin</span>
+                    {% elseif role == 'ROLE_PROPRIETAIRE' %}
+                        <span class="badge bg-primary">Propriétaire</span>
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                <a href="{{ path('app_back_user_edit', { id: u.id }) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                {% if u != app.user %}
+                <form method="post" action="{{ path('app_back_user_delete', { id: u.id }) }}" class="d-inline" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ u.id) }}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="text-muted">Aucun utilisateur.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

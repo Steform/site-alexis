@@ -1,0 +1,44 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}Avis - Back-office{% endblock %}
+
+{% block back_content %}
+<h1 class="mb-4">Avis clients</h1>
+
+<p>
+    <a href="{{ path('app_back_avis_new') }}" class="btn btn-primary">Ajouter un avis</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Auteur</th>
+            <th>Note</th>
+            <th>Date</th>
+            <th>Aperçu</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for a in avis %}
+        <tr>
+            <td>{{ a.auteur }}</td>
+            <td>{{ a.note }}/5</td>
+            <td>{{ a.date|date('d/m/Y') }}</td>
+            <td>{{ a.texte|slice(0, 50) }}{% if a.texte|length > 50 %}…{% endif %}</td>
+            <td>
+                <a href="{{ path('app_back_avis_edit', { id: a.id }) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                <form method="post" action="{{ path('app_back_avis_delete', { id: a.id }) }}" class="d-inline" onsubmit="return confirm('Supprimer cet avis ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ a.id) }}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" class="text-muted">Aucun avis.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

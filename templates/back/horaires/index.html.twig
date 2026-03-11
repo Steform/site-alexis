@@ -1,0 +1,32 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}Horaires - Back-office{% endblock %}
+
+{% block back_content %}
+<h1 class="mb-4">Horaires d'ouverture</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Jour</th>
+            <th>Heure d'ouverture</th>
+            <th>Heure de fermeture</th>
+            <th>Commentaire</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for h in horaires %}
+        <tr>
+            <td>{{ h.jour|capitalize }}</td>
+            <td>{{ h.heureDebut ? h.heureDebut|date('H:i') : '—' }}</td>
+            <td>{{ h.heureFin ? h.heureFin|date('H:i') : '—' }}</td>
+            <td>{{ h.commentaire|default('—') }}</td>
+            <td>
+                <a href="{{ path('app_back_horaires_edit', { id: h.id }) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

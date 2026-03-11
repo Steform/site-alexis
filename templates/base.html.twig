@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Carrosserie Lino - Baldersheim{% endblock %}</title>
+        {{ importmap('app') }}
+        <style>
+            :root {
+                --bs-body-bg: #f5f5fa;
+                --bs-body-color: #212529;
+            }
+            /* Fix Symfony Web Debug Toolbar display with Bootstrap */
+            #sf-toolbar,
+            .sf-toolbar {
+                z-index: 999999 !important;
+                position: fixed !important;
+            }
+            .sf-toolbar-icon svg {
+                vertical-align: baseline;
+            }
+        </style>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

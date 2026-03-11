@@ -1,0 +1,38 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}{{ user.id ? 'Modifier' : 'Nouvel' }} utilisateur - Back-office{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block back_content %}
+<h1 class="mb-4">{{ user.id ? 'Modifier l\'utilisateur' : 'Créer un utilisateur' }}</h1>
+
+{{ form_start(form) }}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-6">
+                {{ form_row(form.nom) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.email) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.roles) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.plainPassword.first) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.plainPassword.second) }}
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{{ path('app_back_user_index') }}" class="btn btn-outline-secondary">Annuler</a>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+{% endblock %}
