@@ -38,6 +38,15 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Galerie</h5>
+                <p class="card-text">Gérer les images de la galerie du site.</p>
+                <a href="{{ path('app_back_gallery_index') }}" class="btn btn-primary">Gérer la galerie</a>
+            </div>
+        </div>
+    </div>
     {% if is_granted('ROLE_ADMIN') %}
     <div class="col-md-4">
         <div class="card h-100">

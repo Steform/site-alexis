@@ -50,4 +50,14 @@
     array (
     ),
   ),
+  'stuslider' => 
+  array (
+    'version' => '0.5.3',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
 );

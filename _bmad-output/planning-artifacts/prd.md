@@ -110,6 +110,10 @@ Refondre le site de la **Carrosserie Lino** (Baldersheim) pour qu'il porte la **
 - **i18n :** Structure multilingue en place dès le MVP (Symfony i18n, locales). Contenu rédigé d'abord en français ; traduction (ex. allemand) prévue dans la foulée à chaque création ou mise à jour de contenu.
 - Stack : Symfony 8+, hébergement adapté, envoi d'emails opérationnel.
 
+### Pages à créer
+
+- **Mentions légales** : page `/mentions-legales` (lien dans le footer après « Baldersheim »). Contenu à rédiger ultérieurement.
+
 ### Growth Features (Post-MVP)
 
 - SEO local (baldage, microdonnées), y compris par langue (FR / DE).

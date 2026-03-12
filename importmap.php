@@ -35,4 +35,7 @@ return [
         'version' => '5.3.8',
         'type' => 'css',
     ],
+    'stuslider' => [
+        'version' => '0.5.3',
+    ],
 ];

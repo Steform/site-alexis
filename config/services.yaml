@@ -7,6 +7,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    mailer.from: '%env(MAILER_FROM)%'
+    devis.email_receiver: '%env(DEVIS_EMAIL_RECEIVER)%'
 
 services:
     # default configuration for services in *this* file

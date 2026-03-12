@@ -4,6 +4,26 @@ app_home:
   controller: App\Controller\Public\HomeController::index
   methods: GET
 
+app_devis:
+  path: /devis
+  controller: App\Controller\Public\DevisController::index
+  methods: [GET, POST]
+
+app_gallery:
+  path: /galerie
+  controller: App\Controller\Public\GalleryController::index
+  methods: GET
+
+app_mentions_legales:
+  path: /mentions-legales
+  controller: App\Controller\Public\MentionsLegalesController::index
+  methods: GET
+
+app_qui_sommes_nous:
+  path: /qui-sommes-nous
+  controller: App\Controller\Public\QuiSommesNousController::index
+  methods: GET
+
 # Security
 app_login:
   path: /login
@@ -89,4 +109,24 @@ app_back_user_edit:
 app_back_user_delete:
   path: /back/users/{id}/delete
   controller: App\Controller\Back\UserController::delete
+  methods: POST
+
+app_back_gallery_index:
+  path: /back/galerie
+  controller: App\Controller\Back\GalleryController::index
+  methods: GET
+
+app_back_gallery_new:
+  path: /back/galerie/new
+  controller: App\Controller\Back\GalleryController::new
+  methods: [GET, POST]
+
+app_back_gallery_edit:
+  path: /back/galerie/{id}/edit
+  controller: App\Controller\Back\GalleryController::edit
+  methods: [GET, POST]
+
+app_back_gallery_delete:
+  path: /back/galerie/{id}/delete
+  controller: App\Controller\Back\GalleryController::delete
   methods: POST

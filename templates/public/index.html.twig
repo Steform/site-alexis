@@ -1,10 +1,378 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Carrosserie Lino - Baldersheim{% endblock %}
+{% block title %}Carrosserie Lino - Baldersheim | Réparation & Peinture auto{% endblock %}
+
+{% block stylesheets %}
+<style>
+:root {
+    --cl-primary: #1f417f;
+    --cl-primary-light: #4a90e2;
+    --cl-navy: #162047;
+}
+.contact-bar {
+    background: var(--cl-navy);
+    color: rgba(255,255,255,0.9);
+    font-size: 0.9rem;
+}
+.contact-bar a { color: inherit; text-decoration: none; }
+.navbar-main { background: #fff !important; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+[data-theme="dark"] .navbar-main { background: #252830 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+.navbar-main .nav-link {
+    color: #555 !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    border-left: 1px solid #ddd;
+}
+.navbar-main .nav-item:first-child .nav-link { border-left: none; padding-left: 0 !important; }
+.navbar-main .nav-link:hover { color: var(--cl-primary-light) !important; }
+.navbar-main .nav-link.active {
+    color: var(--cl-primary-light) !important;
+    border-bottom: 2px solid var(--cl-primary-light);
+    padding-bottom: 0.25rem;
+}
+[data-theme="dark"] .navbar-main .nav-link { color: #a0a5b0 !important; border-left-color: #3a3f4a; }
+[data-theme="dark"] .navbar-main .nav-link:hover { color: #6eb5ff !important; }
+[data-theme="dark"] .navbar-main .nav-link.active { color: #6eb5ff !important; border-bottom-color: #6eb5ff; }
+.btn-darkmode {
+    background: transparent;
+    border: 1px solid #ddd;
+    color: #555;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-darkmode:hover { background: #f5f5f5; color: #333; }
+[data-theme="dark"] .btn-darkmode { border-color: #4a4f58; color: #a0a5b0; }
+[data-theme="dark"] .btn-darkmode:hover { background: #2d3139; color: #e4e6eb; }
+.btn-devis { background: linear-gradient(135deg, #4a90e2, #357abd); color: #fff !important; border: none; font-weight: 600; padding: 0.5rem 1.25rem; }
+.btn-devis:hover { background: linear-gradient(135deg, #357abd, #2a6ba0); color: #fff !important; }
+.hero-section {
+    position: relative;
+    min-height: 450px;
+    background: url('{{ asset('images/top.png') }}') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+}
+.hero-section h1 { font-size: 2.5rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+.hero-section .lead { font-size: 1.1rem; opacity: 0.95; }
+.alert-message { background: #dc3545; color: #fff; border: none; }
+.section-title { font-size: 1.75rem; font-weight: 700; color: #333; letter-spacing: 0.05em; }
+[data-theme="dark"] .section-title { color: #e4e6eb; }
+.section-title::before, .section-title::after { content: ''; display: inline-block; width: 60px; height: 2px; background: var(--cl-primary-light); vertical-align: middle; margin: 0 1rem; }
+.card-service { border: 1px solid #e9ecef; transition: box-shadow 0.2s; }
+.card-service:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+[data-theme="dark"] .card-service { border-color: #3a3f4a; background: #252830; }
+[data-theme="dark"] .card-service:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.card-service .card-title { color: var(--cl-navy); font-weight: 600; }
+[data-theme="dark"] .card-service .card-title { color: #6eb5ff; }
+.card-img-overlay-dark { background: linear-gradient(to top, rgba(22,32,71,0.9), transparent 60%); }
+.footer-top { background: var(--cl-navy); color: #fff; }
+.footer-bottom { background: #2c3e50; color: rgba(255,255,255,0.8); font-size: 0.9rem; }
+.footer-bottom a { color: rgba(255,255,255,0.9); }
+.testimonial-section {
+    background: linear-gradient(160deg, #f0f8ff 0%, #e8f4fc 35%, #dceef8 70%, #c8e4f5 100%);
+    background-attachment: local;
+    position: relative;
+    overflow: hidden;
+}
+.testimonial-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 100'%3E%3Cpath fill='none' stroke='rgba(74,144,226,0.08)' stroke-width='0.5' d='M0,50 Q100,30 200,50 T400,50'/%3E%3Cpath fill='none' stroke='rgba(74,144,226,0.06)' stroke-width='0.5' d='M0,60 Q100,40 200,60 T400,60'/%3E%3Cpath fill='none' stroke='rgba(74,144,226,0.05)' stroke-width='0.5' d='M0,70 Q150,50 300,70'/%3E%3C/svg%3E") repeat-x;
+    opacity: 0.9;
+    pointer-events: none;
+}
+.avis-quote-icon {
+    font-size: 3.5rem;
+    color: var(--cl-primary-light);
+    line-height: 1;
+    font-family: Georgia, serif;
+}
+.avis-slide .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    padding: 2rem;
+}
+.avis-slide .card-text {
+    font-size: 1.15rem;
+    color: #2c3e50;
+    max-width: 85%;
+}
+.avis-slide .avis-author {
+    color: #34495e;
+    font-size: 0.95rem;
+}
+[data-theme="dark"] .testimonial-section {
+    background: linear-gradient(160deg, #1e2530 0%, #252830 35%, #2a3040 70%, #1e2530 100%);
+}
+[data-theme="dark"] .testimonial-section::before { opacity: 0.3; }
+[data-theme="dark"] .avis-slide .card-text { color: #d0d5dc; }
+[data-theme="dark"] .avis-slide .avis-author { color: #a0a5b0; }
+.section-alt-bg { background: #f5f5fa; }
+[data-theme="dark"] .section-alt-bg { background: #1a1d23 !important; }
+[data-theme="dark"] .navbar-toggler { border-color: #4a4f58; }
+[data-theme="dark"] .navbar-toggler-icon { filter: invert(1); }
+</style>
+{% endblock %}
 
 {% block body %}
-<div class="container py-5">
-    <h1 class="display-4">Carrosserie Lino</h1>
-    <p class="lead">Baldersheim — À votre service depuis 2007</p>
+{# Messages à date bornée (affichage rouge) #}
+{% for message in messages %}
+<div class="alert alert-message alert-dismissible fade show rounded-0 mb-0 text-center" role="alert">
+    <strong>{{ message.contenu }}</strong>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Fermer"></button>
 </div>
+{% endfor %}
+
+{# Barre contact #}
+<div class="contact-bar py-2">
+    <div class="container">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-auto d-flex flex-wrap gap-4">
+                <span>📍 Baldersheim</span>
+                <a href="tel:0389572828">📞 03 89 57 28 28</a>
+                <span>
+                    🕐 {% if horaires|length > 0 %}
+                        {% set first = horaires|first %}
+                        {% if first.heureDebut and first.heureFin %}
+                            Lun - Ven : {{ first.heureDebut|date('H') }}h{{ first.heureDebut|date('i') != '00' ? first.heureDebut|date('i') : '' }} - {{ first.heureFin|date('H') }}h{{ first.heureFin|date('i') != '00' ? first.heureFin|date('i') : '' }}
+                        {% else %}
+                            Horaires variables
+                        {% endif %}
+                    {% else %}
+                        Lun - Ven : 8h - 12h / 14h - 18h
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Navigation principale (structure maquette : liens uppercase, séparateurs verticaux) #}
+<nav class="navbar navbar-expand-lg navbar-main py-3">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_home') }}">
+            <img src="{{ asset('images/logo.svg') }}" alt="Carrosserie Lino" height="50">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMain">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link active" href="{{ path('app_home') }}">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_qui_sommes_nous') }}">Qui sommes-nous</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">Nos services</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_gallery') }}">Galerie</a></li>
+                <li class="nav-item"><a class="nav-link" href="#avis">Avis clients</a></li>
+                <li class="nav-item ms-2">
+                    <a class="btn btn-devis rounded-pill" href="{{ path('app_devis') }}">Devis rapide</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{# Hero #}
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <p class="text-uppercase mb-2 opacity-90" style="font-size: 0.9rem; letter-spacing: 0.15em;">Expérimentés & professionnels</p>
+                <h1 class="text-white mb-3">Carrosserie & réparation auto</h1>
+                <p class="lead text-white mb-4">À votre service depuis 2007</p>
+                <a class="btn btn-devis btn-lg rounded-pill" href="{{ path('app_devis') }}">Obtenez un devis</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# 3 cartes services rapides #}
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card card-service h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3" style="font-size: 3rem;">🚗</div>
+                        <h5 class="card-title">Réparation carrosserie</h5>
+                        <p class="card-text text-muted">Choc, rayures, débosselage</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-service h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3" style="font-size: 3rem;">🪟</div>
+                        <h5 class="card-title">Remplacement pare-brise</h5>
+                        <p class="card-text text-muted">Vitrages & optiques</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-service h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3" style="font-size: 3rem;">🔧</div>
+                        <h5 class="card-title">Entretien & mécanique</h5>
+                        <p class="card-text text-muted">Révision & pneumatiques</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Qui sommes-nous - Identité Alexis Haffner #}
+<section id="qui-sommes-nous" class="py-5 section-alt-bg">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6">
+                <h2 class="section-title mb-4">Qui sommes-nous ?</h2>
+                <p class="fw-bold text-dark mb-2">Alexis Haffner, carrossier à Baldersheim.</p>
+                <p class="text-muted mb-3">Alexis travaille avec son père dans une entreprise familiale. Expertise en réparation, peinture et entretien pour tous véhicules. Travail soigné, équipe à l'écoute et solutions rapides depuis 2007.</p>
+                <a class="btn btn-devis rounded-pill" href="{{ path('app_qui_sommes_nous') }}">Découvrir notre équipe</a>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800" alt="Carrosserie Lino - Garage" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Nos services (4 cartes avec images) #}
+<section id="services" class="py-5 bg-white">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Nos services</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 overflow-hidden shadow-sm h-100">
+                    <img src="https://images.unsplash.com/photo-1551524559-8af4e6624178?w=400" class="card-img-top" alt="Réparation & Peinture" style="height: 200px; object-fit: cover;">
+                    <div class="card-img-overlay card-img-overlay-dark d-flex align-items-end">
+                        <h5 class="card-title text-white mb-0">Réparation & Peinture</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 overflow-hidden shadow-sm h-100">
+                    <img src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=400" class="card-img-top" alt="Débosselage" style="height: 200px; object-fit: cover;">
+                    <div class="card-img-overlay card-img-overlay-dark d-flex align-items-end">
+                        <h5 class="card-title text-white mb-0">Débosselage</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 overflow-hidden shadow-sm h-100">
+                    <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400" class="card-img-top" alt="Pare-brise & Vitrages" style="height: 200px; object-fit: cover;">
+                    <div class="card-img-overlay card-img-overlay-dark d-flex align-items-end">
+                        <h5 class="card-title text-white mb-0">Pare-brise & Vitrages</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 overflow-hidden shadow-sm h-100">
+                    <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400" class="card-img-top" alt="Véhicules de courtoisie" style="height: 200px; object-fit: cover;">
+                    <div class="card-img-overlay card-img-overlay-dark d-flex align-items-end">
+                        <h5 class="card-title text-white mb-0">Véhicules de courtoisie</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a class="btn btn-devis rounded-pill" href="{{ path('app_devis') }}">Découvrir tous nos services</a>
+        </div>
+    </div>
+</section>
+
+{# Avis clients - StuSlider structure per README #}
+<section id="avis" class="py-5 testimonial-section">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Avis clients</h2>
+        {% if avis|length > 0 %}
+        <div class="avis-slider-wrapper mx-auto" style="width: 75%; min-height: 280px;">
+        <div class="avis-slider-container">
+            <div class="avis-slider">
+                {% for a in avis %}
+                <div class="avis-slide">
+                    <div class="card border-0 shadow-none bg-transparent h-100">
+                        <div class="card-body text-center">
+                            <div class="avis-quote-icon mb-2">"</div>
+                            <p class="card-text fst-italic mb-2">{{ a.texte }}</p>
+                            <p class="avis-author fst-italic mb-0">— {{ a.auteur }}, {{ a.date|date('d/m/Y') }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        </div>
+        {% else %}
+        {# Témoignage par défaut (maquette) #}
+        <div class="text-center py-5">
+            <div class="avis-quote-icon mb-2">"</div>
+            <p class="fs-5 fst-italic text-dark mb-2">Travail toujours impeccable, on peut avoir confiance !</p>
+            <p class="avis-author fst-italic">— Pierre M.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{# CTA Devis #}
+<section id="devis" class="py-5 bg-white">
+    <div class="container text-center">
+        <h2 class="section-title mb-3">Demander un devis</h2>
+        <p class="text-muted mb-4">Remplissez notre formulaire en ligne ou appelez-nous au <a href="tel:0389572828" class="fw-bold">03 89 57 28 28</a></p>
+        <a href="{{ path('app_devis') }}" class="btn btn-devis btn-lg rounded-pill">Demander un devis</a>
+    </div>
+</section>
+
+{# Footer #}
+<footer class="footer-top py-4">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <p class="mb-0">🛡️ Assurance & Expertises</p>
+            </div>
+            <div class="col-md-4">
+                <p class="mb-0">🚗 Véhicules toutes marques</p>
+            </div>
+            <div class="col-md-4">
+                <p class="mb-0">🔑 Prêt de voiture</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<footer class="footer-bottom py-3">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span>© {{ 'now'|date('Y') }} Carrosserie Lino - Baldersheim | <a href="{{ path('app_mentions_legales') }}" class="text-decoration-none">Mentions légales</a></span>
+            <div>
+                <a href="#" class="me-3" aria-label="Facebook">f</a>
+                <a href="#" aria-label="Instagram">📷</a>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% if avis|length > 0 %}
+<script type="module">
+    import { StuSlider } from 'https://cdn.jsdelivr.net/npm/stuslider@0.5.3/dist/stuslider.js';
+    const avisContainer = document.querySelector('.avis-slider-container');
+    if (avisContainer) {
+        const slider = new StuSlider('avis', 10000, '100%', '280px', false, false, false, false);
+        slider.initialize();
+    }
+</script>
+{% endif %}
 {% endblock %}

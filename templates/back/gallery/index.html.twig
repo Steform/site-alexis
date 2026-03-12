@@ -1,0 +1,43 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}Galerie - Back-office{% endblock %}
+
+{% block back_content %}
+<h1 class="mb-4">Galerie</h1>
+
+<p>
+    <a href="{{ path('app_back_gallery_new') }}" class="btn btn-primary">Ajouter une image</a>
+</p>
+
+<div class="row g-3">
+    {% for item in items %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+            {% if item.image %}
+            <img src="{{ asset(item.image) }}" class="card-img-top" alt="{{ item.titre }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                <span class="text-white">Pas d'image</span>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ item.titre }}</h5>
+                <p class="card-text text-muted small">{{ (item.description|default('—'))|slice(0, 80) }}{% if (item.description|default(''))|length > 80 %}…{% endif %}</p>
+                <p class="text-muted small mb-0">Ordre : {{ item.ordre }}</p>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{{ path('app_back_gallery_edit', { id: item.id }) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                <form method="post" action="{{ path('app_back_gallery_delete', { id: item.id }) }}" class="d-inline" onsubmit="return confirm('Supprimer cet élément ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info">Aucun élément dans la galerie. Ajoutez des images pour les afficher sur le site.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

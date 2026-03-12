@@ -4,12 +4,30 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Carrosserie Lino - Baldersheim{% endblock %}</title>
+        <script>
+            (function(){var s=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',s||(d?'dark':'light'));})();
+        </script>
         {{ importmap('app') }}
         <style>
-            :root {
+            :root, [data-theme="light"] {
                 --bs-body-bg: #f5f5fa;
                 --bs-body-color: #212529;
             }
+            [data-theme="dark"] {
+                --bs-body-bg: #1a1d23;
+                --bs-body-color: #e4e6eb;
+            }
+            [data-theme="dark"] .bg-white { background-color: #252830 !important; }
+            [data-theme="dark"] .text-dark { color: #e4e6eb !important; }
+            [data-theme="dark"] .text-muted { color: #a0a5b0 !important; }
+            [data-theme="dark"] .card { background-color: #252830; border-color: #3a3f4a; }
+            [data-theme="dark"] .table { color: #e4e6eb; }
+            [data-theme="dark"] .table-light { background-color: #2d3139; color: #e4e6eb; }
+            [data-theme="dark"] .form-control, [data-theme="dark"] .form-select { background-color: #252830; border-color: #3a3f4a; color: #e4e6eb; }
+            .btn-darkmode{background:transparent;border:1px solid #ddd;color:#555;padding:.35rem .6rem;border-radius:.375rem;cursor:pointer;transition:background .2s,color .2s}
+            .btn-darkmode:hover{background:#f5f5f5;color:#333}
+            [data-theme="dark"] .btn-darkmode{border-color:#4a4f58;color:#a0a5b0}
+            [data-theme="dark"] .btn-darkmode:hover{background:#2d3139;color:#e4e6eb}
             /* Fix Symfony Web Debug Toolbar display with Bootstrap */
             #sf-toolbar,
             .sf-toolbar {
@@ -24,6 +42,10 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+        <button type="button" class="btn btn-darkmode position-fixed bottom-0 end-0 m-3 shadow" id="btn-darkmode" aria-label="Passer en mode sombre" title="Passer en mode sombre" style="z-index: 1000;">🌙</button>
         {% block javascripts %}{% endblock %}
+        <script>
+            document.addEventListener('DOMContentLoaded',function(){var btn=document.getElementById('btn-darkmode');if(btn){function updateBtn(){var t=document.documentElement.getAttribute('data-theme');btn.textContent=t==='dark'?'☀️':'🌙';btn.setAttribute('aria-label',t==='dark'?'Passer en mode clair':'Passer en mode sombre');btn.setAttribute('title',t==='dark'?'Passer en mode clair':'Passer en mode sombre');}updateBtn();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('theme',n);updateBtn();};}});
+        </script>
     </body>
 </html>
