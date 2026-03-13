@@ -5,6 +5,7 @@ nav.gallery: "Galerie"
 nav.reviews: "Kundenbewertungen"
 nav.quote: "Schnelle Offerte"
 nav.menu: "Menü"
+nav.lang_selector_label: "Sprachauswahl"
 
 home.title: "Carrosserie Lino - Baldersheim | Karosserie & Lackierung"
 home.hero.ribbon: "Erfahren & professionell"
@@ -97,6 +98,8 @@ mentions.placeholder: "Inhalt folgt."
 auth.login.title: "Anmeldung"
 auth.logout.see_site: "Website anzeigen (Abmeldung)"
 auth.login.password: "Passwort"
+
+front.common.close: "Schließen"
 
 hours.title: "Unsere Öffnungszeiten"
 hours.empty: "Öffnungszeiten bald verfügbar."

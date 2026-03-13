@@ -49,7 +49,7 @@ class DevisController extends AbstractController
 
             $mailer->send($email);
 
-            $this->addFlash('success', 'Votre demande de devis a bien été envoyée. Nous vous recontacterons rapidement.');
+            $this->addFlash('success', $this->trans('devis.flash.success'));
 
             return $this->redirectToRoute('app_devis');
         }

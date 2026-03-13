@@ -35,7 +35,7 @@
                 </li>
                 <li class="nav-item ms-3">
                     {% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
-                    <div class="btn-group btn-group-sm" role="group" aria-label="Sélecteur de langue">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'nav.lang_selector_label'|trans }}">
                         <a href="{{ path('app_switch_locale', { locale: 'fr' }) }}"
                            class="btn {{ currentLocale == 'fr' ? 'btn-primary' : 'btn-outline-primary' }}">
                             FR
