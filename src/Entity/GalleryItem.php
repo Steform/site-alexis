@@ -24,8 +24,14 @@ class GalleryItem
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $titreDe = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptionDe = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
@@ -58,6 +64,30 @@ class GalleryItem
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getTitreDe(): ?string
+    {
+        return $this->titreDe;
+    }
+
+    public function setTitreDe(?string $titreDe): static
+    {
+        $this->titreDe = $titreDe;
+
+        return $this;
+    }
+
+    public function getDescriptionDe(): ?string
+    {
+        return $this->descriptionDe;
+    }
+
+    public function setDescriptionDe(?string $descriptionDe): static
+    {
+        $this->descriptionDe = $descriptionDe;
 
         return $this;
     }

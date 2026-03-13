@@ -1,50 +1,78 @@
 {% extends 'back/base.html.twig' %}
 
-{% block title %}{{ message.id ? 'Modifier' : 'Nouveau' }} message - Back-office{% endblock %}
+{% block title %}
+    {% if message.id %}
+        {{ 'back.messages.form.title_edit'|trans(domain='back') }}
+    {% else %}
+        {{ 'back.messages.form.title_new'|trans(domain='back') }}
+    {% endif %}
+{% endblock %}
 
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block back_content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">{{ message.id ? 'Modifier le message' : 'Ajouter un message' }}</h1>
+    <h1 class="mb-0">
+        {% if message.id %}
+            {{ 'back.messages.form.heading_edit'|trans(domain='back') }}
+        {% else %}
+            {{ 'back.messages.form.heading_new'|trans(domain='back') }}
+        {% endif %}
+    </h1>
     <a href="{{ path('app_back_message_index') }}" class="btn btn-outline-secondary">
-        ← Retour à la liste
+        {{ 'back.messages.form.back_to_list'|trans(domain='back') }}
     </a>
 </div>
 
 {{ form_start(form, { 'attr': { 'class': 'needs-validation' } }) }}
 <div class="card shadow-sm border-0">
     <div class="card-header bg-info text-white py-3">
-        <h5 class="card-title mb-0">{{ message.id ? 'Modifier le message d\'affichage' : 'Nouveau message d\'affichage' }}</h5>
-        <small class="opacity-75">Ex. : « Garage fermé du 12 au 22 février » — affiché sur la page d'accueil pendant la période indiquée</small>
+        <h5 class="card-title mb-0">
+            {% if message.id %}
+                {{ 'back.messages.form.card_title_edit'|trans(domain='back') }}
+            {% else %}
+                {{ 'back.messages.form.card_title_new'|trans(domain='back') }}
+            {% endif %}
+        </h5>
+        <small class="opacity-75">
+            {{ 'back.messages.form.card_help'|trans(domain='back') }}
+        </small>
     </div>
     <div class="card-body p-4">
         <div class="row g-4">
             <div class="col-12">
                 {{ form_row(form.contenu, {
                     'row_attr': { 'class': 'mb-0' },
-                    'attr': { 'class': 'form-control', 'placeholder': 'Garage fermé du 12 au 22 février', 'rows': 4 }
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'back.messages.form.placeholder.content'|trans(domain='back'),
+                        'rows': 4
+                    }
                 }) }}
             </div>
             <div class="col-md-6">
                 {{ form_row(form.dateDebut, {
                     'row_attr': { 'class': 'mb-0' },
                     'attr': { 'class': 'form-control' },
-                    'help': 'Le message apparaît dès cette date et heure.'
+                    'help': 'back.messages.form.help.start'|trans(domain='back')
                 }) }}
             </div>
             <div class="col-md-6">
                 {{ form_row(form.dateFin, {
                     'row_attr': { 'class': 'mb-0' },
                     'attr': { 'class': 'form-control' },
-                    'help': 'Le message disparaît après cette date et heure.'
+                    'help': 'back.messages.form.help.end'|trans(domain='back')
                 }) }}
             </div>
         </div>
         <hr class="my-4">
         <div class="d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <a href="{{ path('app_back_message_index') }}" class="btn btn-outline-secondary">Annuler</a>
+            <button type="submit" class="btn btn-primary">
+                {{ 'back.messages.form.save'|trans(domain='back') }}
+            </button>
+            <a href="{{ path('app_back_message_index') }}" class="btn btn-outline-secondary">
+                {{ 'back.messages.form.cancel'|trans(domain='back') }}
+            </a>
         </div>
     </div>
 </div>

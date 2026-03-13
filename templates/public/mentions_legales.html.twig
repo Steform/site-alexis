@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mentions légales - Carrosserie Lino{% endblock %}
+{% block title %}{{ 'mentions.title'|trans }} - Carrosserie Lino{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -12,8 +12,10 @@
 {% endblock %}
 
 {% block body %}
+{% include 'partials/_navbar_public.html.twig' %}
 <div class="container py-5">
-    <h1 class="section-title mb-4">Mentions légales</h1>
-    <p class="text-muted">Contenu à venir.</p>
+    <h1 class="section-title mb-4">{{ 'mentions.title'|trans }}</h1>
+    <p class="text-muted">{{ 'mentions.placeholder'|trans }}</p>
 </div>
+{% include 'partials/_footer_public.html.twig' %}
 {% endblock %}

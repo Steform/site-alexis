@@ -1,23 +1,26 @@
 {% extends 'back/base.html.twig' %}
 
-{% block title %}Messages - Back-office{% endblock %}
+{% block title %}{{ 'back.messages.index.title'|trans(domain='back') }}{% endblock %}
 
 {% block back_content %}
-<h1 class="mb-4">Messages à date bornée</h1>
+<h1 class="mb-4">{{ 'back.messages.index.heading'|trans(domain='back') }}</h1>
 
-<p class="text-muted">Ces messages s'affichent sur le site public uniquement entre la date de début et la date de fin.</p>
+<p class="text-muted">{{ 'back.messages.index.help'|trans(domain='back') }}</p>
 
 <p>
-    <a href="{{ path('app_back_message_new') }}" class="btn btn-primary">Ajouter un message</a>
+    <a href="{{ path('app_back_message_new') }}" class="btn btn-primary">
+        {{ 'back.messages.index.add'|trans(domain='back') }}
+    </a>
 </p>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Contenu</th>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Statut</th>
+            <th>{{ 'back.messages.index.th.content_fr'|trans(domain='back') }}</th>
+            <th>{{ 'back.messages.index.th.content_de'|trans(domain='back') }}</th>
+            <th>{{ 'back.messages.index.th.start'|trans(domain='back') }}</th>
+            <th>{{ 'back.messages.index.th.end'|trans(domain='back') }}</th>
+            <th>{{ 'back.messages.index.th.status'|trans(domain='back') }}</th>
             <th></th>
         </tr>
     </thead>
@@ -25,26 +28,33 @@
         {% for m in messages %}
         <tr>
             <td>{{ m.contenu|slice(0, 60) }}{% if m.contenu|length > 60 %}…{% endif %}</td>
+            <td>{{ m.contenuDe|slice(0, 60) }}{% if m.contenuDe and m.contenuDe|length > 60 %}…{% endif %}</td>
             <td>{{ m.dateDebut|date('d/m/Y H:i') }}</td>
             <td>{{ m.dateFin|date('d/m/Y H:i') }}</td>
             <td>
                 {% if m.isActive() %}
-                    <span class="badge bg-success">Actif</span>
+                    <span class="badge bg-success">{{ 'back.messages.index.status.active'|trans(domain='back') }}</span>
                 {% else %}
-                    <span class="badge bg-secondary">Inactif</span>
+                    <span class="badge bg-secondary">{{ 'back.messages.index.status.inactive'|trans(domain='back') }}</span>
                 {% endif %}
             </td>
             <td>
-                <a href="{{ path('app_back_message_edit', { id: m.id }) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
-                <form method="post" action="{{ path('app_back_message_delete', { id: m.id }) }}" class="d-inline" onsubmit="return confirm('Supprimer ce message ?');">
+                <a href="{{ path('app_back_message_edit', { id: m.id }) }}" class="btn btn-sm btn-outline-primary">
+                    {{ 'back.messages.index.edit'|trans(domain='back') }}
+                </a>
+                <form method="post" action="{{ path('app_back_message_delete', { id: m.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.messages.index.confirm_delete'|trans(domain='back') }}');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ m.id) }}">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        {{ 'back.messages.index.delete'|trans(domain='back') }}
+                    </button>
                 </form>
             </td>
         </tr>
         {% else %}
         <tr>
-            <td colspan="5" class="text-muted">Aucun message.</td>
+            <td colspan="6" class="text-muted">
+                {{ 'back.messages.index.empty'|trans(domain='back') }}
+            </td>
         </tr>
         {% endfor %}
     </tbody>

@@ -1,19 +1,39 @@
 {% extends 'back/base.html.twig' %}
 
-{% block title %}{{ item.id ? 'Modifier' : 'Ajouter' }} - Galerie{% endblock %}
+{% block title %}
+    {% if item.id %}
+        {{ 'back.gallery.form.title_edit'|trans(domain='back') }}
+    {% else %}
+        {{ 'back.gallery.form.title_new'|trans(domain='back') }}
+    {% endif %}
+{% endblock %}
 
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block back_content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">{{ item.id ? 'Modifier l\'élément' : 'Ajouter une image' }}</h1>
-    <a href="{{ path('app_back_gallery_index') }}" class="btn btn-outline-secondary">← Retour à la galerie</a>
+    <h1 class="mb-0">
+        {% if item.id %}
+            {{ 'back.gallery.form.heading_edit'|trans(domain='back') }}
+        {% else %}
+            {{ 'back.gallery.form.heading_new'|trans(domain='back') }}
+        {% endif %}
+    </h1>
+    <a href="{{ path('app_back_gallery_index') }}" class="btn btn-outline-secondary">
+        {{ 'back.gallery.form.back_to_list'|trans(domain='back') }}
+    </a>
 </div>
 
 {{ form_start(form, { 'attr': { 'enctype': 'multipart/form-data' } }) }}
 <div class="card shadow-sm border-0">
     <div class="card-header bg-primary text-white py-3">
-        <h5 class="card-title mb-0">{{ item.id ? 'Modifier l\'élément' : 'Nouvel élément' }}</h5>
+        <h5 class="card-title mb-0">
+            {% if item.id %}
+                {{ 'back.gallery.form.card_title_edit'|trans(domain='back') }}
+            {% else %}
+                {{ 'back.gallery.form.card_title_new'|trans(domain='back') }}
+            {% endif %}
+        </h5>
     </div>
     <div class="card-body p-4">
         <div class="row g-4">
@@ -29,14 +49,22 @@
             <div class="col-12">
                 {{ form_row(form.imageFile) }}
                 {% if item.image %}
-                <p class="small text-muted mt-1">Image actuelle : <img src="{{ asset(item.image) }}" alt="" class="img-thumbnail" style="max-height: 80px;"> Laissez vide pour conserver.</p>
+                <p class="small text-muted mt-1">
+                    {{ 'back.gallery.form.current_image'|trans(domain='back') }}
+                    <img src="{{ asset(item.image) }}" alt="" class="img-thumbnail" style="max-height: 80px;">
+                    {{ 'back.gallery.form.current_image_hint'|trans(domain='back') }}
+                </p>
                 {% endif %}
             </div>
         </div>
         <hr class="my-4">
         <div class="d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <a href="{{ path('app_back_gallery_index') }}" class="btn btn-outline-secondary">Annuler</a>
+            <button type="submit" class="btn btn-primary">
+                {{ 'back.gallery.form.save'|trans(domain='back') }}
+            </button>
+            <a href="{{ path('app_back_gallery_index') }}" class="btn btn-outline-secondary">
+                {{ 'back.gallery.form.cancel'|trans(domain='back') }}
+            </a>
         </div>
     </div>
 </div>

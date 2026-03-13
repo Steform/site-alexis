@@ -25,14 +25,24 @@ class GalleryItemType extends AbstractType
     {
         $builder
             ->add('titre', TextType::class, [
-                'label' => 'Titre',
+                'label' => 'Titre (FR)',
                 'attr' => ['placeholder' => 'Ex. : Réparation Peugeot 308'],
                 'constraints' => [new NotBlank(['message' => 'Le titre est requis.'])],
             ])
+            ->add('titreDe', TextType::class, [
+                'label' => 'Titre (DE)',
+                'required' => true,
+                'attr' => ['placeholder' => 'z.B.: Reparatur Peugeot 308'],
+            ])
             ->add('description', TextareaType::class, [
-                'label' => 'Description',
+                'label' => 'Description (FR)',
                 'required' => false,
                 'attr' => ['rows' => 3, 'placeholder' => 'Description optionnelle'],
+            ])
+            ->add('descriptionDe', TextareaType::class, [
+                'label' => 'Description (DE)',
+                'required' => false,
+                'attr' => ['rows' => 3, 'placeholder' => 'Optionale Beschreibung auf Deutsch'],
             ])
             ->add('ordre', IntegerType::class, [
                 'label' => 'Ordre d\'affichage',

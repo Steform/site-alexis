@@ -1,49 +1,49 @@
 
 {% extends 'back/base.html.twig' %}
 
-{% block title %}Back-office - Carrosserie Lino{% endblock %}
+{% block title %}{{ 'back.layout.title'|trans({}, 'back') }}{% endblock %}
 
 {% block back_content %}
-<h1 class="mb-4">Tableau de bord</h1>
-<p class="lead">Bienvenue, {{ app.user.nom|default(app.user.email) }}.</p>
+<h1 class="mb-4">{{ 'back.dashboard.title'|trans({}, 'back') }}</h1>
+<p class="lead">{{ 'back.dashboard.welcome'|trans({'%name%': app.user.nom|default(app.user.email)}, 'back') }}</p>
 <p class="mb-4">
-    <a href="{{ path('app_logout') }}" class="btn btn-outline-primary">Voir le site (déconnexion)</a>
+    <a href="{{ path('app_logout') }}" class="btn btn-outline-primary">{{ 'back.dashboard.logout_to_site'|trans({}, 'back') }}</a>
 </p>
 
 <div class="row g-3">
     <div class="col-md-4">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Horaires</h5>
-                <p class="card-text">Gérer les horaires d'ouverture du garage.</p>
-                <a href="{{ path('app_back_horaires_index') }}" class="btn btn-primary">Gérer les horaires</a>
+                <h5 class="card-title">{{ 'back.dashboard.card.horaires.title'|trans({}, 'back') }}</h5>
+                <p class="card-text">{{ 'back.dashboard.card.horaires.text'|trans({}, 'back') }}</p>
+                <a href="{{ path('app_back_horaires_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.horaires.cta'|trans({}, 'back') }}</a>
             </div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Avis clients</h5>
-                <p class="card-text">Ajouter et modifier les avis affichés sur le site.</p>
-                <a href="{{ path('app_back_avis_index') }}" class="btn btn-primary">Gérer les avis</a>
+                <h5 class="card-title">{{ 'back.dashboard.card.avis.title'|trans({}, 'back') }}</h5>
+                <p class="card-text">{{ 'back.dashboard.card.avis.text'|trans({}, 'back') }}</p>
+                <a href="{{ path('app_back_avis_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.avis.cta'|trans({}, 'back') }}</a>
             </div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Messages</h5>
-                <p class="card-text">Messages à date bornée (ex. fermeture exceptionnelle).</p>
-                <a href="{{ path('app_back_message_index') }}" class="btn btn-primary">Gérer les messages</a>
+                <h5 class="card-title">{{ 'back.dashboard.card.messages.title'|trans({}, 'back') }}</h5>
+                <p class="card-text">{{ 'back.dashboard.card.messages.text'|trans({}, 'back') }}</p>
+                <a href="{{ path('app_back_message_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.messages.cta'|trans({}, 'back') }}</a>
             </div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Galerie</h5>
-                <p class="card-text">Gérer les images de la galerie du site.</p>
-                <a href="{{ path('app_back_gallery_index') }}" class="btn btn-primary">Gérer la galerie</a>
+                <h5 class="card-title">{{ 'back.dashboard.card.gallery.title'|trans({}, 'back') }}</h5>
+                <p class="card-text">{{ 'back.dashboard.card.gallery.text'|trans({}, 'back') }}</p>
+                <a href="{{ path('app_back_gallery_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.gallery.cta'|trans({}, 'back') }}</a>
             </div>
         </div>
     </div>
@@ -51,9 +51,9 @@
     <div class="col-md-4">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Utilisateurs</h5>
-                <p class="card-text">Gérer les comptes (admin, Propriétaire).</p>
-                <a href="{{ path('app_back_user_index') }}" class="btn btn-primary">Gérer les utilisateurs</a>
+                <h5 class="card-title">{{ 'back.dashboard.card.users.title'|trans({}, 'back') }}</h5>
+                <p class="card-text">{{ 'back.dashboard.card.users.text'|trans({}, 'back') }}</p>
+                <a href="{{ path('app_back_user_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.users.cta'|trans({}, 'back') }}</a>
             </div>
         </div>
     </div>

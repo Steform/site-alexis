@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'hours.title'|trans }} - Carrosserie Lino{% endblock %}
+
+{% block body %}
+{% include 'partials/_navbar_public.html.twig' %}
+<div class="container py-5">
+    <h1 class="section-title mb-4">{{ 'hours.title'|trans }}</h1>
+
+    {% if horaires_full is not empty %}
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <table class="table table-striped bg-white shadow-sm">
+                    <tbody>
+                    {% for row in horaires_full %}
+                        <tr>
+                            <th scope="row" class="fw-semibold">{{ row.day }}</th>
+                            <td>
+                                {{ row.ranges }}
+                                {% if row.comment %}
+                                    – {{ row.comment }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <p class="lead text-muted mb-4">{{ 'hours.empty'|trans }}</p>
+    {% endif %}
+</div>
+{% endblock %}
+

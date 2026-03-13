@@ -37,18 +37,32 @@ class HorairesType extends AbstractType
                 ],
                 'disabled' => $options['edit_mode'] ?? false,
             ])
-            ->add('heureDebut', TimeType::class, [
-                'label' => 'Heure d\'ouverture',
+            ->add('heureDebutMatin', TimeType::class, [
+                'label' => 'Heure début matin',
                 'widget' => 'single_text',
                 'required' => false,
             ])
-            ->add('heureFin', TimeType::class, [
-                'label' => 'Heure de fermeture',
+            ->add('heureFinMatin', TimeType::class, [
+                'label' => 'Heure fin matin',
+                'widget' => 'single_text',
+                'required' => false,
+            ])
+            ->add('heureDebutApresMidi', TimeType::class, [
+                'label' => 'Heure début après-midi',
+                'widget' => 'single_text',
+                'required' => false,
+            ])
+            ->add('heureFinApresMidi', TimeType::class, [
+                'label' => 'Heure fin après-midi',
                 'widget' => 'single_text',
                 'required' => false,
             ])
             ->add('commentaire', TextareaType::class, [
-                'label' => 'Commentaire (ex. fermé)',
+                'label' => 'Commentaire FR (ex. fermé)',
+                'required' => false,
+            ])
+            ->add('commentaireDe', TextareaType::class, [
+                'label' => 'Commentaire DE',
                 'required' => false,
             ])
         ;

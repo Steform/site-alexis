@@ -36,45 +36,46 @@ class DevisType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [
-                'label' => 'Nom',
-                'attr' => ['placeholder' => 'Votre nom'],
-                'constraints' => [new NotBlank(['message' => 'Le nom est requis.'])],
+                'label' => 'form.devis.name.label',
+                'attr' => ['placeholder' => 'form.devis.name.placeholder'],
+                'constraints' => [new NotBlank(['message' => 'validator.devis.name_required'])],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email',
-                'attr' => ['placeholder' => 'votre@email.fr'],
+                'label' => 'form.devis.email.label',
+                'attr' => ['placeholder' => 'form.devis.email.placeholder'],
                 'constraints' => [
-                    new NotBlank(['message' => 'L\'email est requis.']),
-                    new Email(['message' => 'Email invalide.']),
+                    new NotBlank(['message' => 'validator.devis.email_required']),
+                    new Email(['message' => 'validator.devis.email_invalid']),
                 ],
             ])
             ->add('telephone', TelType::class, [
-                'label' => 'Téléphone',
-                'attr' => ['placeholder' => '06 12 34 56 78'],
+                'label' => 'form.devis.phone.label',
+                'attr' => ['placeholder' => 'form.devis.phone.placeholder'],
                 'required' => false,
             ])
             ->add('vehicule', TextType::class, [
-                'label' => 'Véhicule',
-                'attr' => ['placeholder' => 'Ex. : Renault Clio 2020'],
-                'constraints' => [new NotBlank(['message' => 'Le véhicule est requis.'])],
+                'label' => 'form.devis.vehicle.label',
+                'attr' => ['placeholder' => 'form.devis.vehicle.placeholder'],
+                'constraints' => [new NotBlank(['message' => 'validator.devis.vehicle_required'])],
             ])
             ->add('typePrestation', ChoiceType::class, [
-                'label' => 'Type de prestation',
+                'label' => 'form.devis.type.label',
                 'choices' => [
-                    'Réparation carrosserie' => 'reparation_carrosserie',
-                    'Peinture' => 'peinture',
-                    'Débosselage' => 'debosselage',
-                    'Pare-brise / Vitrages' => 'pare_brise',
-                    'Entretien / Mécanique' => 'entretien',
-                    'Autre' => 'autre',
+                    'form.devis.type.reparation' => 'reparation_carrosserie',
+                    'form.devis.type.peinture' => 'peinture',
+                    'form.devis.type.debosselage' => 'debosselage',
+                    'form.devis.type.pare_brise' => 'pare_brise',
+                    'form.devis.type.entretien' => 'entretien',
+                    'form.devis.type.autre' => 'autre',
                 ],
-                'placeholder' => 'Sélectionnez...',
-                'constraints' => [new NotBlank(['message' => 'Le type de prestation est requis.'])],
+                'choice_translation_domain' => 'messages',
+                'placeholder' => 'form.devis.type.placeholder',
+                'constraints' => [new NotBlank(['message' => 'validator.devis.type_required'])],
             ])
             ->add('message', TextareaType::class, [
-                'label' => 'Message',
-                'attr' => ['rows' => 4, 'placeholder' => 'Décrivez votre demande...'],
-                'constraints' => [new NotBlank(['message' => 'Le message est requis.'])],
+                'label' => 'form.devis.message.label',
+                'attr' => ['rows' => 4, 'placeholder' => 'form.devis.message.placeholder'],
+                'constraints' => [new NotBlank(['message' => 'validator.devis.message_required'])],
             ])
             ->add('website', TextType::class, [
                 'label' => false,

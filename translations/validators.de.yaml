@@ -1,0 +1,7 @@
+validator.devis.name_required: "Der Name ist erforderlich."
+validator.devis.email_required: "Die E-Mail-Adresse ist erforderlich."
+validator.devis.email_invalid: "Ungültige E-Mail-Adresse."
+validator.devis.vehicle_required: "Das Fahrzeug ist erforderlich."
+validator.devis.type_required: "Die Art der Leistung ist erforderlich."
+validator.devis.message_required: "Die Nachricht ist erforderlich."
+

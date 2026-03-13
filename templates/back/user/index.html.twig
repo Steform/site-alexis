@@ -1,20 +1,22 @@
 {% extends 'back/base.html.twig' %}
 
-{% block title %}Utilisateurs - Back-office{% endblock %}
+{% block title %}{{ 'back.users.index.title'|trans(domain='back') }}{% endblock %}
 
 {% block back_content %}
-<h1 class="mb-4">Utilisateurs</h1>
+<h1 class="mb-4">{{ 'back.users.index.heading'|trans(domain='back') }}</h1>
 
 <p>
-    <a href="{{ path('app_back_user_new') }}" class="btn btn-primary">Créer un utilisateur</a>
+    <a href="{{ path('app_back_user_new') }}" class="btn btn-primary">
+        {{ 'back.users.index.add'|trans(domain='back') }}
+    </a>
 </p>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>Rôle</th>
+            <th>{{ 'back.users.index.th.name'|trans(domain='back') }}</th>
+            <th>{{ 'back.users.index.th.email'|trans(domain='back') }}</th>
+            <th>{{ 'back.users.index.th.role'|trans(domain='back') }}</th>
             <th></th>
         </tr>
     </thead>
@@ -26,25 +28,31 @@
             <td>
                 {% for role in u.roles %}
                     {% if role == 'ROLE_ADMIN' %}
-                        <span class="badge bg-danger">Admin</span>
+                        <span class="badge bg-danger">{{ 'back.users.index.role.admin'|trans(domain='back') }}</span>
                     {% elseif role == 'ROLE_PROPRIETAIRE' %}
-                        <span class="badge bg-primary">Propriétaire</span>
+                        <span class="badge bg-primary">{{ 'back.users.index.role.owner'|trans(domain='back') }}</span>
                     {% endif %}
                 {% endfor %}
             </td>
             <td>
-                <a href="{{ path('app_back_user_edit', { id: u.id }) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                <a href="{{ path('app_back_user_edit', { id: u.id }) }}" class="btn btn-sm btn-outline-primary">
+                    {{ 'back.users.index.edit'|trans(domain='back') }}
+                </a>
                 {% if u != app.user %}
-                <form method="post" action="{{ path('app_back_user_delete', { id: u.id }) }}" class="d-inline" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                <form method="post" action="{{ path('app_back_user_delete', { id: u.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.users.index.confirm_delete'|trans(domain='back') }}');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ u.id) }}">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        {{ 'back.users.index.delete'|trans(domain='back') }}
+                    </button>
                 </form>
                 {% endif %}
             </td>
         </tr>
         {% else %}
         <tr>
-            <td colspan="4" class="text-muted">Aucun utilisateur.</td>
+            <td colspan="4" class="text-muted">
+                {{ 'back.users.index.empty'|trans(domain='back') }}
+            </td>
         </tr>
         {% endfor %}
     </tbody>

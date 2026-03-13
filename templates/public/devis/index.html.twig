@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demander un devis - Carrosserie Lino{% endblock %}
+{% block title %}{{ 'devis.page.title'|trans }}{% endblock %}
 
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 
@@ -15,11 +15,12 @@
 {% endblock %}
 
 {% block body %}
+{% include 'partials/_navbar_public.html.twig' %}
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h1 class="mb-4">Demander un devis</h1>
-            <p class="lead text-muted mb-4">Remplissez le formulaire ci-dessous. Nous vous recontacterons rapidement pour étudier votre demande.</p>
+            <h1 class="mb-4">{{ 'devis.title'|trans }}</h1>
+            <p class="lead text-muted mb-4">{{ 'devis.lead'|trans }}</p>
 
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
@@ -58,8 +59,8 @@
                     </div>
                     <hr class="my-4">
                     <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-devis btn-lg rounded-pill">Envoyer ma demande</button>
-                        <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">Retour</a>
+                        <button type="submit" class="btn btn-devis btn-lg rounded-pill">{{ 'home.quote.cta'|trans }}</button>
+                        <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">{{ 'nav.home'|trans }}</a>
                     </div>
                 </div>
             </div>
@@ -67,4 +68,5 @@
         </div>
     </div>
 </div>
+{% include 'partials/_footer_public.html.twig' %}
 {% endblock %}

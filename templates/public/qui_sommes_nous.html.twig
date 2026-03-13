@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Qui sommes-nous ? - Alexis Haffner | Carrosserie Lino{% endblock %}
+{% block title %}{{ 'qui_sommes_nous.title'|trans }} - Alexis Haffner | Carrosserie Lino{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -16,10 +16,11 @@
 {% endblock %}
 
 {% block body %}
+{% include 'partials/_navbar_public.html.twig' %}
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <h1 class="section-title text-center mb-5">Qui sommes-nous ?</h1>
+            <h1 class="section-title text-center mb-5">{{ 'qui_sommes_nous.title'|trans }}</h1>
 
             <div class="row align-items-center g-5 mb-5">
                 <div class="col-md-5 text-center">
@@ -28,11 +29,11 @@
                 </div>
                 <div class="col-md-7">
                     <h2 class="h3 fw-bold mb-3">Alexis Haffner</h2>
-                    <p class="text-muted text-uppercase mb-3" style="letter-spacing: 0.1em; font-size: 0.9rem;">Carrossier</p>
-                    <p class="lead mb-4">À la tête de la Carrosserie Lino depuis 2022, Alexis Haffner perpétue l'excellence du garage avec une vision familiale et professionnelle.</p>
-                    <p class="mb-4">Alexis travaille aux côtés de son père pour vous offrir un service de qualité. Une équipe familiale, des valeurs de confiance et de proximité : la Carrosserie Lino, c'est bien plus qu'un garage — c'est une histoire de famille au service de votre véhicule.</p>
-                    <p class="mb-4">Réparation, peinture, débosselage : expertise et savoir-faire transmis de génération en génération pour vous garantir un travail soigné et des conseils honnêtes.</p>
-                    <a href="{{ path('app_devis') }}" class="btn btn-devis rounded-pill">Demander un devis</a>
+                    <p class="text-muted text-uppercase mb-3" style="letter-spacing: 0.1em; font-size: 0.9rem;">{{ 'qui_sommes_nous.alexis.role'|trans }}</p>
+                    <p class="lead mb-4">{{ 'qui_sommes_nous.alexis.lead'|trans }}</p>
+                    <p class="mb-4">{{ 'qui_sommes_nous.alexis.text1'|trans }}</p>
+                    <p class="mb-4">{{ 'qui_sommes_nous.alexis.text2'|trans }}</p>
+                    <a href="{{ path('app_devis') }}" class="btn btn-devis rounded-pill">{{ 'qui_sommes_nous.cta.quote'|trans }}</a>
                 </div>
             </div>
 
@@ -43,8 +44,8 @@
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="mb-3" style="font-size: 2.5rem;">👨‍👦</div>
-                            <h5 class="card-title">Entreprise familiale</h5>
-                            <p class="card-text text-muted">Alexis et son père travaillent ensemble pour vous offrir un service personnalisé et de confiance.</p>
+                            <h5 class="card-title">{{ 'qui_sommes_nous.card.family.title'|trans }}</h5>
+                            <p class="card-text text-muted">{{ 'qui_sommes_nous.card.family.text'|trans }}</p>
                         </div>
                     </div>
                 </div>
@@ -52,8 +53,8 @@
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="mb-3" style="font-size: 2.5rem;">🔧</div>
-                            <h5 class="card-title">Expertise carrosserie</h5>
-                            <p class="card-text text-muted">Réparation, peinture, débosselage : un savoir-faire reconnu pour tous types de véhicules.</p>
+                            <h5 class="card-title">{{ 'qui_sommes_nous.card.expertise.title'|trans }}</h5>
+                            <p class="card-text text-muted">{{ 'qui_sommes_nous.card.expertise.text'|trans }}</p>
                         </div>
                     </div>
                 </div>
@@ -61,8 +62,8 @@
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="mb-3" style="font-size: 2.5rem;">📍</div>
-                            <h5 class="card-title">Baldersheim</h5>
-                            <p class="card-text text-muted">Votre garage de proximité à Baldersheim, à votre service depuis 2007.</p>
+                            <h5 class="card-title">{{ 'qui_sommes_nous.card.location.title'|trans }}</h5>
+                            <p class="card-text text-muted">{{ 'qui_sommes_nous.card.location.text'|trans }}</p>
                         </div>
                     </div>
                 </div>
@@ -70,4 +71,5 @@
         </div>
     </div>
 </div>
+{% include 'partials/_footer_public.html.twig' %}
 {% endblock %}

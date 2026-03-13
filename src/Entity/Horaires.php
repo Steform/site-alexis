@@ -36,6 +36,21 @@ class Horaires
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
 
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $heureDebutMatin = null;
+
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $heureFinMatin = null;
+
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $heureDebutApresMidi = null;
+
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $heureFinApresMidi = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $commentaireDe = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +100,66 @@ class Horaires
     public function setCommentaire(?string $commentaire): static
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getHeureDebutMatin(): ?\DateTimeInterface
+    {
+        return $this->heureDebutMatin;
+    }
+
+    public function setHeureDebutMatin(?\DateTimeInterface $heureDebutMatin): static
+    {
+        $this->heureDebutMatin = $heureDebutMatin;
+
+        return $this;
+    }
+
+    public function getHeureFinMatin(): ?\DateTimeInterface
+    {
+        return $this->heureFinMatin;
+    }
+
+    public function setHeureFinMatin(?\DateTimeInterface $heureFinMatin): static
+    {
+        $this->heureFinMatin = $heureFinMatin;
+
+        return $this;
+    }
+
+    public function getHeureDebutApresMidi(): ?\DateTimeInterface
+    {
+        return $this->heureDebutApresMidi;
+    }
+
+    public function setHeureDebutApresMidi(?\DateTimeInterface $heureDebutApresMidi): static
+    {
+        $this->heureDebutApresMidi = $heureDebutApresMidi;
+
+        return $this;
+    }
+
+    public function getHeureFinApresMidi(): ?\DateTimeInterface
+    {
+        return $this->heureFinApresMidi;
+    }
+
+    public function setHeureFinApresMidi(?\DateTimeInterface $heureFinApresMidi): static
+    {
+        $this->heureFinApresMidi = $heureFinApresMidi;
+
+        return $this;
+    }
+
+    public function getCommentaireDe(): ?string
+    {
+        return $this->commentaireDe;
+    }
+
+    public function setCommentaireDe(?string $commentaireDe): static
+    {
+        $this->commentaireDe = $commentaireDe;
 
         return $this;
     }

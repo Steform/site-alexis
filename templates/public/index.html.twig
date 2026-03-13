@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Carrosserie Lino - Baldersheim | Réparation & Peinture auto{% endblock %}
+{% block title %}{{ 'home.title'|trans }}{% endblock %}
 
 {% block stylesheets %}
 <style>
@@ -126,71 +126,32 @@
 {% endblock %}
 
 {% block body %}
+{% include 'partials/_navbar_public.html.twig' %}
+
 {# Messages à date bornée (affichage rouge) #}
+{% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
 {% for message in messages %}
 <div class="alert alert-message alert-dismissible fade show rounded-0 mb-0 text-center" role="alert">
-    <strong>{{ message.contenu }}</strong>
+    <strong>
+        {% if currentLocale == 'de' and message.contenuDe %}
+            {{ message.contenuDe }}
+        {% else %}
+            {{ message.contenu }}
+        {% endif %}
+    </strong>
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Fermer"></button>
 </div>
 {% endfor %}
-
-{# Barre contact #}
-<div class="contact-bar py-2">
-    <div class="container">
-        <div class="row align-items-center justify-content-between">
-            <div class="col-auto d-flex flex-wrap gap-4">
-                <span>📍 Baldersheim</span>
-                <a href="tel:0389572828">📞 03 89 57 28 28</a>
-                <span>
-                    🕐 {% if horaires|length > 0 %}
-                        {% set first = horaires|first %}
-                        {% if first.heureDebut and first.heureFin %}
-                            Lun - Ven : {{ first.heureDebut|date('H') }}h{{ first.heureDebut|date('i') != '00' ? first.heureDebut|date('i') : '' }} - {{ first.heureFin|date('H') }}h{{ first.heureFin|date('i') != '00' ? first.heureFin|date('i') : '' }}
-                        {% else %}
-                            Horaires variables
-                        {% endif %}
-                    {% else %}
-                        Lun - Ven : 8h - 12h / 14h - 18h
-                    {% endif %}
-                </span>
-            </div>
-        </div>
-    </div>
-</div>
-
-{# Navigation principale (structure maquette : liens uppercase, séparateurs verticaux) #}
-<nav class="navbar navbar-expand-lg navbar-main py-3">
-    <div class="container">
-        <a class="navbar-brand" href="{{ path('app_home') }}">
-            <img src="{{ asset('images/logo.svg') }}" alt="Carrosserie Lino" height="50">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Menu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navMain">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link active" href="{{ path('app_home') }}">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ path('app_qui_sommes_nous') }}">Qui sommes-nous</a></li>
-                <li class="nav-item"><a class="nav-link" href="#services">Nos services</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ path('app_gallery') }}">Galerie</a></li>
-                <li class="nav-item"><a class="nav-link" href="#avis">Avis clients</a></li>
-                <li class="nav-item ms-2">
-                    <a class="btn btn-devis rounded-pill" href="{{ path('app_devis') }}">Devis rapide</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
 {# Hero #}
 <section class="hero-section">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <p class="text-uppercase mb-2 opacity-90" style="font-size: 0.9rem; letter-spacing: 0.15em;">Expérimentés & professionnels</p>
-                <h1 class="text-white mb-3">Carrosserie & réparation auto</h1>
-                <p class="lead text-white mb-4">À votre service depuis 2007</p>
-                <a class="btn btn-devis btn-lg rounded-pill" href="{{ path('app_devis') }}">Obtenez un devis</a>
+                <p class="text-uppercase mb-2 opacity-90" style="font-size: 0.9rem; letter-spacing: 0.15em;">{{ 'home.hero.ribbon'|trans }}</p>
+                <h1 class="text-white mb-3">{{ 'home.hero.title'|trans }}</h1>
+                <p class="lead text-white mb-4">{{ 'home.hero.subtitle'|trans }}</p>
+                <a class="btn btn-devis btn-lg rounded-pill" href="{{ path('app_devis') }}">{{ 'home.hero.cta'|trans }}</a>
             </div>
         </div>
     </div>
@@ -204,8 +165,8 @@
                 <div class="card card-service h-100 border-0 shadow-sm">
                     <div class="card-body text-center p-4">
                         <div class="mb-3" style="font-size: 3rem;">🚗</div>
-                        <h5 class="card-title">Réparation carrosserie</h5>
-                        <p class="card-text text-muted">Choc, rayures, débosselage</p>
+                        <h5 class="card-title">{{ 'home.quick.card1.title'|trans }}</h5>
+                        <p class="card-text text-muted">{{ 'home.quick.card1.text'|trans }}</p>
                     </div>
                 </div>
             </div>
@@ -213,8 +174,8 @@
                 <div class="card card-service h-100 border-0 shadow-sm">
                     <div class="card-body text-center p-4">
                         <div class="mb-3" style="font-size: 3rem;">🪟</div>
-                        <h5 class="card-title">Remplacement pare-brise</h5>
-                        <p class="card-text text-muted">Vitrages & optiques</p>
+                        <h5 class="card-title">{{ 'home.quick.card2.title'|trans }}</h5>
+                        <p class="card-text text-muted">{{ 'home.quick.card2.text'|trans }}</p>
                     </div>
                 </div>
             </div>
@@ -222,8 +183,8 @@
                 <div class="card card-service h-100 border-0 shadow-sm">
                     <div class="card-body text-center p-4">
                         <div class="mb-3" style="font-size: 3rem;">🔧</div>
-                        <h5 class="card-title">Entretien & mécanique</h5>
-                        <p class="card-text text-muted">Révision & pneumatiques</p>
+                        <h5 class="card-title">{{ 'home.quick.card3.title'|trans }}</h5>
+                        <p class="card-text text-muted">{{ 'home.quick.card3.text'|trans }}</p>
                     </div>
                 </div>
             </div>
@@ -236,10 +197,10 @@
     <div class="container">
         <div class="row align-items-center g-4">
             <div class="col-lg-6">
-                <h2 class="section-title mb-4">Qui sommes-nous ?</h2>
-                <p class="fw-bold text-dark mb-2">Alexis Haffner, carrossier à Baldersheim.</p>
-                <p class="text-muted mb-3">Alexis travaille avec son père dans une entreprise familiale. Expertise en réparation, peinture et entretien pour tous véhicules. Travail soigné, équipe à l'écoute et solutions rapides depuis 2007.</p>
-                <a class="btn btn-devis rounded-pill" href="{{ path('app_qui_sommes_nous') }}">Découvrir notre équipe</a>
+                <h2 class="section-title mb-4">{{ 'home.about.title'|trans }}</h2>
+                <p class="fw-bold text-dark mb-2">{{ 'home.about.lead'|trans }}</p>
+                <p class="text-muted mb-3">{{ 'home.about.text'|trans }}</p>
+                <a class="btn btn-devis rounded-pill" href="{{ path('app_qui_sommes_nous') }}">{{ 'home.about.cta'|trans }}</a>
             </div>
             <div class="col-lg-6">
                 <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800" alt="Carrosserie Lino - Garage" class="img-fluid rounded shadow">
@@ -251,13 +212,13 @@
 {# Nos services (4 cartes avec images) #}
 <section id="services" class="py-5 bg-white">
     <div class="container">
-        <h2 class="section-title text-center mb-5">Nos services</h2>
+        <h2 class="section-title text-center mb-5">{{ 'home.services.title'|trans }}</h2>
         <div class="row g-4">
             <div class="col-md-6 col-lg-3">
                 <div class="card border-0 overflow-hidden shadow-sm h-100">
                     <img src="https://images.unsplash.com/photo-1551524559-8af4e6624178?w=400" class="card-img-top" alt="Réparation & Peinture" style="height: 200px; object-fit: cover;">
                     <div class="card-img-overlay card-img-overlay-dark d-flex align-items-end">
-                        <h5 class="card-title text-white mb-0">Réparation & Peinture</h5>
+                        <h5 class="card-title text-white mb-0">{{ 'home.services.card1.title'|trans }}</h5>
                     </div>
                 </div>
             </div>
@@ -265,7 +226,7 @@
                 <div class="card border-0 overflow-hidden shadow-sm h-100">
                     <img src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=400" class="card-img-top" alt="Débosselage" style="height: 200px; object-fit: cover;">
                     <div class="card-img-overlay card-img-overlay-dark d-flex align-items-end">
-                        <h5 class="card-title text-white mb-0">Débosselage</h5>
+                        <h5 class="card-title text-white mb-0">{{ 'home.services.card2.title'|trans }}</h5>
                     </div>
                 </div>
             </div>
@@ -273,7 +234,7 @@
                 <div class="card border-0 overflow-hidden shadow-sm h-100">
                     <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400" class="card-img-top" alt="Pare-brise & Vitrages" style="height: 200px; object-fit: cover;">
                     <div class="card-img-overlay card-img-overlay-dark d-flex align-items-end">
-                        <h5 class="card-title text-white mb-0">Pare-brise & Vitrages</h5>
+                        <h5 class="card-title text-white mb-0">{{ 'home.services.card3.title'|trans }}</h5>
                     </div>
                 </div>
             </div>
@@ -281,13 +242,13 @@
                 <div class="card border-0 overflow-hidden shadow-sm h-100">
                     <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400" class="card-img-top" alt="Véhicules de courtoisie" style="height: 200px; object-fit: cover;">
                     <div class="card-img-overlay card-img-overlay-dark d-flex align-items-end">
-                        <h5 class="card-title text-white mb-0">Véhicules de courtoisie</h5>
+                        <h5 class="card-title text-white mb-0">{{ 'home.services.card4.title'|trans }}</h5>
                     </div>
                 </div>
             </div>
         </div>
         <div class="text-center mt-4">
-            <a class="btn btn-devis rounded-pill" href="{{ path('app_devis') }}">Découvrir tous nos services</a>
+            <a class="btn btn-devis rounded-pill" href="{{ path('app_devis') }}">{{ 'home.services.cta'|trans }}</a>
         </div>
     </div>
 </section>
@@ -295,7 +256,7 @@
 {# Avis clients - StuSlider structure per README #}
 <section id="avis" class="py-5 testimonial-section">
     <div class="container">
-        <h2 class="section-title text-center mb-5">Avis clients</h2>
+        <h2 class="section-title text-center mb-5">{{ 'home.reviews.title'|trans }}</h2>
         {% if avis|length > 0 %}
         <div class="avis-slider-wrapper mx-auto" style="width: 75%; min-height: 280px;">
         <div class="avis-slider-container">
@@ -305,7 +266,13 @@
                     <div class="card border-0 shadow-none bg-transparent h-100">
                         <div class="card-body text-center">
                             <div class="avis-quote-icon mb-2">"</div>
-                            <p class="card-text fst-italic mb-2">{{ a.texte }}</p>
+                            <p class="card-text fst-italic mb-2">
+                                {% if currentLocale == 'de' and a.texteDe %}
+                                    {{ a.texteDe }}
+                                {% else %}
+                                    {{ a.texte }}
+                                {% endif %}
+                            </p>
                             <p class="avis-author fst-italic mb-0">— {{ a.auteur }}, {{ a.date|date('d/m/Y') }}</p>
                         </div>
                     </div>
@@ -318,8 +285,8 @@
         {# Témoignage par défaut (maquette) #}
         <div class="text-center py-5">
             <div class="avis-quote-icon mb-2">"</div>
-            <p class="fs-5 fst-italic text-dark mb-2">Travail toujours impeccable, on peut avoir confiance !</p>
-            <p class="avis-author fst-italic">— Pierre M.</p>
+            <p class="fs-5 fst-italic text-dark mb-2">{{ 'home.reviews.default.text'|trans }}</p>
+            <p class="avis-author fst-italic">{{ 'home.reviews.default.author'|trans }}</p>
         </div>
         {% endif %}
     </div>
@@ -328,39 +295,13 @@
 {# CTA Devis #}
 <section id="devis" class="py-5 bg-white">
     <div class="container text-center">
-        <h2 class="section-title mb-3">Demander un devis</h2>
-        <p class="text-muted mb-4">Remplissez notre formulaire en ligne ou appelez-nous au <a href="tel:0389572828" class="fw-bold">03 89 57 28 28</a></p>
-        <a href="{{ path('app_devis') }}" class="btn btn-devis btn-lg rounded-pill">Demander un devis</a>
+        <h2 class="section-title mb-3">{{ 'home.quote.title'|trans }}</h2>
+        <p class="text-muted mb-4">{{ 'home.quote.text'|trans }} <a href="tel:0389572828" class="fw-bold">03 89 57 28 28</a></p>
+        <a href="{{ path('app_devis') }}" class="btn btn-devis btn-lg rounded-pill">{{ 'home.quote.cta'|trans }}</a>
     </div>
 </section>
 
-{# Footer #}
-<footer class="footer-top py-4">
-    <div class="container">
-        <div class="row g-4 text-center">
-            <div class="col-md-4">
-                <p class="mb-0">🛡️ Assurance & Expertises</p>
-            </div>
-            <div class="col-md-4">
-                <p class="mb-0">🚗 Véhicules toutes marques</p>
-            </div>
-            <div class="col-md-4">
-                <p class="mb-0">🔑 Prêt de voiture</p>
-            </div>
-        </div>
-    </div>
-</footer>
-<footer class="footer-bottom py-3">
-    <div class="container">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <span>© {{ 'now'|date('Y') }} Carrosserie Lino - Baldersheim | <a href="{{ path('app_mentions_legales') }}" class="text-decoration-none">Mentions légales</a></span>
-            <div>
-                <a href="#" class="me-3" aria-label="Facebook">f</a>
-                <a href="#" aria-label="Instagram">📷</a>
-            </div>
-        </div>
-    </div>
-</footer>
+{% include 'partials/_footer_public.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}

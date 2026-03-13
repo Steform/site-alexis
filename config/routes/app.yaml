@@ -24,6 +24,11 @@ app_qui_sommes_nous:
   controller: App\Controller\Public\QuiSommesNousController::index
   methods: GET
 
+app_horaires_public:
+  path: /horaires
+  controller: App\Controller\Public\HorairesPublicController::index
+  methods: GET
+
 # Security
 app_login:
   path: /login
@@ -130,3 +135,8 @@ app_back_gallery_delete:
   path: /back/galerie/{id}/delete
   controller: App\Controller\Back\GalleryController::delete
   methods: POST
+
+app_switch_locale:
+  path: /switch-locale/{locale}
+  controller: App\Controller\LocaleController::switch
+  methods: GET

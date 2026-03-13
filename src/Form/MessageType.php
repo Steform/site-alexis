@@ -24,7 +24,11 @@ class MessageType extends AbstractType
     {
         $builder
             ->add('contenu', TextareaType::class, [
-                'label' => 'Contenu (ex. Garage fermé du 12 au 22 février)',
+                'label' => 'Contenu FR (ex. Garage fermé du 12 au 22 février)',
+                'attr' => ['rows' => 3],
+            ])
+            ->add('contenuDe', TextareaType::class, [
+                'label' => 'Contenu DE (z.B. Garage vom 12. bis 22. Februar geschlossen)',
                 'attr' => ['rows' => 3],
             ])
             ->add('dateDebut', DateTimeType::class, [

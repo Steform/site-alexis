@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Galerie - Carrosserie Lino{% endblock %}
+{% block title %}{{ 'gallery.title'|trans }} - Carrosserie Lino{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -15,9 +15,10 @@
 {% endblock %}
 
 {% block body %}
+{% include 'partials/_navbar_public.html.twig' %}
 <div class="container py-5">
-    <h1 class="section-title mb-4">Galerie</h1>
-    <p class="lead text-muted mb-5">Découvrez nos réalisations</p>
+    <h1 class="section-title mb-4">{{ 'gallery.title'|trans }}</h1>
+    <p class="lead text-muted mb-5">{{ 'gallery.lead'|trans }}</p>
 
     {% if items|length > 0 %}
     <div class="row g-4">
@@ -28,9 +29,18 @@
                     <img src="{{ asset(item.image) }}" class="card-img-top" alt="{{ item.titre }}" style="height: 250px; object-fit: cover;">
                 </a>
                 <div class="card-body">
-                    <h5 class="card-title">{{ item.titre }}</h5>
-                    {% if item.description %}
-                    <p class="card-text text-muted">{{ item.description }}</p>
+                    {% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
+                    <h5 class="card-title">
+                        {% if currentLocale == 'de' and item.titreDe %}
+                            {{ item.titreDe }}
+                        {% else %}
+                            {{ item.titre }}
+                        {% endif %}
+                    </h5>
+                    {% if currentLocale == 'de' and item.descriptionDe %}
+                        <p class="card-text text-muted">{{ item.descriptionDe }}</p>
+                    {% elseif item.description %}
+                        <p class="card-text text-muted">{{ item.description }}</p>
                     {% endif %}
                 </div>
             </div>
@@ -39,8 +49,9 @@
     </div>
     {% else %}
     <div class="text-center py-5">
-        <p class="text-muted">La galerie est vide pour le moment.</p>
+        <p class="text-muted">{{ 'gallery.empty'|trans }}</p>
     </div>
     {% endif %}
 </div>
+{% include 'partials/_footer_public.html.twig' %}
 {% endblock %}

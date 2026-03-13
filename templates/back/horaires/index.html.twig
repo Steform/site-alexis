@@ -1,17 +1,18 @@
 {% extends 'back/base.html.twig' %}
 
-{% block title %}Horaires - Back-office{% endblock %}
+{% block title %}{{ 'back.horaires.index.title'|trans(domain='back') }}{% endblock %}
 
 {% block back_content %}
-<h1 class="mb-4">Horaires d'ouverture</h1>
+<h1 class="mb-4">{{ 'back.horaires.index.heading'|trans(domain='back') }}</h1>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Jour</th>
-            <th>Heure d'ouverture</th>
-            <th>Heure de fermeture</th>
-            <th>Commentaire</th>
+            <th>{{ 'back.horaires.index.day'|trans(domain='back') }}</th>
+            <th>{{ 'back.horaires.index.morning'|trans(domain='back') }}</th>
+            <th>{{ 'back.horaires.index.afternoon'|trans(domain='back') }}</th>
+            <th>{{ 'back.horaires.index.comment_fr'|trans(domain='back') }}</th>
+            <th>{{ 'back.horaires.index.comment_de'|trans(domain='back') }}</th>
             <th></th>
         </tr>
     </thead>
@@ -19,11 +20,26 @@
         {% for h in horaires %}
         <tr>
             <td>{{ h.jour|capitalize }}</td>
-            <td>{{ h.heureDebut ? h.heureDebut|date('H:i') : '—' }}</td>
-            <td>{{ h.heureFin ? h.heureFin|date('H:i') : '—' }}</td>
-            <td>{{ h.commentaire|default('—') }}</td>
             <td>
-                <a href="{{ path('app_back_horaires_edit', { id: h.id }) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                {% if h.heureDebutMatin and h.heureFinMatin %}
+                    {{ h.heureDebutMatin|date('H:i') }} - {{ h.heureFinMatin|date('H:i') }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+            <td>
+                {% if h.heureDebutApresMidi and h.heureFinApresMidi %}
+                    {{ h.heureDebutApresMidi|date('H:i') }} - {{ h.heureFinApresMidi|date('H:i') }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+            <td>{{ h.commentaire|default('—') }}</td>
+            <td>{{ h.commentaireDe|default('—') }}</td>
+            <td>
+                <a href="{{ path('app_back_horaires_edit', { id: h.id }) }}" class="btn btn-sm btn-outline-primary">
+                    {{ 'back.horaires.index.edit'|trans(domain='back') }}
+                </a>
             </td>
         </tr>
         {% endfor %}

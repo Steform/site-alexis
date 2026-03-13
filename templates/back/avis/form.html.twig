@@ -1,34 +1,58 @@
 {% extends 'back/base.html.twig' %}
 
-{% block title %}{{ avis.id ? 'Modifier' : 'Nouvel' }} avis - Back-office{% endblock %}
+{% block title %}
+    {% if avis.id %}
+        {{ 'back.avis.form.title_edit'|trans(domain='back') }}
+    {% else %}
+        {{ 'back.avis.form.title_new'|trans(domain='back') }}
+    {% endif %}
+{% endblock %}
 
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block back_content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">{{ avis.id ? 'Modifier l\'avis' : 'Ajouter un avis' }}</h1>
+    <h1 class="mb-0">
+        {% if avis.id %}
+            {{ 'back.avis.form.heading_edit'|trans(domain='back') }}
+        {% else %}
+            {{ 'back.avis.form.heading_new'|trans(domain='back') }}
+        {% endif %}
+    </h1>
     <a href="{{ path('app_back_avis_index') }}" class="btn btn-outline-secondary">
-        ← Retour à la liste
+        {{ 'back.avis.form.back_to_list'|trans(domain='back') }}
     </a>
 </div>
 
 {{ form_start(form, { 'attr': { 'class': 'needs-validation' } }) }}
 <div class="card shadow-sm border-0">
     <div class="card-header bg-primary text-white py-3">
-        <h5 class="card-title mb-0">{{ avis.id ? 'Modifier l\'avis client' : 'Nouvel avis client' }}</h5>
+        <h5 class="card-title mb-0">
+            {% if avis.id %}
+                {{ 'back.avis.form.card_title_edit'|trans(domain='back') }}
+            {% else %}
+                {{ 'back.avis.form.card_title_new'|trans(domain='back') }}
+            {% endif %}
+        </h5>
     </div>
     <div class="card-body p-4">
         <div class="row g-4">
             <div class="col-12">
                 {{ form_row(form.texte, {
                     'row_attr': { 'class': 'mb-0' },
-                    'attr': { 'class': 'form-control', 'placeholder': 'Saisir le texte de l\'avis...' }
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'back.avis.form.placeholder.text'|trans(domain='back')
+                    }
                 }) }}
             </div>
             <div class="col-md-6">
                 {{ form_row(form.auteur, {
                     'row_attr': { 'class': 'mb-0' },
-                    'attr': { 'class': 'form-control', 'placeholder': 'Nom du client' }
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'back.avis.form.placeholder.author'|trans(domain='back')
+                    }
                 }) }}
             </div>
             <div class="col-md-6">
@@ -46,8 +70,12 @@
         </div>
         <hr class="my-4">
         <div class="d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <a href="{{ path('app_back_avis_index') }}" class="btn btn-outline-secondary">Annuler</a>
+            <button type="submit" class="btn btn-primary">
+                {{ 'back.avis.form.save'|trans(domain='back') }}
+            </button>
+            <a href="{{ path('app_back_avis_index') }}" class="btn btn-outline-secondary">
+                {{ 'back.avis.form.cancel'|trans(domain='back') }}
+            </a>
         </div>
     </div>
 </div>

@@ -27,6 +27,9 @@ class Avis
     #[ORM\Column(type: Types::TEXT)]
     private ?string $texte = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $texteDe = null;
+
     #[ORM\Column(length: 255)]
     private ?string $auteur = null;
 
@@ -49,6 +52,18 @@ class Avis
     public function setTexte(string $texte): static
     {
         $this->texte = $texte;
+
+        return $this;
+    }
+
+    public function getTexteDe(): ?string
+    {
+        return $this->texteDe;
+    }
+
+    public function setTexteDe(?string $texteDe): static
+    {
+        $this->texteDe = $texteDe;
 
         return $this;
     }

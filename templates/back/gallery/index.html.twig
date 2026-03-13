@@ -1,12 +1,14 @@
 {% extends 'back/base.html.twig' %}
 
-{% block title %}Galerie - Back-office{% endblock %}
+{% block title %}{{ 'back.gallery.index.title'|trans(domain='back') }}{% endblock %}
 
 {% block back_content %}
-<h1 class="mb-4">Galerie</h1>
+<h1 class="mb-4">{{ 'back.gallery.index.heading'|trans(domain='back') }}</h1>
 
 <p>
-    <a href="{{ path('app_back_gallery_new') }}" class="btn btn-primary">Ajouter une image</a>
+    <a href="{{ path('app_back_gallery_new') }}" class="btn btn-primary">
+        {{ 'back.gallery.index.add'|trans(domain='back') }}
+    </a>
 </p>
 
 <div class="row g-3">
@@ -17,26 +19,32 @@
             <img src="{{ asset(item.image) }}" class="card-img-top" alt="{{ item.titre }}" style="height: 200px; object-fit: cover;">
             {% else %}
             <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                <span class="text-white">Pas d'image</span>
+                <span class="text-white">{{ 'back.gallery.index.no_image'|trans(domain='back') }}</span>
             </div>
             {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ item.titre }}</h5>
                 <p class="card-text text-muted small">{{ (item.description|default('—'))|slice(0, 80) }}{% if (item.description|default(''))|length > 80 %}…{% endif %}</p>
-                <p class="text-muted small mb-0">Ordre : {{ item.ordre }}</p>
+                <p class="text-muted small mb-0">{{ 'back.gallery.index.order'|trans(domain='back') }} : {{ item.ordre }}</p>
             </div>
             <div class="card-footer bg-transparent">
-                <a href="{{ path('app_back_gallery_edit', { id: item.id }) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
-                <form method="post" action="{{ path('app_back_gallery_delete', { id: item.id }) }}" class="d-inline" onsubmit="return confirm('Supprimer cet élément ?');">
+                <a href="{{ path('app_back_gallery_edit', { id: item.id }) }}" class="btn btn-sm btn-outline-primary">
+                    {{ 'back.gallery.index.edit'|trans(domain='back') }}
+                </a>
+                <form method="post" action="{{ path('app_back_gallery_delete', { id: item.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.gallery.index.confirm_delete'|trans(domain='back') }}');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        {{ 'back.gallery.index.delete'|trans(domain='back') }}
+                    </button>
                 </form>
             </div>
         </div>
     </div>
     {% else %}
     <div class="col-12">
-        <div class="alert alert-info">Aucun élément dans la galerie. Ajoutez des images pour les afficher sur le site.</div>
+        <div class="alert alert-info">
+            {{ 'back.gallery.index.empty'|trans(domain='back') }}
+        </div>
     </div>
     {% endfor %}
 </div>

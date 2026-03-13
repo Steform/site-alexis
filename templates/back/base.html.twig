@@ -3,32 +3,43 @@
 {% block body %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" href="{{ path('app_back_dashboard') }}">Back-office</a>
+        <a class="navbar-brand" href="{{ path('app_back_dashboard') }}">{{ 'back.layout.brand'|trans({}, 'back') }}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBack" aria-controls="navbarBack" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarBack">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_back_horaires_index') }}">Horaires</a>
+                    <a class="nav-link" href="{{ path('app_back_horaires_index') }}">{{ 'back.layout.nav.horaires'|trans({}, 'back') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_back_avis_index') }}">Avis</a>
+                    <a class="nav-link" href="{{ path('app_back_avis_index') }}">{{ 'back.layout.nav.avis'|trans({}, 'back') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_back_message_index') }}">Messages</a>
+                    <a class="nav-link" href="{{ path('app_back_message_index') }}">{{ 'back.layout.nav.messages'|trans({}, 'back') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_back_gallery_index') }}">Galerie</a>
+                    <a class="nav-link" href "{{ path('app_back_gallery_index') }}">{{ 'back.layout.nav.gallery'|trans({}, 'back') }}</a>
                 </li>
                 {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_back_user_index') }}">Utilisateurs</a>
+                    <a class="nav-link" href="{{ path('app_back_user_index') }}">{{ 'back.layout.nav.users'|trans({}, 'back') }}</a>
                 </li>
                 {% endif %}
             </ul>
+            {% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
+            <div class="btn-group btn-group-sm me-3" role="group" aria-label="Sélecteur de langue back-office">
+                <a href="{{ path('app_switch_locale', { locale: 'fr' }) }}"
+                   class="btn {{ currentLocale == 'fr' ? 'btn-outline-light' : 'btn-outline-secondary' }}">
+                    FR
+                </a>
+                <a href="{{ path('app_switch_locale', { locale: 'de' }) }}"
+                   class="btn {{ currentLocale == 'de' ? 'btn-outline-light' : 'btn-outline-secondary' }}">
+                    DE
+                </a>
+            </div>
             <span class="navbar-text text-light me-3">{{ app.user.nom|default(app.user.email) }}</span>
-            <a href="{{ path('app_logout') }}" class="btn btn-outline-light btn-sm">Déconnexion</a>
+            <a href="{{ path('app_logout') }}" class="btn btn-outline-light btn-sm">{{ 'back.layout.logout'|trans({}, 'back') }}</a>
         </div>
     </div>
 </nav>

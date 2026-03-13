@@ -1,0 +1,12 @@
+{% if horaires_compact is defined and horaires_compact is not empty %}
+    {% for row in horaires_compact %}
+        <div>
+            <span class="fw-semibold">{{ row.label }}</span> :
+            <span>{{ row.ranges }}</span>
+            {% if row.comment %}
+                <span> – {{ row.comment }}</span>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endif %}
+

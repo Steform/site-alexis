@@ -1,14 +1,16 @@
 {% extends 'back/base.html.twig' %}
 
-{% block title %}Modifier {{ horaires.jour|capitalize }} - Horaires{% endblock %}
+{% block title %}{{ 'back.horaires.edit.title'|trans({'%day%': horaires.jour|capitalize}, 'back') }}{% endblock %}
 
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block back_content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">Modifier les horaires — {{ horaires.jour|capitalize }}</h1>
+    <h1 class="mb-0">
+        {{ 'back.horaires.edit.heading'|trans({'%day%': horaires.jour|capitalize}, 'back') }}
+    </h1>
     <a href="{{ path('app_back_horaires_index') }}" class="btn btn-outline-secondary">
-        ← Retour aux horaires
+        {{ 'back.horaires.edit.back'|trans(domain='back') }}
     </a>
 </div>
 
@@ -16,7 +18,9 @@
 <div class="card shadow-sm border-0">
     <div class="card-header bg-success text-white py-3">
         <h5 class="card-title mb-0">{{ horaires.jour|capitalize }}</h5>
-        <small class="opacity-75">Modifier les horaires d'ouverture pour ce jour</small>
+        <small class="opacity-75">
+            {{ 'back.horaires.edit.subheading'|trans(domain='back') }}
+        </small>
     </div>
     <div class="card-body p-4">
         <div class="row g-4">
@@ -25,33 +29,67 @@
                     'row_attr': { 'class': 'mb-0' },
                     'attr': { 'class': 'form-select' }
                 }) }}
-                <small class="form-text text-muted">Le jour ne peut pas être modifié.</small>
+                <small class="form-text text-muted">
+                    {{ 'back.horaires.edit.help.day_fixed'|trans(domain='back') }}
+                </small>
             </div>
             <div class="col-md-6">
-                {{ form_row(form.heureDebut, {
+                {{ form_row(form.heureDebutMatin, {
                     'row_attr': { 'class': 'mb-0' },
                     'attr': { 'class': 'form-control' },
-                    'help': 'Heure d\'ouverture (vide si fermé)'
+                    'help': 'back.horaires.edit.help.morning_start'|trans(domain='back')
                 }) }}
             </div>
             <div class="col-md-6">
-                {{ form_row(form.heureFin, {
+                {{ form_row(form.heureFinMatin, {
                     'row_attr': { 'class': 'mb-0' },
                     'attr': { 'class': 'form-control' },
-                    'help': 'Heure de fermeture (vide si fermé)'
+                    'help': 'back.horaires.edit.help.morning_end'|trans(domain='back')
                 }) }}
             </div>
-            <div class="col-12">
+            <div class="col-md-6">
+                {{ form_row(form.heureDebutApresMidi, {
+                    'row_attr': { 'class': 'mb-0' },
+                    'attr': { 'class': 'form-control' },
+                    'help': 'back.horaires.edit.help.afternoon_start'|trans(domain='back')
+                }) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.heureFinApresMidi, {
+                    'row_attr': { 'class': 'mb-0' },
+                    'attr': { 'class': 'form-control' },
+                    'help': 'back.horaires.edit.help.afternoon_end'|trans(domain='back')
+                }) }}
+            </div>
+            <div class="col-md-6">
                 {{ form_row(form.commentaire, {
                     'row_attr': { 'class': 'mb-0' },
-                    'attr': { 'class': 'form-control', 'placeholder': 'Ex. : Fermé, Congés annuels, etc.', 'rows': 2 }
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'back.horaires.edit.placeholder.comment_fr'|trans(domain='back'),
+                        'rows': 2
+                    }
+                }) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.commentaireDe, {
+                    'row_attr': { 'class': 'mb-0' },
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'back.horaires.edit.placeholder.comment_de'|trans(domain='back'),
+                        'rows': 2
+                    }
                 }) }}
             </div>
         </div>
         <hr class="my-4">
         <div class="d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <a href="{{ path('app_back_horaires_index') }}" class="btn btn-outline-secondary">Annuler</a>
+            <button type="submit" class="btn btn-primary">
+                {{ 'back.horaires.edit.save'|trans(domain='back') }}
+            </button>
+            <a href="{{ path('app_back_horaires_index') }}" class="btn btn-outline-secondary">
+                {{ 'back.horaires.edit.cancel'|trans(domain='back') }}
+            </a>
         </div>
     </div>
 </div>

@@ -26,7 +26,11 @@ class AvisType extends AbstractType
     {
         $builder
             ->add('texte', TextareaType::class, [
-                'label' => 'Avis',
+                'label' => 'Texte (FR)',
+                'attr' => ['rows' => 4],
+            ])
+            ->add('texteDe', TextareaType::class, [
+                'label' => 'Texte (DE)',
                 'attr' => ['rows' => 4],
             ])
             ->add('auteur', TextType::class, [

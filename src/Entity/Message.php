@@ -27,6 +27,9 @@ class Message
     #[ORM\Column(type: Types::TEXT)]
     private ?string $contenu = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $contenuDe = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateDebut = null;
 
@@ -46,6 +49,18 @@ class Message
     public function setContenu(string $contenu): static
     {
         $this->contenu = $contenu;
+
+        return $this;
+    }
+
+    public function getContenuDe(): ?string
+    {
+        return $this->contenuDe;
+    }
+
+    public function setContenuDe(?string $contenuDe): static
+    {
+        $this->contenuDe = $contenuDe;
 
         return $this;
     }

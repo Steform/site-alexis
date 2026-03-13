@@ -1,21 +1,24 @@
 {% extends 'back/base.html.twig' %}
 
-{% block title %}Avis - Back-office{% endblock %}
+{% block title %}{{ 'back.avis.index.title'|trans(domain='back') }}{% endblock %}
 
 {% block back_content %}
-<h1 class="mb-4">Avis clients</h1>
+<h1 class="mb-4">{{ 'back.avis.index.heading'|trans(domain='back') }}</h1>
 
 <p>
-    <a href="{{ path('app_back_avis_new') }}" class="btn btn-primary">Ajouter un avis</a>
+    <a href="{{ path('app_back_avis_new') }}" class="btn btn-primary">
+        {{ 'back.avis.index.add'|trans(domain='back') }}
+    </a>
 </p>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Auteur</th>
-            <th>Note</th>
-            <th>Date</th>
-            <th>Aperçu</th>
+            <th>{{ 'back.avis.index.th.author'|trans(domain='back') }}</th>
+            <th>{{ 'back.avis.index.th.rating'|trans(domain='back') }}</th>
+            <th>{{ 'back.avis.index.th.date'|trans(domain='back') }}</th>
+            <th>{{ 'back.avis.index.th.preview_fr'|trans(domain='back') }}</th>
+            <th>{{ 'back.avis.index.th.preview_de'|trans(domain='back') }}</th>
             <th></th>
         </tr>
     </thead>
@@ -26,17 +29,24 @@
             <td>{{ a.note }}/5</td>
             <td>{{ a.date|date('d/m/Y') }}</td>
             <td>{{ a.texte|slice(0, 50) }}{% if a.texte|length > 50 %}…{% endif %}</td>
+            <td>{{ a.texteDe|slice(0, 50) }}{% if a.texteDe and a.texteDe|length > 50 %}…{% endif %}</td>
             <td>
-                <a href="{{ path('app_back_avis_edit', { id: a.id }) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
-                <form method="post" action="{{ path('app_back_avis_delete', { id: a.id }) }}" class="d-inline" onsubmit="return confirm('Supprimer cet avis ?');">
+                <a href="{{ path('app_back_avis_edit', { id: a.id }) }}" class="btn btn-sm btn-outline-primary">
+                    {{ 'back.avis.index.edit'|trans(domain='back') }}
+                </a>
+                <form method="post" action="{{ path('app_back_avis_delete', { id: a.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.avis.index.confirm_delete'|trans(domain='back') }}');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ a.id) }}">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        {{ 'back.avis.index.delete'|trans(domain='back') }}
+                    </button>
                 </form>
             </td>
         </tr>
         {% else %}
         <tr>
-            <td colspan="5" class="text-muted">Aucun avis.</td>
+            <td colspan="6" class="text-muted">
+                {{ 'back.avis.index.empty'|trans(domain='back') }}
+            </td>
         </tr>
         {% endfor %}
     </tbody>
