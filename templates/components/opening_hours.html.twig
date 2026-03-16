@@ -1,0 +1,46 @@
+{# 
+  Reusable opening hours component.
+  Expects:
+    - rows: array of rows (compact or full structure, prepared in PHP)
+    - mode: 'compact' | 'full' (default: 'compact')
+#}
+
+{% set mode = mode|default('compact') %}
+
+{% if rows is empty %}
+    {# Nothing to display #}
+{% else %}
+    {% if mode == 'compact' %}
+        {# Compact inline rendering (used in top contact bar) #}
+        {% for row in rows %}
+            <span class="fw-semibold">🕐 {{ row.label }}</span> :
+            <span>{{ row.ranges }}</span>
+            {% if row.comment %}
+                <span> – {{ row.comment }}</span>
+            {% endif %}
+            {% if not loop.last %}
+                <span class="mx-1">|</span>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {# Full table rendering (used on /horaires and contact page) #}
+        <div class="table-responsive">
+            <table class="table table-striped bg-white shadow-sm mb-0">
+                <tbody>
+                {% for row in rows %}
+                    <tr>
+                        <th scope="row" class="fw-semibold">{{ row.day }}</th>
+                        <td>
+                            {{ row.ranges }}
+                            {% if row.comment %}
+                                – {{ row.comment }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endif %}
+

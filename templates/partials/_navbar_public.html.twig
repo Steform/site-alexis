@@ -54,13 +54,30 @@
     <div class="container">
         <div class="row align-items-center justify-content-between">
             <div class="col-auto d-flex flex-wrap gap-4">
-                <span>📍 {{ 'home.contact.location'|trans }}</span>
-                <a href="tel:0389572828">📞 03 89 57 28 28</a>
+                {% if coordinates is defined and coordinates %}
+                    {% if coordinates.city is not empty %}
+                        <span>📍 {{ coordinates.city }}</span>
+                    {% else %}
+                        <span>📍 {{ 'nav.city'|trans }}</span>
+                    {% endif %}
+
+                    {% set phoneHref = coordinates.phone is not empty
+                        ? coordinates.phone|replace({' ': '', '.': '', '-': ''})
+                        : null
+                    %}
+                    {% if phoneHref %}
+                        <a href="tel:{{ phoneHref }}">📞 {{ coordinates.phone }}</a>
+                    {% else %}
+                        <span>📞 {{ 'nav.phone'|trans }}</span>
+                    {% endif %}
+                {% else %}
+                    <span>📍 {{ 'nav.city'|trans }}</span>
+                    <span>📞 {{ 'nav.phone'|trans }}</span>
+                {% endif %}
                 <span>
                     {% if horaires_compact is defined and horaires_compact is not empty %}
-                        🕐
-                        <a href="{{ path('app_horaires_public') }}" class="ms-1 text-decoration-none text-reset">
-                            {% include 'components/_opening_hours_compact.html.twig' %}
+                        <a href="{{ path('app_horaires_public') }}" class="">
+                            {% include 'components/opening_hours.html.twig' with { rows: horaires_compact, mode: 'compact' } %}
                         </a>
                     {% endif %}
                 </span>

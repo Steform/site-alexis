@@ -10,21 +10,7 @@
     {% if horaires_full is not empty %}
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <table class="table table-striped bg-white shadow-sm">
-                    <tbody>
-                    {% for row in horaires_full %}
-                        <tr>
-                            <th scope="row" class="fw-semibold">{{ row.day }}</th>
-                            <td>
-                                {{ row.ranges }}
-                                {% if row.comment %}
-                                    – {{ row.comment }}
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                {% include 'components/opening_hours.html.twig' with { rows: horaires_full, mode: 'full' } %}
             </div>
         </div>
     {% else %}

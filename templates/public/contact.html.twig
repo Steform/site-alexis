@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'contact.title'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'partials/_navbar_public.html.twig' %}
+
+    <main class="py-5">
+        <div class="container">
+            {# Top row: text + coordinates on the left, map on the right #}
+            <div class="row g-4 mb-4 align-items-start">
+                <div class="col-lg-6">
+                    <h1 class="mb-3">{{ 'contact.heading'|trans }}</h1>
+                    <p class="lead text-muted mb-4">
+                        {{ 'contact.intro'|trans }}
+                    </p>
+
+                    {% if coordinates %}
+                        <div class="mb-3">
+                            <p class="mb-1 fw-semibold fs-5">
+                                {{ coordinates.companyName }}
+                            </p>
+                            <p class="mb-2 text-muted">
+                                {{ coordinates.street }}<br>
+                                {{ coordinates.postalCode }} {{ coordinates.city }}
+                            </p>
+                            <p class="mb-0">
+                                <span class="fw-semibold">{{ 'contact.coordinates.phone'|trans }}</span>
+                                : {{ coordinates.phone }}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <div class="col-lg-6">
+                    {% if coordinates and coordinates.googleMapsEmbedUrl %}
+                        <div class="ratio ratio-16x9 shadow-sm">
+                            <iframe
+                                src="{{ coordinates.googleMapsEmbedUrl }}"
+                                style="border:0;heihgt: 250px;"
+                                allowfullscreen
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <hr class="my-4 d-none d-md-block">
+
+            {# Second row: contact form on the left, opening hours component on the right (no cards) #}
+            <div class="row g-4 align-items-start mt-1">
+                <div class="col-lg-6">
+                    <h2 class="h4 mb-3">
+                        {{ 'contact.form.title'|trans }}
+                    </h2>
+                    <p class="text-muted mb-4 small">
+                        {{ 'contact.form.subtitle'|trans|default('') }}
+                    </p>
+
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label == 'error' ? 'danger' : label }} mb-3">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    {{ form_start(form, {
+                        attr: {
+                            class: 'needs-validation',
+                            novalidate: 'novalidate'
+                        }
+                    }) }}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                {{ form_row(form.name, {
+                                    row_attr: { class: 'mb-3' },
+                                    attr: { class: 'form-control' }
+                                }) }}
+                            </div>
+                            <div class="col-12">
+                                {{ form_row(form.email, {
+                                    row_attr: { class: 'mb-3' },
+                                    attr: { class: 'form-control' }
+                                }) }}
+                            </div>
+                            <div class="col-12">
+                                {{ form_row(form.message, {
+                                    row_attr: { class: 'mb-3' },
+                                    attr: { class: 'form-control', rows: 6 }
+                                }) }}
+                            </div>
+
+                            <div class="d-none">
+                                {{ form_row(form.website) }}
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-end pt-2">
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="bi bi-envelope-paper me-2"></i>
+                                    {{ 'contact.form.submit'|trans }}
+                                </button>
+                            </div>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+
+                <div class="col-lg-6">
+                    <h2 class="h4 mb-3 text-uppercase text-muted fw-semibold">
+                        {{ 'contact.opening_hours.title'|trans }}
+                    </h2>
+                    {% if horaires_full is not empty %}
+                        {% include 'components/opening_hours.html.twig' with { rows: horaires_full, mode: 'full' } %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {% include 'partials/_footer_public.html.twig' %}
+{% endblock %}
+

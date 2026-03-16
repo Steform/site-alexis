@@ -6,9 +6,6 @@
 {% block back_content %}
 <h1 class="mb-4">{{ 'back.dashboard.title'|trans({}, 'back') }}</h1>
 <p class="lead">{{ 'back.dashboard.welcome'|trans({'%name%': app.user.nom|default(app.user.email)}, 'back') }}</p>
-<p class="mb-4">
-    <a href="{{ path('app_logout') }}" class="btn btn-outline-primary">{{ 'back.dashboard.logout_to_site'|trans({}, 'back') }}</a>
-</p>
 
 <div class="row g-3">
     <div class="col-md-4">
@@ -44,6 +41,15 @@
                 <h5 class="card-title">{{ 'back.dashboard.card.gallery.title'|trans({}, 'back') }}</h5>
                 <p class="card-text">{{ 'back.dashboard.card.gallery.text'|trans({}, 'back') }}</p>
                 <a href="{{ path('app_back_gallery_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.gallery.cta'|trans({}, 'back') }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ 'back.dashboard.card.coordinates.title'|trans({}, 'back') }}</h5>
+                <p class="card-text">{{ 'back.dashboard.card.coordinates.text'|trans({}, 'back') }}</p>
+                <a href="{{ path('app_back_coordinates') }}" class="btn btn-primary">{{ 'back.dashboard.card.coordinates.cta'|trans({}, 'back') }}</a>
             </div>
         </div>
     </div>

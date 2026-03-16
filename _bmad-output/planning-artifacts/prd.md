@@ -90,8 +90,8 @@ Refondre le site de la **Carrosserie Lino** (Baldersheim) pour qu'il porte la **
 ### Technical Success
 
 - **Symfony 8+ :** code structuré, maintenable.
-- **Sécurité :** authentification (admin + Alexis), formulaire devis protégé (anti-spam / validation).
-- **Disponibilité :** envoi d'email fiable pour le devis ; affichage des messages selon les dates.
+- **Sécurité :** authentification (admin + Alexis), formulaires publics (**devis** et **contact**) protégés (validation, anti-spam basique, **captcha**).
+- **Disponibilité :** envoi d'email fiable pour le devis et le contact ; affichage des messages selon les dates.
 
 ### Measurable Outcomes
 
@@ -166,7 +166,7 @@ Refondre le site de la **Carrosserie Lino** (Baldersheim) pour qu'il porte la **
 
 ### Journey Requirements Summary
 
-- **Site public :** pages alignées sur la maquette ; horaires dynamiques ; affichage des avis (saisis manuellement) ; affichage conditionnel des messages à date bornée (rouge, emplacement à définir) ; formulaire « Demander un devis » avec envoi d'email ; contact visible (téléphone, etc.) ; identité Alexis (nom, photo, texte).
+- **Site public :** pages alignées sur la maquette ; horaires dynamiques ; affichage des avis (saisis manuellement) ; affichage conditionnel des messages à date bornée (rouge, emplacement à définir) ; formulaires « Demander un devis » et **« Contact »** avec envoi d'email et **captcha anti-spam** ; contact visible (téléphone, etc.) ; identité Alexis (nom, photo, texte).
 - **Back-office Alexis :** authentification ; écrans de gestion des horaires, des avis et des messages à date bornée (liste illimitée, contenu + dates) ; pas d'accès à la gestion des autres comptes.
 - **Back-office Admin :** authentification ; gestion des comptes (et des rôles) ; possibilité de vérifier ou superviser le contenu et le bon fonctionnement (ex. envoi des devis).
-- **Technique :** Symfony 8+ ; envoi d'emails fiable ; règles d'affichage des messages selon les dates ; sécurité (auth, validation formulaire, anti-spam basique si pertinent).
+- **Technique :** Symfony 8+ ; envoi d'emails fiable ; règles d'affichage des messages selon les dates ; sécurité (auth, validation formulaire, **captcha** et anti-spam basique sur les formulaires publics).

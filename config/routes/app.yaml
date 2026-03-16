@@ -4,6 +4,11 @@ app_home:
   controller: App\Controller\Public\HomeController::index
   methods: GET
 
+app_contact:
+  path: /contact
+  controller: App\Controller\Public\ContactController::index
+  methods: GET
+
 app_devis:
   path: /devis
   controller: App\Controller\Public\DevisController::index
@@ -135,6 +140,11 @@ app_back_gallery_delete:
   path: /back/galerie/{id}/delete
   controller: App\Controller\Back\GalleryController::delete
   methods: POST
+
+app_back_coordinates:
+  path: /back/coordinates
+  controller: App\Controller\Back\CoordinatesController::index
+  methods: [GET, POST]
 
 app_switch_locale:
   path: /switch-locale/{locale}
