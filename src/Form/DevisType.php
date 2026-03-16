@@ -38,14 +38,14 @@ class DevisType extends AbstractType
             ->add('nom', TextType::class, [
                 'label' => 'form.devis.name.label',
                 'attr' => ['placeholder' => 'form.devis.name.placeholder'],
-                'constraints' => [new NotBlank(['message' => 'validator.devis.name_required'])],
+                'constraints' => [new NotBlank(message: 'validator.devis.name_required')],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'form.devis.email.label',
                 'attr' => ['placeholder' => 'form.devis.email.placeholder'],
                 'constraints' => [
-                    new NotBlank(['message' => 'validator.devis.email_required']),
-                    new Email(['message' => 'validator.devis.email_invalid']),
+                    new NotBlank(message: 'validator.devis.email_required'),
+                    new Email(message: 'validator.devis.email_invalid'),
                 ],
             ])
             ->add('telephone', TelType::class, [
@@ -56,7 +56,7 @@ class DevisType extends AbstractType
             ->add('vehicule', TextType::class, [
                 'label' => 'form.devis.vehicle.label',
                 'attr' => ['placeholder' => 'form.devis.vehicle.placeholder'],
-                'constraints' => [new NotBlank(['message' => 'validator.devis.vehicle_required'])],
+                'constraints' => [new NotBlank(message: 'validator.devis.vehicle_required')],
             ])
             ->add('typePrestation', ChoiceType::class, [
                 'label' => 'form.devis.type.label',
@@ -70,12 +70,12 @@ class DevisType extends AbstractType
                 ],
                 'choice_translation_domain' => 'messages',
                 'placeholder' => 'form.devis.type.placeholder',
-                'constraints' => [new NotBlank(['message' => 'validator.devis.type_required'])],
+                'constraints' => [new NotBlank(message: 'validator.devis.type_required')],
             ])
             ->add('message', TextareaType::class, [
                 'label' => 'form.devis.message.label',
                 'attr' => ['rows' => 4, 'placeholder' => 'form.devis.message.placeholder'],
-                'constraints' => [new NotBlank(['message' => 'validator.devis.message_required'])],
+                'constraints' => [new NotBlank(message: 'validator.devis.message_required')],
             ])
             ->add('website', TextType::class, [
                 'label' => false,

@@ -1,0 +1,91 @@
+# generated: 2026-03-13
+# project: site-alexis
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: "2026-03-13"
+project: site-alexis
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+# Status aligned with existing code (phase 4 reprise après code déjà fait)
+development_status:
+  epic-1: done
+  1-1-initialiser-le-projet-symfony-8: done
+  1-2-integrer-bootstrap-et-base-twig: done
+  epic-1-retrospective: optional
+
+  epic-2: done
+  2-1-entite-user: done
+  2-2-entite-horaires: done
+  2-3-entite-avis: done
+  2-4-entite-message: done
+  2-5-migrations-doctrine: done
+  epic-2-retrospective: optional
+
+  epic-3: done
+  3-1-symfony-security: done
+  3-2-roles-et-utilisateurs: done
+  3-3-firewall-back-office: done
+  epic-3-retrospective: optional
+
+  epic-4: done
+  4-1-crud-horaires: done
+  4-2-crud-avis: done
+  4-3-crud-messages-a-date-bornee: done
+  epic-4-retrospective: optional
+
+  epic-5: done
+  5-1-page-index-maquette: done
+  5-2-horaires-dynamiques: done
+  5-3-avis-clients: done
+  5-4-messages-a-date-bornee: done
+  5-5-identite-alexis: done
+  5-6-contact-visible: done
+  epic-5-retrospective: optional
+
+  epic-6: done
+  6-1-formulaire-devis: done
+  6-2-envoi-email: done
+  epic-6-retrospective: optional
+
+  epic-7: done
+  7-1-symfony-translation: done
+  7-2-contenu-traductible: done
+  epic-7-retrospective: optional
+
+  epic-8: in-progress
+  8-1-responsive: ready-for-dev
+  8-2-accessibilite: backlog
+  epic-8-retrospective: optional

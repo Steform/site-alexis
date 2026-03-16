@@ -1,5 +1,2 @@
-{"sessionId":"f469c3","timestamp":1773428115000,"hypothesisId":"A","message":"Apache and port 90","data":{"apache":"active","port90_listen_count":"1"},"location":"debug-connectivity.sh"}
-{"sessionId":"f469c3","timestamp":1773428115000,"hypothesisId":"B","message":"alexis.loc resolution","data":{"resolved_ips":"127.0.0.1 "},"location":"debug-connectivity.sh"}
-{"sessionId":"f469c3","timestamp":1773428115000,"hypothesisId":"C","message":"curl IPv4 127.0.0.1:90","data":{"http_code_or_error":"500"},"location":"debug-connectivity.sh"}
-{"sessionId":"f469c3","timestamp":1773428115000,"hypothesisId":"D","message":"curl IPv6 [::1]:90","data":{"http_code_or_error":"500"},"location":"debug-connectivity.sh"}
-{"sessionId":"f469c3","timestamp":1773428115000,"hypothesisId":"E","message":"curl alexis.loc:90","data":{"http_code_or_error":"500"},"location":"debug-connectivity.sh"}
+{"sessionId":"f469c3","hypothesisId":"A","message":"DevisType buildForm","data":{"step":"start"},"timestamp":1773494819000,"location":"DevisType.php:buildForm"}
+{"sessionId":"f469c3","hypothesisId":"A","message":"DevisType buildForm","data":{"step":"end"},"timestamp":1773494819000,"location":"DevisType.php:buildForm"}

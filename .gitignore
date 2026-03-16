@@ -1,4 +1,5 @@
 ###> symfony/framework-bundle ###
+# Local overrides only; keep .env out of Git
 /.env
 /.env.local
 /.env.local.php

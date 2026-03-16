@@ -27,7 +27,7 @@ class GalleryItemType extends AbstractType
             ->add('titre', TextType::class, [
                 'label' => 'Titre (FR)',
                 'attr' => ['placeholder' => 'Ex. : Réparation Peugeot 308'],
-                'constraints' => [new NotBlank(['message' => 'Le titre est requis.'])],
+                'constraints' => [new NotBlank(message: 'Le titre est requis.')],
             ])
             ->add('titreDe', TextType::class, [
                 'label' => 'Titre (DE)',
@@ -54,12 +54,12 @@ class GalleryItemType extends AbstractType
                 'mapped' => false,
                 'required' => !$options['is_edit'],
                 'constraints' => $options['is_edit'] ? [] : [
-                    new NotBlank(['message' => 'L\'image est requise.']),
-                    new File([
-                        'maxSize' => '5M',
-                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-                        'mimeTypesMessage' => 'Format accepté : JPEG, PNG, WebP ou GIF.',
-                    ]),
+                    new NotBlank(message: 'L\'image est requise.'),
+                    new File(
+                        maxSize: '5M',
+                        mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                        mimeTypesMessage: 'Format accepté : JPEG, PNG, WebP ou GIF.',
+                    ),
                 ],
             ])
         ;
