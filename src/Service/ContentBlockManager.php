@@ -375,74 +375,9 @@ class ContentBlockManager
             $fallbackIndexed[$block->getKey()] = $block;
         }
 
-        // #region agent log
-        @file_put_contents(
-            'debug-8a5f96.log',
-            json_encode([
-                'sessionId' => '8a5f96',
-                'runId' => 'pre-fix',
-                'hypothesisId' => 'H1',
-                'location' => 'ContentBlockManager.php:getPageColors:before-loop',
-                'message' => 'Indexed blocks snapshot',
-                'data' => [
-                    'pageName' => $pageName,
-                    'locale' => $locale,
-                    'definitions' => array_keys($definitions),
-                    'localeIndexed' => array_keys($localeIndexed),
-                    'fallbackIndexed' => array_keys($fallbackIndexed),
-                ],
-                'timestamp' => (int) round(microtime(true) * 1000),
-            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL,
-            FILE_APPEND
-        );
-        // #endregion
-
         $colors = [];
         foreach ($definitions as $key => $_definition) {
-            // #region agent log
-            @file_put_contents(
-                'debug-8a5f96.log',
-                json_encode([
-                    'sessionId' => '8a5f96',
-                    'runId' => 'pre-fix',
-                    'hypothesisId' => 'H2',
-                    'location' => 'ContentBlockManager.php:getPageColors:per-key',
-                    'message' => 'Key presence check',
-                    'data' => [
-                        'pageName' => $pageName,
-                        'locale' => $locale,
-                        'key' => $key,
-                        'inLocaleIndexed' => array_key_exists($key, $localeIndexed),
-                        'inFallbackIndexed' => array_key_exists($key, $fallbackIndexed),
-                    ],
-                    'timestamp' => (int) round(microtime(true) * 1000),
-                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL,
-                FILE_APPEND
-            );
-            // #endregion
-
             $storedColor = ($localeIndexed[$key] ?? null)?->getColor() ?? ($fallbackIndexed[$key] ?? null)?->getColor();
-
-            // #region agent log
-            @file_put_contents(
-                'debug-8a5f96.log',
-                json_encode([
-                    'sessionId' => '8a5f96',
-                    'runId' => 'pre-fix',
-                    'hypothesisId' => 'H3',
-                    'location' => 'ContentBlockManager.php:getPageColors:resolved-color',
-                    'message' => 'Resolved stored color before normalize',
-                    'data' => [
-                        'pageName' => $pageName,
-                        'locale' => $locale,
-                        'key' => $key,
-                        'storedColor' => $storedColor,
-                    ],
-                    'timestamp' => (int) round(microtime(true) * 1000),
-                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL,
-                FILE_APPEND
-            );
-            // #endregion
 
             $colors[$key] = $this->normalizeColor($storedColor, $pageName, $key);
         }

@@ -162,8 +162,18 @@
   color: #6eb5ff;
 }
 
-.card-img-overlay-dark {
-  background: linear-gradient(to top, rgba(22, 32, 71, 0.9), transparent 60%);
+/* Services cards: keep transparency of images */
+.service-card {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.service-card-img-overlay {
+  background: transparent !important;
+}
+
+#services .service-card-img-overlay .card-title {
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
 .testimonial-section {
