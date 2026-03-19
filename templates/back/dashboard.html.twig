@@ -47,6 +47,15 @@
     <div class="col-md-4">
         <div class="card h-100">
             <div class="card-body">
+                <h5 class="card-title">{{ 'back.dashboard.card.texts.title'|trans({}, 'back') }}</h5>
+                <p class="card-text">{{ 'back.dashboard.card.texts.text'|trans({}, 'back') }}</p>
+                <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_home_de' : 'app_back_content_home_fr') }}" class="btn btn-primary">{{ 'back.dashboard.card.texts.cta'|trans({}, 'back') }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
                 <h5 class="card-title">{{ 'back.dashboard.card.coordinates.title'|trans({}, 'back') }}</h5>
                 <p class="card-text">{{ 'back.dashboard.card.coordinates.text'|trans({}, 'back') }}</p>
                 <a href="{{ path('app_back_coordinates') }}" class="btn btn-primary">{{ 'back.dashboard.card.coordinates.cta'|trans({}, 'back') }}</a>

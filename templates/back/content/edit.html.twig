@@ -1,0 +1,270 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}{{ 'back.content.title'|trans({}, 'back') }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://unpkg.com/trix@1.3.1/dist/trix.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/trix@1.3.1/dist/trix.js"></script>
+{% endblock %}
+
+{% block back_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">{{ 'back.content.heading'|trans({}, 'back') }}</h1>
+</div>
+
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link {{ page_name == 'home' ? 'active' : '' }}" href="{{ path(locale == 'fr' ? 'app_back_content_home_fr' : 'app_back_content_home_de') }}">
+            {{ 'back.content.tab.home'|trans({}, 'back') }}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ page_name == 'qui_sommes_nous' ? 'active' : '' }}" href="{{ path(locale == 'fr' ? 'app_back_content_qui_sommes_nous_fr' : 'app_back_content_qui_sommes_nous_de') }}">
+            {{ 'back.content.tab.qui'|trans({}, 'back') }}
+        </a>
+    </li>
+</ul>
+
+<ul class="nav nav-pills mb-4">
+    <li class="nav-item">
+        <a class="nav-link {{ locale == 'fr' ? 'active' : '' }}" href="{{ path(page_name == 'home' ? 'app_back_content_home_fr' : 'app_back_content_qui_sommes_nous_fr') }}">
+            {{ 'back.content.locale.short.fr'|trans({}, 'back') }}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ locale == 'de' ? 'active' : '' }}" href="{{ path(page_name == 'home' ? 'app_back_content_home_de' : 'app_back_content_qui_sommes_nous_de') }}">
+            {{ 'back.content.locale.short.de'|trans({}, 'back') }}
+        </a>
+    </li>
+</ul>
+
+<form method="post">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            {% if page_name == 'home' %}
+                {% set section_map = {
+                    'back.content.section.hero_top': ['hero.top_content', 'hero.text_shadow_color', 'hero.cta'],
+                    'back.content.section.hero_photos': ['hero.custom_css'],
+                    'back.content.section.about_home': ['about.title', 'about.lead', 'about.body', 'about.cta'],
+                    'back.content.section.about_photos': []
+                } %}
+            {% else %}
+                {% set section_map = {
+                    'back.content.section.qui_main': ['title', 'alexis.role', 'alexis.lead', 'alexis.text1', 'alexis.text2', 'cta.quote'],
+                    'back.content.section.qui_cards': ['card.family.title', 'card.family.text', 'card.expertise.title', 'card.expertise.text', 'card.location.title', 'card.location.text']
+                } %}
+            {% endif %}
+
+            <div class="accordion" id="contentSectionsAccordion_{{ page_name }}_{{ locale }}">
+                {% for section_label, section_keys in section_map %}
+                    <div class="accordion-item mb-3 border rounded">
+                        <h2 class="accordion-header" id="heading_{{ page_name }}_{{ locale }}_{{ loop.index }}">
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapse_{{ page_name }}_{{ locale }}_{{ loop.index }}"
+                                aria-expanded="false"
+                                aria-controls="collapse_{{ page_name }}_{{ locale }}_{{ loop.index }}"
+                            >
+                                {{ section_label|trans({}, 'back') }}
+                            </button>
+                        </h2>
+                        <div
+                            id="collapse_{{ page_name }}_{{ locale }}_{{ loop.index }}"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="heading_{{ page_name }}_{{ locale }}_{{ loop.index }}"
+                            data-bs-parent="#contentSectionsAccordion_{{ page_name }}_{{ locale }}"
+                        >
+                            <div class="accordion-body">
+                                {% if section_label == 'back.content.section.about_photos' and page_name == 'home' %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="d-flex flex-column">
+                                            <p class="text-muted mb-1">{{ 'back.about.photo.image_help'|trans({}, 'back') }}</p>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge text-bg-dark">WEBP</span>
+                                                <span class="badge text-bg-secondary">960x550</span>
+                                                <span class="badge text-bg-light">{{ (about_photos|default([]))|length }} photo(s)</span>
+                                            </div>
+                                        </div>
+                                        <a href="{{ path('app_back_content_home_photo_new', { locale: locale }) }}" class="btn btn-sm btn-primary">
+                                            {{ 'back.about.photos.index.add'|trans({}, 'back') }}
+                                        </a>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        {% for photo in about_photos|default([]) %}
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="card h-100 shadow-sm">
+                                                    {% if photo.image %}
+                                                        <img src="{{ asset(photo.image) }}" class="card-img-top" alt="{{ photo.altFr|default('')|default(photo.image) }}" style="height: 220px; object-fit: cover;">
+                                                    {% else %}
+                                                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 220px;">
+                                                            <span class="text-white">{{ 'back.gallery.index.no_image'|trans({}, 'back') }}</span>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <span class="badge text-bg-info">
+                                                                {{ 'back.about.photo.position'|trans({}, 'back') }} #{{ photo.position }}
+                                                            </span>
+                                                            <span class="badge bg-{{ photo.isActive ? 'success' : 'secondary' }}">
+                                                                {{ photo.isActive ? 'back.messages.index.status.active'|trans({}, 'back') : 'back.messages.index.status.inactive'|trans({}, 'back') }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer bg-transparent d-flex gap-2">
+                                                        <a href="{{ path('app_back_content_home_photo_edit', { locale: locale, id: photo.id }) }}" class="btn btn-sm btn-outline-primary">
+                                                            {{ 'back.about.photos.index.edit'|trans({}, 'back') }}
+                                                        </a>
+                                                        <form method="post" action="{{ path('app_back_content_home_photo_delete', { locale: locale, id: photo.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.about.photos.index.confirm_delete'|trans({}, 'back') }}');">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_home_photo' ~ photo.id) }}">
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                {{ 'back.about.photos.index.delete'|trans({}, 'back') }}
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-12">
+                                                <div class="alert alert-info mb-0">
+                                                    {{ 'back.about.photos.index.empty'|trans({}, 'back') }}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% if section_label == 'back.content.section.hero_photos' and page_name == 'home' %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="d-flex flex-column">
+                                            <p class="text-muted mb-1">{{ 'back.home_hero.photo.image_help'|trans({}, 'back') }}</p>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge text-bg-dark">WEBP</span>
+                                                <span class="badge text-bg-secondary">1920x550</span>
+                                                <span class="badge text-bg-light">{{ (home_hero_photos|default([]))|length }} photo(s)</span>
+                                            </div>
+                                        </div>
+                                        <a href="{{ path('app_back_content_home_hero_photo_new', { locale: locale }) }}" class="btn btn-sm btn-primary">
+                                            {{ 'back.home_hero.photos.index.add'|trans({}, 'back') }}
+                                        </a>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        {% for photo in home_hero_photos|default([]) %}
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="card h-100 shadow-sm">
+                                                    {% if photo.image %}
+                                                        <img src="{{ asset(photo.image) }}" class="card-img-top" alt="{{ photo.altFr|default('')|default(photo.image) }}" style="height: 220px; object-fit: cover;">
+                                                    {% else %}
+                                                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 220px;">
+                                                            <span class="text-white">{{ 'back.gallery.index.no_image'|trans({}, 'back') }}</span>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <span class="badge text-bg-info">
+                                                                {{ 'back.home_hero.photo.position'|trans({}, 'back') }} #{{ photo.position }}
+                                                            </span>
+                                                            <span class="badge bg-{{ photo.isActive ? 'success' : 'secondary' }}">
+                                                                {{ photo.isActive ? 'back.messages.index.status.active'|trans({}, 'back') : 'back.messages.index.status.inactive'|trans({}, 'back') }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer bg-transparent d-flex gap-2">
+                                                        <a href="{{ path('app_back_content_home_hero_photo_edit', { locale: locale, id: photo.id }) }}" class="btn btn-sm btn-outline-primary">
+                                                            {{ 'back.home_hero.photos.index.edit'|trans({}, 'back') }}
+                                                        </a>
+                                                        <form method="post" action="{{ path('app_back_content_home_hero_photo_delete', { locale: locale, id: photo.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.home_hero.photos.index.confirm_delete'|trans({}, 'back') }}');">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_home_hero_photo' ~ photo.id) }}">
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                {{ 'back.home_hero.photos.index.delete'|trans({}, 'back') }}
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-12">
+                                                <div class="alert alert-info mb-0">
+                                                    {{ 'back.home_hero.photos.index.empty'|trans({}, 'back') }}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% for block_key in section_keys %}
+                                    {% set config = definitions[block_key]|default(null) %}
+                                    {% if config %}
+                                        <div class="border rounded p-3 mb-3">
+                                            <div class="fw-semibold mb-3">
+                                                {{ ('back.content.block.' ~ block_key|replace({'.':'_'}))|trans({}, 'back') }}
+                                            </div>
+                                            {% if block_key not in ['hero.custom_css', 'hero.text_shadow_color'] %}
+                                                <div class="mb-3">
+                                                    <label for="color_{{ block_key|replace({'.':'_'}) }}" class="form-label">
+                                                        {{ 'back.content.color.label'|trans({}, 'back') }}
+                                                    </label>
+                                                    <input
+                                                        id="color_{{ block_key|replace({'.':'_'}) }}"
+                                                        type="color"
+                                                        class="form-control form-control-color"
+                                                        name="colors[{{ block_key }}]"
+                                                        value="{{ content_colors[block_key]|default('#212529') }}"
+                                                        title="{{ 'back.content.color.help'|trans({}, 'back') }}"
+                                                    >
+                                                </div>
+                                            {% endif %}
+
+                                            <div class="row g-3">
+                                                <div class="col-12">
+                                                    <label class="form-label">
+                                                        {{ locale == 'fr' ? 'back.content.locale.fr'|trans({}, 'back') : 'back.content.locale.de'|trans({}, 'back') }}
+                                                    </label>
+                                                    {% if block_key == 'hero.custom_css' %}
+                                                        <textarea
+                                                            class="form-control font-monospace"
+                                                            name="content[{{ block_key }}]"
+                                                            rows="4"
+                                                            placeholder="background: linear-gradient(90deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.25) 45%, rgba(0,0,0,.2) 100%);"
+                                                        >{{ content_values[block_key]|default('') }}</textarea>
+                                                        <div class="form-text">{{ 'back.content.hero_css.help'|trans({}, 'back') }}</div>
+                                                    {% elseif block_key == 'hero.text_shadow_color' %}
+                                                        <input
+                                                            id="content_{{ block_key|replace({'.':'_'}) }}_{{ locale }}"
+                                                            type="color"
+                                                            class="form-control form-control-color"
+                                                            name="content[{{ block_key }}]"
+                                                            value="{{ content_values[block_key]|default('#000000') }}"
+                                                            title="{{ 'back.content.hero_text_shadow.help'|trans({}, 'back') }}"
+                                                        >
+                                                        <div class="form-text">{{ 'back.content.hero_text_shadow.help'|trans({}, 'back') }}</div>
+                                                    {% elseif config.type == 'rich' %}
+                                                        <textarea id="content_{{ block_key|replace({'.':'_'}) }}_{{ locale }}" name="content[{{ block_key }}]" class="d-none">{{ content_values[block_key]|default('') }}</textarea>
+                                                        <trix-editor input="content_{{ block_key|replace({'.':'_'}) }}_{{ locale }}"></trix-editor>
+                                                    {% else %}
+                                                        <input type="text" class="form-control" name="content[{{ block_key }}]" value="{{ content_values[block_key]|default('') }}">
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{ 'back.content.save'|trans({}, 'back') }}</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+

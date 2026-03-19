@@ -55,6 +55,14 @@ class CoordinatesType extends AbstractType
                 'label' => 'back.coordinates.google_maps_url',
                 'required' => false,
             ])
+            ->add('facebookUrl', TextType::class, [
+                'label' => 'back.coordinates.facebook_url',
+                'required' => false,
+            ])
+            ->add('instagramUrl', TextType::class, [
+                'label' => 'back.coordinates.instagram_url',
+                'required' => false,
+            ])
         ;
     }
 

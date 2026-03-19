@@ -40,6 +40,12 @@ class Coordinates
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $googleMapsEmbedUrl = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $facebookUrl = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $instagramUrl = null;
+
     /**
      * @brief Returns the identifier.
      *
@@ -237,6 +243,60 @@ class Coordinates
     public function setGoogleMapsEmbedUrl(?string $googleMapsEmbedUrl): self
     {
         $this->googleMapsEmbedUrl = $googleMapsEmbedUrl;
+
+        return $this;
+    }
+
+    /**
+     * @brief Gets the Facebook page URL.
+     *
+     * @return string|null The Facebook URL.
+     * @date 2026-03-16
+     * @author Stephane H.
+     */
+    public function getFacebookUrl(): ?string
+    {
+        return $this->facebookUrl;
+    }
+
+    /**
+     * @brief Sets the Facebook page URL.
+     *
+     * @param string|null $facebookUrl The Facebook URL.
+     * @return self Fluent interface.
+     * @date 2026-03-16
+     * @author Stephane H.
+     */
+    public function setFacebookUrl(?string $facebookUrl): self
+    {
+        $this->facebookUrl = $facebookUrl;
+
+        return $this;
+    }
+
+    /**
+     * @brief Gets the Instagram profile URL.
+     *
+     * @return string|null The Instagram URL.
+     * @date 2026-03-16
+     * @author Stephane H.
+     */
+    public function getInstagramUrl(): ?string
+    {
+        return $this->instagramUrl;
+    }
+
+    /**
+     * @brief Sets the Instagram profile URL.
+     *
+     * @param string|null $instagramUrl The Instagram URL.
+     * @return self Fluent interface.
+     * @date 2026-03-16
+     * @author Stephane H.
+     */
+    public function setInstagramUrl(?string $instagramUrl): self
+    {
+        $this->instagramUrl = $instagramUrl;
 
         return $this;
     }

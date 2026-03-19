@@ -22,6 +22,12 @@
                     <a class="nav-link" href="{{ path('app_back_gallery_index') }}">{{ 'back.layout.nav.gallery'|trans({}, 'back') }}</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_home_de' : 'app_back_content_home_fr') }}">{{ 'back.layout.nav.content'|trans({}, 'back') }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_back_about_section_edit') }}">{{ 'back.layout.nav.about'|trans({}, 'back') }}</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_back_coordinates') }}">{{ 'back.layout.nav.coordinates'|trans({}, 'back') }}</a>
                 </li>
                 {% if is_granted('ROLE_ADMIN') %}

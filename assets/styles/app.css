@@ -1,1 +1,237 @@
-/* Custom app styles - uses --bs-body-bg from base.html.twig */
+/* Global styles shared across all pages */
+
+:root,
+[data-theme="light"] {
+  --bs-body-bg: #f5f5fa;
+  --bs-body-color: #212529;
+}
+
+:root {
+  --cl-primary: #1f417f;
+  --cl-primary-light: #4a90e2;
+  --cl-navy: #162047;
+}
+
+[data-theme="dark"] {
+  --bs-body-bg: #1a1d23;
+  --bs-body-color: #e4e6eb;
+}
+
+[data-theme="dark"] .bg-white {
+  background-color: #252830 !important;
+}
+
+[data-theme="dark"] .text-dark {
+  color: #e4e6eb !important;
+}
+
+[data-theme="dark"] .text-muted {
+  color: #a0a5b0 !important;
+}
+
+[data-theme="dark"] .card {
+  background-color: #252830;
+  border-color: #3a3f4a;
+}
+
+[data-theme="dark"] .table {
+  color: #e4e6eb;
+}
+
+[data-theme="dark"] .table-light {
+  background-color: #2d3139;
+  color: #e4e6eb;
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+  background-color: #252830;
+  border-color: #3a3f4a;
+  color: #e4e6eb;
+}
+
+.btn-darkmode {
+  background: transparent;
+  border: 1px solid #ddd;
+  color: #555;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-darkmode:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+[data-theme="dark"] .btn-darkmode {
+  border-color: #4a4f58;
+  color: #a0a5b0;
+}
+
+[data-theme="dark"] .btn-darkmode:hover {
+  background: #2d3139;
+  color: #e4e6eb;
+}
+
+.contact-bar {
+  background: var(--cl-navy);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+.contact-bar a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.navbar-main {
+  background: #fff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .navbar-main {
+  background: #252830 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-main .nav-link {
+  color: #555 !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  border-left: 1px solid #ddd;
+}
+
+.navbar-main .nav-item:first-child .nav-link {
+  border-left: none;
+  padding-left: 0 !important;
+}
+
+.navbar-main .nav-link:hover {
+  color: var(--cl-primary-light) !important;
+}
+
+.navbar-main .nav-link.active {
+  color: var(--cl-primary-light) !important;
+  border-bottom: 2px solid var(--cl-primary-light);
+  padding-bottom: 0.25rem;
+}
+
+[data-theme="dark"] .navbar-main .nav-link {
+  color: #a0a5b0 !important;
+  border-left-color: #3a3f4a;
+}
+
+[data-theme="dark"] .navbar-main .nav-link:hover {
+  color: #6eb5ff !important;
+}
+
+[data-theme="dark"] .navbar-main .nav-link.active {
+  color: #6eb5ff !important;
+  border-bottom-color: #6eb5ff;
+}
+
+.btn-devis {
+  background: linear-gradient(135deg, #4a90e2, #357abd);
+  color: #fff !important;
+  border: none;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+}
+
+.btn-devis:hover {
+  background: linear-gradient(135deg, #357abd, #2a6ba0);
+  color: #fff !important;
+}
+
+.footer-top {
+  background: var(--cl-navy);
+  color: #fff;
+}
+
+.footer-bottom {
+  background:
+    radial-gradient(
+      1200px 420px at 50% 0%,
+      rgba(36, 70, 114, 0.95) 0%,
+      rgba(6, 17, 38, 0) 70%
+    ),
+    radial-gradient(
+      900px 360px at 15% 0%,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0) 60%
+    ),
+    radial-gradient(
+      900px 360px at 85% 0%,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0) 60%
+    ),
+    radial-gradient(circle at 50% 0%, #244672 0%, #061126 100%);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.footer-bottom a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.footer-bottom .footer-badge {
+  font-size: 1.03rem;
+}
+
+.footer-bottom .footer-social-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.footer-bottom .footer-meta {
+  font-size: 1.03rem;
+}
+
+.footer-bottom .footer-badge-icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex: 0 0 auto;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #333;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="dark"] .section-title {
+  color: #e4e6eb;
+}
+
+.section-title::before,
+.section-title::after {
+  content: '';
+  display: inline-block;
+  width: 60px;
+  height: 2px;
+  background: var(--cl-primary-light);
+  vertical-align: middle;
+  margin: 0 1rem;
+}
+
+.w-80 {
+  width: 80% !important;
+}
+
+/* Fix Symfony Web Debug Toolbar display with Bootstrap */
+#sf-toolbar,
+.sf-toolbar {
+  z-index: 999999 !important;
+  position: fixed !important;
+}
+
+.sf-toolbar-icon svg {
+  vertical-align: baseline;
+}

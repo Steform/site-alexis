@@ -1,0 +1,25 @@
+/* About page specific styles (templates/public/qui_sommes_nous.html.twig) */
+
+.alexis-photo {
+  max-width: 320px;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .alexis-photo {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .card-title {
+  color: #e4e6eb;
+}
+
+.alexis-role {
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+}
+

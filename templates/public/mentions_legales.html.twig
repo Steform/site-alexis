@@ -4,11 +4,7 @@
 
 {% block stylesheets %}
 {{ parent() }}
-<style>
-.btn-devis { background: linear-gradient(135deg, #4a90e2, #357abd); color: #fff !important; border: none; font-weight: 600; }
-.section-title { font-size: 1.75rem; font-weight: 700; color: #333; }
-[data-theme="dark"] .section-title { color: #e4e6eb; }
-</style>
+<link rel="stylesheet" href="{{ asset('styles/pages/mentions_legales.css') }}">
 {% endblock %}
 
 {% block body %}

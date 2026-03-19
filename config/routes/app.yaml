@@ -146,6 +146,73 @@ app_back_coordinates:
   controller: App\Controller\Back\CoordinatesController::index
   methods: [GET, POST]
 
+app_back_about_section_edit:
+  path: /back/qui-sommes-nous
+  controller: App\Controller\Back\AboutSectionController::edit
+  methods: [GET, POST]
+
+app_back_content_home_fr:
+  path: /back/content/home/fr
+  controller: App\Controller\Back\ContentController::homeFr
+  methods: [GET, POST]
+
+app_back_content_home_de:
+  path: /back/content/home/de
+  controller: App\Controller\Back\ContentController::homeDe
+  methods: [GET, POST]
+
+app_back_content_qui_sommes_nous_fr:
+  path: /back/content/qui-sommes-nous/fr
+  controller: App\Controller\Back\ContentController::quiSommesNousFr
+  methods: [GET, POST]
+
+app_back_content_qui_sommes_nous_de:
+  path: /back/content/qui-sommes-nous/de
+  controller: App\Controller\Back\ContentController::quiSommesNousDe
+  methods: [GET, POST]
+
+app_back_content_home_photo_new:
+  path: /back/content/home/{locale}/photos/new
+  controller: App\Controller\Back\ContentController::homePhotoNew
+  methods: [GET, POST]
+  requirements:
+    locale: fr|de
+
+app_back_content_home_photo_edit:
+  path: /back/content/home/{locale}/photos/{id}/edit
+  controller: App\Controller\Back\ContentController::homePhotoEdit
+  methods: [GET, POST]
+  requirements:
+    locale: fr|de
+
+app_back_content_home_photo_delete:
+  path: /back/content/home/{locale}/photos/{id}/delete
+  controller: App\Controller\Back\ContentController::homePhotoDelete
+  methods: POST
+  requirements:
+    locale: fr|de
+
+app_back_content_home_hero_photo_new:
+  path: /back/content/home/{locale}/hero-photos/new
+  controller: App\Controller\Back\ContentController::homeHeroPhotoNew
+  methods: [GET, POST]
+  requirements:
+    locale: fr|de
+
+app_back_content_home_hero_photo_edit:
+  path: /back/content/home/{locale}/hero-photos/{id}/edit
+  controller: App\Controller\Back\ContentController::homeHeroPhotoEdit
+  methods: [GET, POST]
+  requirements:
+    locale: fr|de
+
+app_back_content_home_hero_photo_delete:
+  path: /back/content/home/{locale}/hero-photos/{id}/delete
+  controller: App\Controller\Back\ContentController::homeHeroPhotoDelete
+  methods: POST
+  requirements:
+    locale: fr|de
+
 app_switch_locale:
   path: /switch-locale/{locale}
   controller: App\Controller\LocaleController::switch

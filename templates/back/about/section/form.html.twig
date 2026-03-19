@@ -1,0 +1,65 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}{{ 'back.about.section.title'|trans(domain='back') }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://unpkg.com/trix@1.3.1/dist/trix.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/trix@1.3.1/dist/trix.js"></script>
+{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block back_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">{{ 'back.about.section.heading'|trans(domain='back') }}</h1>
+    <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_home_de' : 'app_back_content_home_fr') }}" class="btn btn-outline-secondary btn-sm">
+        {{ 'back.about.section.photos_cta'|trans(domain='back') }}
+    </a>
+</div>
+
+{{ form_start(form, { 'attr': { 'class': 'needs-validation' } }) }}
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white py-3">
+        <h5 class="card-title mb-0">{{ 'back.about.section.title'|trans(domain='back') }}</h5>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-4">
+            <div class="col-md-6">
+                {{ form_row(form.leadFr) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.leadDe) }}
+            </div>
+            <div class="col-12">
+                {{ form_label(form.contentFr) }}
+                {{ form_widget(form.contentFr, { 'attr': { 'class': 'd-none' } }) }}
+                <trix-editor input="{{ form.contentFr.vars.id }}"></trix-editor>
+                {{ form_errors(form.contentFr) }}
+            </div>
+            <div class="col-12">
+                {{ form_label(form.contentDe) }}
+                {{ form_widget(form.contentDe, { 'attr': { 'class': 'd-none' } }) }}
+                <trix-editor input="{{ form.contentDe.vars.id }}"></trix-editor>
+                {{ form_errors(form.contentDe) }}
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">
+                {{ 'back.about.section.save'|trans(domain='back') }}
+            </button>
+        </div>
+    </div>
+</div>
+
+{{ form_end(form) }}
+{% endblock %}
+

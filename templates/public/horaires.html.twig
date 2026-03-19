@@ -2,6 +2,11 @@
 
 {% block title %}{{ 'hours.title'|trans }} - Carrosserie Lino{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/horaires.css') }}">
+{% endblock %}
+
 {% block body %}
 {% include 'partials/_navbar_public.html.twig' %}
 <div class="container py-5">
