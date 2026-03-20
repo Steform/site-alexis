@@ -4,4 +4,5 @@ validator.devis.email_invalid: "Email invalide."
 validator.devis.vehicle_required: "Le véhicule est requis."
 validator.devis.type_required: "Le type de prestation est requis."
 validator.devis.message_required: "Le message est requis."
+validator.devis.photos_invalid: "Fichiers invalides. Formats acceptés : JPG, PNG, WebP, GIF. Max 5 Mo par fichier."
 

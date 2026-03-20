@@ -2,20 +2,24 @@
 
 namespace App\Entity;
 
-use App\Repository\ContentBlockRepository;
+use App\Repository\ContentBlockHistoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @brief Stores editable content blocks per page, key, and locale.
+ * @brief Stores a snapshot of a content block state before it was modified.
  *
- * @date 2026-03-18
+ * Each entry represents the previous state of a block (value, color, color_dark)
+ * before a save. Used for history display and rollback.
+ *
+ * @date 2026-03-19
  * @author Stephane H.
  */
-#[ORM\Entity(repositoryClass: ContentBlockRepository::class)]
-#[ORM\Table(name: 'content_block')]
-#[ORM\UniqueConstraint(name: 'uniq_content_block_page_key_locale', columns: ['page_name', 'block_key', 'locale'])]
-class ContentBlock
+#[ORM\Entity(repositoryClass: ContentBlockHistoryRepository::class)]
+#[ORM\Table(name: 'content_block_history')]
+#[ORM\Index(name: 'idx_content_block_history_lookup', columns: ['page_name', 'block_key', 'locale', 'created_at'])]
+class ContentBlockHistory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,13 +30,10 @@ class ContentBlock
     private ?string $pageName = null;
 
     #[ORM\Column(name: 'block_key', length: 150)]
-    private ?string $key = null;
+    private ?string $blockKey = null;
 
     #[ORM\Column(length: 5)]
     private ?string $locale = null;
-
-    #[ORM\Column(length: 20)]
-    private ?string $type = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $value = null;
@@ -44,13 +45,17 @@ class ContentBlock
     private ?string $colorDark = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'created_by_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    private ?User $createdBy = null;
 
     /**
      * @brief Returns the identifier.
      *
      * @return int|null The identifier.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
     public function getId(): ?int
@@ -62,7 +67,7 @@ class ContentBlock
      * @brief Gets the page name.
      *
      * @return string|null The page name.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
     public function getPageName(): ?string
@@ -75,7 +80,7 @@ class ContentBlock
      *
      * @param string $pageName The page name.
      * @return self Fluent interface.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
     public function setPageName(string $pageName): self
@@ -89,25 +94,25 @@ class ContentBlock
      * @brief Gets the block key.
      *
      * @return string|null The block key.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
-    public function getKey(): ?string
+    public function getBlockKey(): ?string
     {
-        return $this->key;
+        return $this->blockKey;
     }
 
     /**
      * @brief Sets the block key.
      *
-     * @param string $key The block key.
+     * @param string $blockKey The block key.
      * @return self Fluent interface.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
-    public function setKey(string $key): self
+    public function setBlockKey(string $blockKey): self
     {
-        $this->key = $key;
+        $this->blockKey = $blockKey;
 
         return $this;
     }
@@ -116,7 +121,7 @@ class ContentBlock
      * @brief Gets the locale.
      *
      * @return string|null The locale.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
     public function getLocale(): ?string
@@ -129,7 +134,7 @@ class ContentBlock
      *
      * @param string $locale The locale.
      * @return self Fluent interface.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
     public function setLocale(string $locale): self
@@ -140,37 +145,10 @@ class ContentBlock
     }
 
     /**
-     * @brief Gets the block type.
-     *
-     * @return string|null The block type (plain|rich).
-     * @date 2026-03-18
-     * @author Stephane H.
-     */
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @brief Sets the block type.
-     *
-     * @param string $type The block type.
-     * @return self Fluent interface.
-     * @date 2026-03-18
-     * @author Stephane H.
-     */
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
      * @brief Gets the content value.
      *
      * @return string|null The content value.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
     public function getValue(): ?string
@@ -183,7 +161,7 @@ class ContentBlock
      *
      * @param string $value The content value.
      * @return self Fluent interface.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
     public function setValue(string $value): self
@@ -194,7 +172,7 @@ class ContentBlock
     }
 
     /**
-     * @brief Gets the display color for the block.
+     * @brief Gets the light mode color.
      *
      * @return string|null The HEX color.
      * @date 2026-03-19
@@ -206,7 +184,7 @@ class ContentBlock
     }
 
     /**
-     * @brief Sets the display color for the block.
+     * @brief Sets the light mode color.
      *
      * @param string|null $color The HEX color.
      * @return self Fluent interface.
@@ -221,7 +199,7 @@ class ContentBlock
     }
 
     /**
-     * @brief Gets the display color for dark mode.
+     * @brief Gets the dark mode color.
      *
      * @return string|null The HEX color.
      * @date 2026-03-19
@@ -233,7 +211,7 @@ class ContentBlock
     }
 
     /**
-     * @brief Sets the display color for dark mode.
+     * @brief Sets the dark mode color.
      *
      * @param string|null $colorDark The HEX color.
      * @return self Fluent interface.
@@ -248,30 +226,56 @@ class ContentBlock
     }
 
     /**
-     * @brief Gets the update date.
+     * @brief Gets the creation date.
      *
-     * @return \DateTimeImmutable|null The update date.
-     * @date 2026-03-18
+     * @return \DateTimeImmutable|null The creation date.
+     * @date 2026-03-19
      * @author Stephane H.
      */
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->updatedAt;
+        return $this->createdAt;
     }
 
     /**
-     * @brief Sets the update date.
+     * @brief Sets the creation date.
      *
-     * @param \DateTimeImmutable $updatedAt The update date.
+     * @param \DateTimeImmutable $createdAt The creation date.
      * @return self Fluent interface.
-     * @date 2026-03-18
+     * @date 2026-03-19
      * @author Stephane H.
      */
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @brief Gets the user who triggered the save that replaced this state.
+     *
+     * @return User|null The user.
+     * @date 2026-03-19
+     * @author Stephane H.
+     */
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @brief Sets the user who triggered the save.
+     *
+     * @param UserInterface|null $createdBy The user.
+     * @return self Fluent interface.
+     * @date 2026-03-19
+     * @author Stephane H.
+     */
+    public function setCreatedBy(?UserInterface $createdBy): self
+    {
+        $this->createdBy = $createdBy instanceof User ? $createdBy : null;
 
         return $this;
     }
 }
-

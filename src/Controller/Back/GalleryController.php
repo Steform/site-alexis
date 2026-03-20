@@ -52,7 +52,9 @@ class GalleryController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Élément ajouté à la galerie.');
 
-            return $this->redirectToRoute('app_back_gallery_index');
+            return $this->redirectToRoute(
+                str_starts_with($request->getLocale(), 'de') ? 'app_back_content_gallery_de' : 'app_back_content_gallery_fr'
+            );
         }
 
         return $this->render('back/gallery/form.html.twig', [
@@ -71,7 +73,9 @@ class GalleryController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Élément modifié.');
 
-            return $this->redirectToRoute('app_back_gallery_index');
+            return $this->redirectToRoute(
+                str_starts_with($request->getLocale(), 'de') ? 'app_back_content_gallery_de' : 'app_back_content_gallery_fr'
+            );
         }
 
         return $this->render('back/gallery/form.html.twig', [
@@ -90,7 +94,9 @@ class GalleryController extends AbstractController
         $this->em->flush();
         $this->addFlash('success', 'Élément supprimé.');
 
-        return $this->redirectToRoute('app_back_gallery_index');
+        return $this->redirectToRoute(
+            str_starts_with($request->getLocale(), 'de') ? 'app_back_content_gallery_de' : 'app_back_content_gallery_fr'
+        );
     }
 
     private function handleImageUpload($form, GalleryItem $item): void

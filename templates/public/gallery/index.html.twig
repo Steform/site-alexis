@@ -8,10 +8,22 @@
 {% endblock %}
 
 {% block body %}
+<style>
+:root {
+  {% for key, c in gallery_colors|default([]) %}
+  --color-gallery-{{ key|replace({'.': '-'}) }}: {{ (c.light ?? c)|default('#212529') }};
+  {% endfor %}
+}
+[data-theme="dark"] {
+  {% for key, c in gallery_colors|default([]) %}
+  --color-gallery-{{ key|replace({'.': '-'}) }}: {{ (c.dark ?? c)|default('#e4e6eb') }};
+  {% endfor %}
+}
+</style>
 {% include 'partials/_navbar_public.html.twig' %}
 <div class="container py-5">
-    <h1 class="section-title mb-4">{{ 'gallery.title'|trans }}</h1>
-    <p class="lead text-muted mb-5">{{ 'gallery.lead'|trans }}</p>
+    <h1 class="section-title mb-4" style="color: var(--color-gallery-gallery-title, #212529);">{{ gallery_content['gallery.title']|default('gallery.title'|trans) }}</h1>
+    <p class="lead mb-5" style="color: var(--color-gallery-gallery-lead, #6C757D);">{{ gallery_content['gallery.lead']|default('gallery.lead'|trans) }}</p>
 
     {% if items|length > 0 %}
     <div class="row g-4">

@@ -8,11 +8,23 @@
 {% endblock %}
 
 {% block body %}
+<style>
+:root {
+  {% for key, c in qui_colors|default([]) %}
+  --color-{{ key|replace({'.': '-'}) }}: {{ (c.light ?? c)|default('#212529') }};
+  {% endfor %}
+}
+[data-theme="dark"] {
+  {% for key, c in qui_colors|default([]) %}
+  --color-{{ key|replace({'.': '-'}) }}: {{ (c.dark ?? c)|default('#e4e6eb') }};
+  {% endfor %}
+}
+</style>
 {% include 'partials/_navbar_public.html.twig' %}
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <h1 class="section-title text-center mb-5" style="color: {{ qui_colors['title']|default('#212529') }};">{{ qui_content['title']|default('qui_sommes_nous.title'|trans) }}</h1>
+            <h1 class="section-title text-center mb-5" style="color: var(--color-title, #212529);">{{ qui_content['title']|default('qui_sommes_nous.title'|trans) }}</h1>
 
             <div class="row align-items-center g-5 mb-5">
                 <div class="col-md-5 text-center">
@@ -21,11 +33,11 @@
                 </div>
                 <div class="col-md-7">
                     <h2 class="h3 fw-bold mb-3">Alexis Haffner</h2>
-                    <p class="text-uppercase mb-3 alexis-role" style="color: {{ qui_colors['alexis.role']|default('#6C757D') }};">{{ qui_content['alexis.role']|default('qui_sommes_nous.alexis.role'|trans) }}</p>
-                    <div class="lead mb-4" style="color: {{ qui_colors['alexis.lead']|default('#212529') }};">{{ qui_content['alexis.lead']|default('qui_sommes_nous.alexis.lead'|trans)|raw }}</div>
-                    <div class="mb-4" style="color: {{ qui_colors['alexis.text1']|default('#212529') }};">{{ qui_content['alexis.text1']|default('qui_sommes_nous.alexis.text1'|trans)|raw }}</div>
-                    <div class="mb-4" style="color: {{ qui_colors['alexis.text2']|default('#212529') }};">{{ qui_content['alexis.text2']|default('qui_sommes_nous.alexis.text2'|trans)|raw }}</div>
-                    <a href="{{ path('app_devis') }}" class="btn btn-devis rounded-pill" style="color: {{ qui_colors['cta.quote']|default('#FFFFFF') }};">{{ qui_content['cta.quote']|default('qui_sommes_nous.cta.quote'|trans) }}</a>
+                    <p class="text-uppercase mb-3 alexis-role" style="color: var(--color-alexis-role, #6C757D);">{{ qui_content['alexis.role']|default('qui_sommes_nous.alexis.role'|trans) }}</p>
+                    <div class="lead mb-4" style="color: var(--color-alexis-lead, #212529);">{{ qui_content['alexis.lead']|default('qui_sommes_nous.alexis.lead'|trans)|raw }}</div>
+                    <div class="mb-4" style="color: var(--color-alexis-text1, #212529);">{{ qui_content['alexis.text1']|default('qui_sommes_nous.alexis.text1'|trans)|raw }}</div>
+                    <div class="mb-4" style="color: var(--color-alexis-text2, #212529);">{{ qui_content['alexis.text2']|default('qui_sommes_nous.alexis.text2'|trans)|raw }}</div>
+                    <a href="{{ path('app_devis') }}" class="btn btn-devis rounded-pill" style="color: var(--color-cta-quote, #FFFFFF);">{{ qui_content['cta.quote']|default('qui_sommes_nous.cta.quote'|trans) }}</a>
                 </div>
             </div>
 
@@ -36,8 +48,8 @@
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="mb-3 feature-icon">👨‍👦</div>
-                            <h5 class="card-title" style="color: {{ qui_colors['card.family.title']|default('#212529') }};">{{ qui_content['card.family.title']|default('qui_sommes_nous.card.family.title'|trans) }}</h5>
-                            <p class="card-text" style="color: {{ qui_colors['card.family.text']|default('#6C757D') }};">{{ qui_content['card.family.text']|default('qui_sommes_nous.card.family.text'|trans) }}</p>
+                            <h5 class="card-title" style="color: var(--color-card-family-title, #212529);">{{ qui_content['card.family.title']|default('qui_sommes_nous.card.family.title'|trans) }}</h5>
+                            <p class="card-text" style="color: var(--color-card-family-text, #6C757D);">{{ qui_content['card.family.text']|default('qui_sommes_nous.card.family.text'|trans) }}</p>
                         </div>
                     </div>
                 </div>
@@ -45,8 +57,8 @@
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="mb-3 feature-icon">🔧</div>
-                            <h5 class="card-title" style="color: {{ qui_colors['card.expertise.title']|default('#212529') }};">{{ qui_content['card.expertise.title']|default('qui_sommes_nous.card.expertise.title'|trans) }}</h5>
-                            <p class="card-text" style="color: {{ qui_colors['card.expertise.text']|default('#6C757D') }};">{{ qui_content['card.expertise.text']|default('qui_sommes_nous.card.expertise.text'|trans) }}</p>
+                            <h5 class="card-title" style="color: var(--color-card-expertise-title, #212529);">{{ qui_content['card.expertise.title']|default('qui_sommes_nous.card.expertise.title'|trans) }}</h5>
+                            <p class="card-text" style="color: var(--color-card-expertise-text, #6C757D);">{{ qui_content['card.expertise.text']|default('qui_sommes_nous.card.expertise.text'|trans) }}</p>
                         </div>
                     </div>
                 </div>
@@ -54,8 +66,8 @@
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="mb-3 feature-icon">📍</div>
-                            <h5 class="card-title" style="color: {{ qui_colors['card.location.title']|default('#212529') }};">{{ qui_content['card.location.title']|default('qui_sommes_nous.card.location.title'|trans) }}</h5>
-                            <p class="card-text" style="color: {{ qui_colors['card.location.text']|default('#6C757D') }};">{{ qui_content['card.location.text']|default('qui_sommes_nous.card.location.text'|trans) }}</p>
+                            <h5 class="card-title" style="color: var(--color-card-location-title, #212529);">{{ qui_content['card.location.title']|default('qui_sommes_nous.card.location.title'|trans) }}</h5>
+                            <p class="card-text" style="color: var(--color-card-location-text, #6C757D);">{{ qui_content['card.location.text']|default('qui_sommes_nous.card.location.text'|trans) }}</p>
                         </div>
                     </div>
                 </div>

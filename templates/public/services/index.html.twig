@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'services.title'|trans }} - Carrosserie Lino{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('styles/pages/services.css') }}">
+{% endblock %}
+
+{% block body %}
+{% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
+{% include 'partials/_navbar_public.html.twig' %}
+
+<section class="py-5 section-soft-blue">
+    <div class="container">
+        <h1 class="section-title text-center mb-5">{{ 'services.title'|trans }}</h1>
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card border-0 overflow-hidden h-100">
+                    <a href="{{ path('app_services_show', { slug: service.slug }) }}" class="text-decoration-none">
+                        <img src="{{ asset(service.image) }}" class="card-img-top" alt="{{ currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre }}" style="height: 200px; object-fit: cover;" loading="lazy">
+                        <div class="card-body p-0 d-flex justify-content-center">
+                            <span class="btn btn-service-card" style="color: #fff;">
+                                {{ currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre }}
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a class="btn btn-devis rounded-pill" href="{{ path('app_devis') }}">{{ 'services.cta'|trans }}</a>
+        </div>
+    </div>
+</section>
+
+{% include 'partials/_footer_public.html.twig' %}
+{% endblock %}

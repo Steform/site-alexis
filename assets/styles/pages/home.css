@@ -155,7 +155,7 @@
 }
 
 [data-theme="dark"] .quick-service-icon {
-  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.55));
 }
 
 [data-theme="dark"] .card-service .card-title {
@@ -168,12 +168,37 @@
   border: 0 !important;
 }
 
-.service-card-img-overlay {
-  background: transparent !important;
+/* Button width = 200/260 of image (usable center area) */
+.btn-service-card {
+  display: inline-block;
+  width: 76.923%;
+  min-width: 0;
+  max-width: none;
+  box-sizing: border-box;
+  border-radius: 0;
+  background: var(--btn-action-gradient);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s;
 }
 
-#services .service-card-img-overlay .card-title {
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+.btn-service-card:hover {
+  background: var(--btn-action-gradient-hover);
+  color: #fff;
+}
+
+[data-theme="dark"] .btn-service-card {
+  background: var(--btn-action-gradient);
+  color: #fff;
+}
+
+[data-theme="dark"] .btn-service-card:hover {
+  background: var(--btn-action-gradient-hover);
+  color: #fff;
 }
 
 .testimonial-section {

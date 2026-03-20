@@ -10,6 +10,8 @@
   --cl-primary: #1f417f;
   --cl-primary-light: #4a90e2;
   --cl-navy: #162047;
+  --btn-action-gradient: linear-gradient(to bottom, #54a2cd, #043c6f);
+  --btn-action-gradient-hover: linear-gradient(to bottom, #5fb0dc, #054a85);
 }
 
 [data-theme="dark"] {
@@ -96,6 +98,18 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+.navbar-logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] .navbar-logo-light {
+  display: none;
+}
+
+[data-theme="dark"] .navbar-logo-dark {
+  display: block;
+}
+
 .navbar-main .nav-link {
   color: #555 !important;
   font-weight: 500;
@@ -137,7 +151,7 @@
 }
 
 .btn-devis {
-  background: linear-gradient(135deg, #4a90e2, #357abd);
+  background: var(--btn-action-gradient);
   color: #fff !important;
   border: none;
   font-weight: 600;
@@ -145,7 +159,7 @@
 }
 
 .btn-devis:hover {
-  background: linear-gradient(135deg, #357abd, #2a6ba0);
+  background: var(--btn-action-gradient-hover);
   color: #fff !important;
 }
 
@@ -155,6 +169,7 @@
 }
 
 .footer-bottom {
+  margin-top: auto;
   background:
     radial-gradient(
       1200px 420px at 50% 0%,

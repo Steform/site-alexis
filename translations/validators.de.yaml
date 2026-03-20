@@ -4,4 +4,5 @@ validator.devis.email_invalid: "Ungültige E-Mail-Adresse."
 validator.devis.vehicle_required: "Das Fahrzeug ist erforderlich."
 validator.devis.type_required: "Die Art der Leistung ist erforderlich."
 validator.devis.message_required: "Die Nachricht ist erforderlich."
+validator.devis.photos_invalid: "Ungültige Dateien. Erlaubte Formate: JPG, PNG, WebP, GIF. Max 5 MB pro Datei."
 

@@ -10,18 +10,12 @@
     <p><span style="font-weight: bold; color: #555;">Nom :</span><br>{{ devis.nom }}</p>
     <p><span style="font-weight: bold; color: #555;">Email :</span><br>{{ devis.email }}</p>
     <p><span style="font-weight: bold; color: #555;">Téléphone :</span><br>{{ devis.telephone|default('—') }}</p>
-    <p><span style="font-weight: bold; color: #555;">Véhicule :</span><br>{{ devis.vehicule }}</p>
-    <p><span style="font-weight: bold; color: #555;">Type de prestation :</span><br>
-        {% set types = {
-            'reparation_carrosserie': 'Réparation carrosserie',
-            'peinture': 'Peinture',
-            'debosselage': 'Débosselage',
-            'pare_brise': 'Pare-brise / Vitrages',
-            'entretien': 'Entretien / Mécanique',
-            'autre': 'Autre'
-        } %}
-        {{ types[devis.typePrestation]|default(devis.typePrestation) }}
-    </p>
+    <p><span style="font-weight: bold; color: #555;">Véhicule :</span><br>{{ devis.vehicule }}{% if devis.anneeVehicule %} ({{ devis.anneeVehicule }}){% endif %}</p>
+    <p><span style="font-weight: bold; color: #555;">Carburant :</span><br>{{ carburantLabel|default('—') }}</p>
+    <p><span style="font-weight: bold; color: #555;">Type de prestation :</span><br>{{ typeLabel|default(devis.typePrestation) }}</p>
+    {% if devis.photos|length > 0 %}
+    <p><span style="font-weight: bold; color: #555;">Photos jointes :</span><br>{{ devis.photos|length }} fichier(s) attaché(s) à cet email.</p>
+    {% endif %}
     <p><span style="font-weight: bold; color: #555;">Message :</span><br>{{ devis.message|nl2br }}</p>
     <hr style="border: none; border-top: 1px solid #ddd; margin: 1.5rem 0;">
     <p style="font-size: 0.9rem; color: #666;">Cet email a été envoyé automatiquement depuis le formulaire de demande de devis du site Carrosserie Lino.</p>

@@ -10,12 +10,24 @@
 {% endblock %}
 
 {% block body %}
+<style>
+:root {
+  {% for key, c in devis_colors|default([]) %}
+  --color-devis-{{ key|replace({'.': '-'}) }}: {{ (c.light ?? c)|default('#212529') }};
+  {% endfor %}
+}
+[data-theme="dark"] {
+  {% for key, c in devis_colors|default([]) %}
+  --color-devis-{{ key|replace({'.': '-'}) }}: {{ (c.dark ?? c)|default('#e4e6eb') }};
+  {% endfor %}
+}
+</style>
 {% include 'partials/_navbar_public.html.twig' %}
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h1 class="mb-4">{{ 'devis.title'|trans }}</h1>
-            <p class="lead text-muted mb-4">{{ 'devis.lead'|trans }}</p>
+            <h1 class="mb-4" style="color: var(--color-devis-devis-title, #212529);">{{ devis_content['devis.title']|default('devis.title'|trans) }}</h1>
+            <p class="lead mb-4" style="color: var(--color-devis-devis-lead, #6C757D);">{{ devis_content['devis.lead']|default('devis.lead'|trans) }}</p>
 
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
@@ -43,7 +55,16 @@
                             {{ form_row(form.vehicule) }}
                         </div>
                         <div class="col-md-6">
+                            {{ form_row(form.anneeVehicule) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.typeCarburant) }}
+                        </div>
+                        <div class="col-12">
                             {{ form_row(form.typePrestation) }}
+                        </div>
+                        <div class="col-12">
+                            {{ form_row(form.photos) }}
                         </div>
                         <div class="col-12">
                             {{ form_row(form.message) }}
@@ -54,7 +75,7 @@
                     </div>
                     <hr class="my-4">
                     <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-devis btn-lg rounded-pill">{{ 'home.quote.cta'|trans }}</button>
+                        <button type="submit" class="btn btn-devis btn-lg rounded-pill" style="color: var(--color-devis-devis-cta, #FFFFFF);">{{ devis_content['devis.cta']|default('home.quote.cta'|trans) }}</button>
                         <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">{{ 'nav.home'|trans }}</a>
                     </div>
                 </div>

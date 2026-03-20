@@ -40,7 +40,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ 'back.dashboard.card.gallery.title'|trans({}, 'back') }}</h5>
                 <p class="card-text">{{ 'back.dashboard.card.gallery.text'|trans({}, 'back') }}</p>
-                <a href="{{ path('app_back_gallery_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.gallery.cta'|trans({}, 'back') }}</a>
+                <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_gallery_de' : 'app_back_content_gallery_fr') }}" class="btn btn-primary">{{ 'back.dashboard.card.gallery.cta'|trans({}, 'back') }}</a>
             </div>
         </div>
     </div>

@@ -3,9 +3,12 @@
 namespace App\Service;
 
 use App\Entity\ContentBlock;
+use App\Entity\ContentBlockHistory;
+use App\Repository\ContentBlockHistoryRepository;
 use App\Repository\ContentBlockRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @brief Manages editable CMS blocks with translation fallback.
@@ -16,30 +19,56 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ContentBlockManager
 {
     /**
-     * @var array<string, array<string, string>>
+     * @var array<string, array<string, array{light: string, dark: string}>>
      */
     private const DEFAULT_COLORS = [
         'home' => [
-            'hero.top_content' => '#FFFFFF',
-            'hero.cta' => '#FFFFFF',
-            'about.title' => '#212529',
-            'about.lead' => '#212529',
-            'about.body' => '#6C757D',
-            'about.cta' => '#FFFFFF',
+            'hero.top_content' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
+            'hero.text_shadow_color' => ['light' => '#000000', 'dark' => '#000000'],
+            'hero.custom_css' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'hero.cta' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
+            'about.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'about.lead' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'about.body' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
+            'about.cta' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
+            'quick.card1.title' => ['light' => '#0a396a', 'dark' => '#7bbcff'],
+            'quick.card1.text' => ['light' => '#5c6773', 'dark' => '#b7bdc8'],
+            'quick.card2.title' => ['light' => '#18416d', 'dark' => '#84c3ff'],
+            'quick.card2.text' => ['light' => '#5c6773', 'dark' => '#b7bdc8'],
+            'quick.card3.title' => ['light' => '#09365f', 'dark' => '#75b7ff'],
+            'quick.card3.text' => ['light' => '#5c6773', 'dark' => '#b7bdc8'],
+            'services.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card1.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card2.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card3.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card4.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.cta' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
+            'reviews.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'reviews.default.text' => ['light' => '#2c3e50', 'dark' => '#d0d5dc'],
+            'reviews.default.author' => ['light' => '#34495e', 'dark' => '#a0a5b0'],
         ],
         'qui_sommes_nous' => [
-            'title' => '#212529',
-            'alexis.role' => '#6C757D',
-            'alexis.lead' => '#212529',
-            'alexis.text1' => '#212529',
-            'alexis.text2' => '#212529',
-            'cta.quote' => '#FFFFFF',
-            'card.family.title' => '#212529',
-            'card.family.text' => '#6C757D',
-            'card.expertise.title' => '#212529',
-            'card.expertise.text' => '#6C757D',
-            'card.location.title' => '#212529',
-            'card.location.text' => '#6C757D',
+            'title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'alexis.role' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
+            'alexis.lead' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'alexis.text1' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'alexis.text2' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'cta.quote' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
+            'card.family.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'card.family.text' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
+            'card.expertise.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'card.expertise.text' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
+            'card.location.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'card.location.text' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
+        ],
+        'devis' => [
+            'devis.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'devis.lead' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
+            'devis.cta' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
+        ],
+        'gallery' => [
+            'gallery.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'gallery.lead' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
         ],
     ];
 
@@ -56,6 +85,21 @@ class ContentBlockManager
             'about.lead' => ['type' => 'plain', 'translation_key' => 'home.about.lead'],
             'about.body' => ['type' => 'rich', 'translation_key' => 'home.about.text'],
             'about.cta' => ['type' => 'plain', 'translation_key' => 'home.about.cta'],
+            'quick.card1.title' => ['type' => 'plain', 'translation_key' => 'home.quick.card1.title'],
+            'quick.card1.text' => ['type' => 'plain', 'translation_key' => 'home.quick.card1.text'],
+            'quick.card2.title' => ['type' => 'plain', 'translation_key' => 'home.quick.card2.title'],
+            'quick.card2.text' => ['type' => 'plain', 'translation_key' => 'home.quick.card2.text'],
+            'quick.card3.title' => ['type' => 'plain', 'translation_key' => 'home.quick.card3.title'],
+            'quick.card3.text' => ['type' => 'plain', 'translation_key' => 'home.quick.card3.text'],
+            'services.title' => ['type' => 'plain', 'translation_key' => 'home.services.title'],
+            'services.card1.title' => ['type' => 'plain', 'translation_key' => 'home.services.card1.title'],
+            'services.card2.title' => ['type' => 'plain', 'translation_key' => 'home.services.card2.title'],
+            'services.card3.title' => ['type' => 'plain', 'translation_key' => 'home.services.card3.title'],
+            'services.card4.title' => ['type' => 'plain', 'translation_key' => 'home.services.card4.title'],
+            'services.cta' => ['type' => 'plain', 'translation_key' => 'home.services.cta'],
+            'reviews.title' => ['type' => 'plain', 'translation_key' => 'home.reviews.title'],
+            'reviews.default.text' => ['type' => 'plain', 'translation_key' => 'home.reviews.default.text'],
+            'reviews.default.author' => ['type' => 'plain', 'translation_key' => 'home.reviews.default.author'],
         ],
         'qui_sommes_nous' => [
             'title' => ['type' => 'plain', 'translation_key' => 'qui_sommes_nous.title'],
@@ -71,12 +115,22 @@ class ContentBlockManager
             'card.location.title' => ['type' => 'plain', 'translation_key' => 'qui_sommes_nous.card.location.title'],
             'card.location.text' => ['type' => 'plain', 'translation_key' => 'qui_sommes_nous.card.location.text'],
         ],
+        'devis' => [
+            'devis.title' => ['type' => 'plain', 'translation_key' => 'devis.title'],
+            'devis.lead' => ['type' => 'plain', 'translation_key' => 'devis.lead'],
+            'devis.cta' => ['type' => 'plain', 'translation_key' => 'home.quote.cta'],
+        ],
+        'gallery' => [
+            'gallery.title' => ['type' => 'plain', 'translation_key' => 'gallery.title'],
+            'gallery.lead' => ['type' => 'plain', 'translation_key' => 'gallery.lead'],
+        ],
     ];
 
     /**
      * @brief ContentBlockManager constructor.
      *
      * @param ContentBlockRepository $repository The content block repository.
+     * @param ContentBlockHistoryRepository $historyRepository The history repository.
      * @param EntityManagerInterface $entityManager The entity manager.
      * @param TranslatorInterface $translator The translator service.
      * @date 2026-03-18
@@ -84,6 +138,7 @@ class ContentBlockManager
      */
     public function __construct(
         private readonly ContentBlockRepository $repository,
+        private readonly ContentBlockHistoryRepository $historyRepository,
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
     ) {
@@ -99,6 +154,19 @@ class ContentBlockManager
     public function getDefinitions(): array
     {
         return self::PAGE_DEFINITIONS;
+    }
+
+    /**
+     * @brief Checks if a page exists in the CMS configuration.
+     *
+     * @param string $pageName The page name.
+     * @return bool True when the page is configured.
+     * @date 2026-03-19
+     * @author Stephane H.
+     */
+    public function hasPage(string $pageName): bool
+    {
+        return array_key_exists($pageName, self::PAGE_DEFINITIONS);
     }
 
     /**
@@ -179,10 +247,10 @@ class ContentBlockManager
     }
 
     /**
-     * @brief Returns editor colors for all blocks of one page.
+     * @brief Returns editor colors for all blocks of one page (light and dark).
      *
      * @param string $pageName The page name.
-     * @return array<string, string> Colors indexed by block key.
+     * @return array<string, array{light: string, dark: string}> Colors indexed by block key.
      * @date 2026-03-19
      * @author Stephane H.
      */
@@ -194,8 +262,14 @@ class ContentBlockManager
         foreach ($definitions as $key => $_definition) {
             $frBlock = $this->repository->findOneByComposite($pageName, $key, 'fr');
             $deBlock = $this->repository->findOneByComposite($pageName, $key, 'de');
-            $storedColor = $frBlock?->getColor() ?? $deBlock?->getColor();
-            $colors[$key] = $this->normalizeColor($storedColor, $pageName, $key);
+            $block = $frBlock ?? $deBlock;
+            $storedLight = $block?->getColor();
+            $storedDark = $block?->getColorDark();
+            $defaults = $this->getDefaultColors($pageName, $key);
+            $colors[$key] = [
+                'light' => $this->normalizeColor($storedLight, $defaults['light']),
+                'dark' => $this->normalizeColor($storedDark, $defaults['dark']),
+            ];
         }
 
         return $colors;
@@ -211,7 +285,7 @@ class ContentBlockManager
      * @date 2026-03-18
      * @author Stephane H.
      */
-    public function savePageContent(string $pageName, array $values, array $colors = []): void
+    public function savePageContent(string $pageName, array $values, array $colors = [], array $colorsDark = [], ?UserInterface $user = null): void
     {
         $definitions = $this->getPageDefinitions($pageName);
         foreach (['fr', 'de'] as $locale) {
@@ -219,7 +293,7 @@ class ContentBlockManager
             foreach ($definitions as $key => $_definition) {
                 $localeValues[$key] = $values[$key][$locale] ?? '';
             }
-            $this->savePageContentForLocale($pageName, $locale, $localeValues, $colors, false);
+            $this->savePageContentForLocale($pageName, $locale, $localeValues, $colors, $colorsDark, false, $user);
         }
         $this->entityManager->flush();
     }
@@ -230,8 +304,10 @@ class ContentBlockManager
      * @param string $pageName The page name.
      * @param string $locale The edited locale.
      * @param array<string, string> $values Submitted values indexed by block key.
-     * @param array<string, string> $colors Submitted colors indexed by block key.
+     * @param array<string, string> $colors Submitted light colors indexed by block key.
+     * @param array<string, string> $colorsDark Submitted dark colors indexed by block key.
      * @param bool $flush Indicates if flush must be executed.
+     * @param UserInterface|null $user The user who triggered the save.
      * @return void
      * @date 2026-03-19
      * @author Stephane H.
@@ -241,7 +317,9 @@ class ContentBlockManager
         string $locale,
         array $values,
         array $colors = [],
-        bool $flush = true
+        array $colorsDark = [],
+        bool $flush = true,
+        ?UserInterface $user = null
     ): void {
         $definitions = $this->getPageDefinitions($pageName);
         $now = new \DateTimeImmutable();
@@ -252,17 +330,34 @@ class ContentBlockManager
             if ($pageName === 'home' && $key === 'hero.text_shadow_color') {
                 $value = preg_match('/^#[0-9a-fA-F]{6}$/', $value) === 1 ? strtoupper($value) : '#000000';
             }
+            $defaults = $this->getDefaultColors($pageName, $key);
             $requestedColor = $colors[$key] ?? null;
-            $color = $this->normalizeColor(
-                is_string($requestedColor) ? $requestedColor : null,
-                $pageName,
-                $key
-            );
+            $requestedColorDark = $colorsDark[$key] ?? null;
+            $color = $this->normalizeColor(is_string($requestedColor) ? $requestedColor : null, $defaults['light']);
+            $colorDark = $this->normalizeColor(is_string($requestedColorDark) ? $requestedColorDark : null, $defaults['dark']);
 
-            $editedBlock = $this->findOrCreateContentBlock($pageName, $key, $locale, $definition['type']);
+            $editedBlock = $this->repository->findOneByComposite($pageName, $key, $locale);
+            $blockExisted = $editedBlock !== null;
+            if ($editedBlock === null) {
+                $editedBlock = $this->findOrCreateContentBlock($pageName, $key, $locale, $definition['type']);
+            }
+
+            if ($blockExisted) {
+                $oldValue = $editedBlock->getValue() ?? '';
+                $oldColor = $editedBlock->getColor();
+                $oldColorDark = $editedBlock->getColorDark();
+                $valueChanged = $oldValue !== $value;
+                $colorChanged = $this->normalizeColor($oldColor, $defaults['light']) !== $color;
+                $colorDarkChanged = $this->normalizeColor($oldColorDark, $defaults['dark']) !== $colorDark;
+                if ($valueChanged || $colorChanged || $colorDarkChanged) {
+                    $this->pushToHistory($editedBlock, $now, $user);
+                }
+            }
+
             $editedBlock
                 ->setValue($value)
                 ->setColor($color)
+                ->setColorDark($colorDark)
                 ->setUpdatedAt($now);
 
             $otherBlock = $this->repository->findOneByComposite($pageName, $key, $otherLocale);
@@ -272,6 +367,7 @@ class ContentBlockManager
                 }
                 $otherBlock
                     ->setColor($color)
+                    ->setColorDark($colorDark)
                     ->setUpdatedAt($now);
             }
 
@@ -280,6 +376,7 @@ class ContentBlockManager
                 $otherBlock
                     ->setValue($value)
                     ->setColor($color)
+                    ->setColorDark($colorDark)
                     ->setUpdatedAt($now);
             }
         }
@@ -287,6 +384,76 @@ class ContentBlockManager
         if ($flush) {
             $this->entityManager->flush();
         }
+    }
+
+    /**
+     * @brief Pushes the current block state to history before it is overwritten.
+     *
+     * @param ContentBlock $block The block whose state to archive.
+     * @param \DateTimeImmutable $now The current timestamp.
+     * @param UserInterface|null $user The user who triggered the save.
+     * @return void
+     * @date 2026-03-19
+     * @author Stephane H.
+     */
+    private function pushToHistory(ContentBlock $block, \DateTimeImmutable $now, ?UserInterface $user): void
+    {
+        $history = new ContentBlockHistory();
+        $history->setPageName($block->getPageName());
+        $history->setBlockKey($block->getKey());
+        $history->setLocale($block->getLocale());
+        $history->setValue($block->getValue() ?? '');
+        $history->setColor($block->getColor());
+        $history->setColorDark($block->getColorDark());
+        $history->setCreatedAt($now);
+        $history->setCreatedBy($user);
+        $this->entityManager->persist($history);
+    }
+
+    /**
+     * @brief Restores a content block to a previous state from history.
+     *
+     * Pushes the current prod state to history, then restores the block from the selected history entry.
+     *
+     * @param int $historyId The history entry ID to restore.
+     * @param UserInterface|null $user The user who triggered the rollback.
+     * @return void
+     * @date 2026-03-19
+     * @author Stephane H.
+     */
+    public function rollbackToHistory(int $historyId, ?UserInterface $user = null): void
+    {
+        $history = $this->historyRepository->find($historyId);
+        if ($history === null) {
+            throw new \InvalidArgumentException('History entry not found.');
+        }
+
+        $block = $this->repository->findOneByComposite(
+            $history->getPageName(),
+            $history->getBlockKey(),
+            $history->getLocale()
+        );
+
+        $now = new \DateTimeImmutable();
+        if ($block !== null) {
+            $this->pushToHistory($block, $now, $user);
+        } else {
+            $definitions = $this->getPageDefinitions($history->getPageName());
+            $block = $this->findOrCreateContentBlock(
+                $history->getPageName(),
+                $history->getBlockKey(),
+                $history->getLocale(),
+                $definitions[$history->getBlockKey()]['type'] ?? 'plain'
+            );
+        }
+
+        $block
+            ->setValue($history->getValue() ?? '')
+            ->setColor($history->getColor())
+            ->setColorDark($history->getColorDark())
+            ->setUpdatedAt($now);
+
+        $this->entityManager->flush();
     }
 
     /**
@@ -377,45 +544,51 @@ class ContentBlockManager
 
         $colors = [];
         foreach ($definitions as $key => $_definition) {
-            $storedColor = ($localeIndexed[$key] ?? null)?->getColor() ?? ($fallbackIndexed[$key] ?? null)?->getColor();
-
-            $colors[$key] = $this->normalizeColor($storedColor, $pageName, $key);
+            $block = $localeIndexed[$key] ?? $fallbackIndexed[$key] ?? null;
+            $storedLight = $block?->getColor();
+            $storedDark = $block?->getColorDark();
+            $defaults = $this->getDefaultColors($pageName, $key);
+            $colors[$key] = [
+                'light' => $this->normalizeColor($storedLight, $defaults['light']),
+                'dark' => $this->normalizeColor($storedDark, $defaults['dark']),
+            ];
         }
 
         return $colors;
     }
 
     /**
-     * @brief Returns default color for a block.
+     * @brief Returns default colors for a block (light and dark).
      *
      * @param string $pageName The page name.
      * @param string $blockKey The block key.
-     * @return string The default HEX color.
+     * @return array{light: string, dark: string} Default HEX colors.
      * @date 2026-03-19
      * @author Stephane H.
      */
-    public function getDefaultColor(string $pageName, string $blockKey): string
+    public function getDefaultColors(string $pageName, string $blockKey): array
     {
-        return self::DEFAULT_COLORS[$pageName][$blockKey] ?? '#212529';
+        $defaults = self::DEFAULT_COLORS[$pageName][$blockKey] ?? ['light' => '#212529', 'dark' => '#e4e6eb'];
+
+        return is_array($defaults) ? $defaults : ['light' => (string) $defaults, 'dark' => '#e4e6eb'];
     }
 
     /**
      * @brief Normalizes a color value to a valid HEX format.
      *
      * @param string|null $color The input color.
-     * @param string $pageName The page name.
-     * @param string $blockKey The block key.
+     * @param string $fallback The fallback HEX color when invalid.
      * @return string A valid HEX color.
      * @date 2026-03-19
      * @author Stephane H.
      */
-    private function normalizeColor(?string $color, string $pageName, string $blockKey): string
+    private function normalizeColor(?string $color, string $fallback): string
     {
         if ($color !== null && preg_match('/^#[0-9a-fA-F]{6}$/', $color) === 1) {
             return strtoupper($color);
         }
 
-        return $this->getDefaultColor($pageName, $blockKey);
+        return $fallback;
     }
 
     /**

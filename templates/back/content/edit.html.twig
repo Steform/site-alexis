@@ -28,16 +28,26 @@
             {{ 'back.content.tab.qui'|trans({}, 'back') }}
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{ page_name == 'devis' ? 'active' : '' }}" href="{{ path(locale == 'fr' ? 'app_back_content_devis_fr' : 'app_back_content_devis_de') }}">
+            {{ 'back.content.tab.devis'|trans({}, 'back') }}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ page_name == 'gallery' ? 'active' : '' }}" href="{{ path(locale == 'fr' ? 'app_back_content_gallery_fr' : 'app_back_content_gallery_de') }}">
+            {{ 'back.content.tab.gallery'|trans({}, 'back') }}
+        </a>
+    </li>
 </ul>
 
 <ul class="nav nav-pills mb-4">
     <li class="nav-item">
-        <a class="nav-link {{ locale == 'fr' ? 'active' : '' }}" href="{{ path(page_name == 'home' ? 'app_back_content_home_fr' : 'app_back_content_qui_sommes_nous_fr') }}">
+        <a class="nav-link {{ locale == 'fr' ? 'active' : '' }}" href="{{ path(page_name == 'home' ? 'app_back_content_home_fr' : (page_name == 'devis' ? 'app_back_content_devis_fr' : (page_name == 'gallery' ? 'app_back_content_gallery_fr' : 'app_back_content_qui_sommes_nous_fr'))) }}">
             {{ 'back.content.locale.short.fr'|trans({}, 'back') }}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ locale == 'de' ? 'active' : '' }}" href="{{ path(page_name == 'home' ? 'app_back_content_home_de' : 'app_back_content_qui_sommes_nous_de') }}">
+        <a class="nav-link {{ locale == 'de' ? 'active' : '' }}" href="{{ path(page_name == 'home' ? 'app_back_content_home_de' : (page_name == 'devis' ? 'app_back_content_devis_de' : (page_name == 'gallery' ? 'app_back_content_gallery_de' : 'app_back_content_qui_sommes_nous_de'))) }}">
             {{ 'back.content.locale.short.de'|trans({}, 'back') }}
         </a>
     </li>
@@ -51,13 +61,29 @@
                     'back.content.section.hero_top': ['hero.top_content', 'hero.text_shadow_color', 'hero.cta'],
                     'back.content.section.hero_photos': ['hero.custom_css'],
                     'back.content.section.about_home': ['about.title', 'about.lead', 'about.body', 'about.cta'],
-                    'back.content.section.about_photos': []
+                    'back.content.section.about_photos': [],
+                    'back.content.section.quick_services': ['quick.card1.title', 'quick.card1.text', 'quick.card2.title', 'quick.card2.text', 'quick.card3.title', 'quick.card3.text'],
+                    'back.content.section.services': ['services.title', 'services.card1.title', 'services.card2.title', 'services.card3.title', 'services.card4.title', 'services.cta'],
+                    'back.content.section.reviews': ['reviews.title', 'reviews.default.text', 'reviews.default.author']
                 } %}
-            {% else %}
+            {% elseif page_name == 'qui_sommes_nous' %}
                 {% set section_map = {
                     'back.content.section.qui_main': ['title', 'alexis.role', 'alexis.lead', 'alexis.text1', 'alexis.text2', 'cta.quote'],
                     'back.content.section.qui_cards': ['card.family.title', 'card.family.text', 'card.expertise.title', 'card.expertise.text', 'card.location.title', 'card.location.text']
                 } %}
+            {% elseif page_name == 'devis' %}
+                {% set section_map = {
+                    'back.content.section.devis_main': ['devis.title', 'devis.lead', 'devis.cta'],
+                    'back.content.section.devis_types_prestation': [],
+                    'back.content.section.devis_types_carburant': []
+                } %}
+            {% elseif page_name == 'gallery' %}
+                {% set section_map = {
+                    'back.content.section.gallery_main': ['gallery.title', 'gallery.lead'],
+                    'back.content.section.gallery_items': []
+                } %}
+            {% else %}
+                {% set section_map = {} %}
             {% endif %}
 
             <div class="accordion" id="contentSectionsAccordion_{{ page_name }}_{{ locale }}">
@@ -82,7 +108,143 @@
                             data-bs-parent="#contentSectionsAccordion_{{ page_name }}_{{ locale }}"
                         >
                             <div class="accordion-body">
-                                {% if section_label == 'back.content.section.about_photos' and page_name == 'home' %}
+                                {% if section_label == 'back.content.section.devis_types_prestation' and page_name == 'devis' %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <p class="text-muted mb-0">{{ 'back.content.section.devis_types_prestation.help'|trans({}, 'back') }}</p>
+                                        <a href="{{ path('app_back_devis_type_prestation_new') }}" class="btn btn-sm btn-primary">
+                                            {{ 'back.devis_type.index.add'|trans({}, 'back') }}
+                                        </a>
+                                    </div>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>{{ 'back.devis_type.index.th.code'|trans({}, 'back') }}</th>
+                                                <th>{{ 'back.devis_type.index.th.label_fr'|trans({}, 'back') }}</th>
+                                                <th>{{ 'back.devis_type.index.th.label_de'|trans({}, 'back') }}</th>
+                                                <th>{{ 'back.devis_type.index.th.ordre'|trans({}, 'back') }}</th>
+                                                <th>{{ 'back.devis_type.index.th.actif'|trans({}, 'back') }}</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for t in devis_type_prestations|default([]) %}
+                                            <tr>
+                                                <td><code>{{ t.code }}</code></td>
+                                                <td>{{ t.label }}</td>
+                                                <td>{{ t.labelDe|default('—') }}</td>
+                                                <td>{{ t.ordre }}</td>
+                                                <td>{{ t.actif ? 'Oui' : 'Non' }}</td>
+                                                <td>
+                                                    <a href="{{ path('app_back_devis_type_prestation_edit', { id: t.id }) }}" class="btn btn-sm btn-outline-primary">
+                                                        {{ 'back.avis.index.edit'|trans({}, 'back') }}
+                                                    </a>
+                                                    <form method="post" action="{{ path('app_back_devis_type_prestation_delete', { id: t.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.devis_type.index.confirm_delete'|trans({}, 'back') }}');">
+                                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ t.id) }}">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            {{ 'back.avis.index.delete'|trans({}, 'back') }}
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            {% else %}
+                                            <tr>
+                                                <td colspan="6" class="text-muted">
+                                                    {{ 'back.devis_type.index.empty'|trans({}, 'back') }}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% elseif section_label == 'back.content.section.devis_types_carburant' and page_name == 'devis' %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <p class="text-muted mb-0">{{ 'back.content.section.devis_types_carburant.help'|trans({}, 'back') }}</p>
+                                        <a href="{{ path('app_back_devis_type_carburant_new') }}" class="btn btn-sm btn-primary">
+                                            {{ 'back.devis_type_carburant.index.add'|trans({}, 'back') }}
+                                        </a>
+                                    </div>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>{{ 'back.devis_type_carburant.index.th.code'|trans({}, 'back') }}</th>
+                                                <th>{{ 'back.devis_type_carburant.index.th.label_fr'|trans({}, 'back') }}</th>
+                                                <th>{{ 'back.devis_type_carburant.index.th.label_de'|trans({}, 'back') }}</th>
+                                                <th>{{ 'back.devis_type_carburant.index.th.ordre'|trans({}, 'back') }}</th>
+                                                <th>{{ 'back.devis_type_carburant.index.th.actif'|trans({}, 'back') }}</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for t in devis_type_carburants|default([]) %}
+                                            <tr>
+                                                <td><code>{{ t.code }}</code></td>
+                                                <td>{{ t.label }}</td>
+                                                <td>{{ t.labelDe|default('—') }}</td>
+                                                <td>{{ t.ordre }}</td>
+                                                <td>{{ t.actif ? 'Oui' : 'Non' }}</td>
+                                                <td>
+                                                    <a href="{{ path('app_back_devis_type_carburant_edit', { id: t.id }) }}" class="btn btn-sm btn-outline-primary">
+                                                        {{ 'back.avis.index.edit'|trans({}, 'back') }}
+                                                    </a>
+                                                    <form method="post" action="{{ path('app_back_devis_type_carburant_delete', { id: t.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.devis_type_carburant.index.confirm_delete'|trans({}, 'back') }}');">
+                                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ t.id) }}">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            {{ 'back.avis.index.delete'|trans({}, 'back') }}
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            {% else %}
+                                            <tr>
+                                                <td colspan="6" class="text-muted">
+                                                    {{ 'back.devis_type_carburant.index.empty'|trans({}, 'back') }}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% elseif section_label == 'back.content.section.gallery_items' and page_name == 'gallery' %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <p class="text-muted mb-0">{{ 'back.content.section.gallery_items.help'|trans({}, 'back') }}</p>
+                                        <a href="{{ path('app_back_gallery_new') }}" class="btn btn-sm btn-primary">
+                                            {{ 'back.gallery.index.add'|trans({}, 'back') }}
+                                        </a>
+                                    </div>
+                                    <div class="row g-3">
+                                        {% for item in gallery_items|default([]) %}
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="card h-100 shadow-sm">
+                                                    {% if item.image %}
+                                                        <img src="{{ asset(item.image) }}" class="card-img-top" alt="{{ item.titre|default('') }}" style="height: 180px; object-fit: cover;">
+                                                    {% else %}
+                                                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 180px;">
+                                                            <span class="text-white">{{ 'back.gallery.index.no_image'|trans({}, 'back') }}</span>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="card-body">
+                                                        <p class="card-text">{{ item.titre|default('—') }}</p>
+                                                    </div>
+                                                    <div class="card-footer bg-transparent d-flex gap-2">
+                                                        <a href="{{ path('app_back_gallery_edit', { id: item.id }) }}" class="btn btn-sm btn-outline-primary">
+                                                            {{ 'back.gallery.index.edit'|trans({}, 'back') }}
+                                                        </a>
+                                                        <form method="post" action="{{ path('app_back_gallery_delete', { id: item.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.gallery.index.confirm_delete'|trans({}, 'back') }}');">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                {{ 'back.gallery.index.delete'|trans({}, 'back') }}
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-12">
+                                                <div class="alert alert-info mb-0">
+                                                    {{ 'back.gallery.index.empty'|trans({}, 'back') }}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% elseif section_label == 'back.content.section.about_photos' and page_name == 'home' %}
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div class="d-flex flex-column">
                                             <p class="text-muted mb-1">{{ 'back.about.photo.image_help'|trans({}, 'back') }}</p>
@@ -207,18 +369,33 @@
                                                 {{ ('back.content.block.' ~ block_key|replace({'.':'_'}))|trans({}, 'back') }}
                                             </div>
                                             {% if block_key not in ['hero.custom_css', 'hero.text_shadow_color'] %}
-                                                <div class="mb-3">
-                                                    <label for="color_{{ block_key|replace({'.':'_'}) }}" class="form-label">
-                                                        {{ 'back.content.color.label'|trans({}, 'back') }}
-                                                    </label>
-                                                    <input
-                                                        id="color_{{ block_key|replace({'.':'_'}) }}"
-                                                        type="color"
-                                                        class="form-control form-control-color"
-                                                        name="colors[{{ block_key }}]"
-                                                        value="{{ content_colors[block_key]|default('#212529') }}"
-                                                        title="{{ 'back.content.color.help'|trans({}, 'back') }}"
-                                                    >
+                                                <div class="row g-2 mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="color_{{ block_key|replace({'.':'_'}) }}" class="form-label">
+                                                            {{ 'back.content.color.label'|trans({}, 'back') }}
+                                                        </label>
+                                                        <input
+                                                            id="color_{{ block_key|replace({'.':'_'}) }}"
+                                                            type="color"
+                                                            class="form-control form-control-color"
+                                                            name="colors[{{ block_key }}]"
+                                                            value="{{ (content_colors[block_key].light ?? content_colors[block_key])|default('#212529') }}"
+                                                            title="{{ 'back.content.color.help'|trans({}, 'back') }}"
+                                                        >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="color_dark_{{ block_key|replace({'.':'_'}) }}" class="form-label">
+                                                            {{ 'back.content.color_dark.label'|trans({}, 'back') }}
+                                                        </label>
+                                                        <input
+                                                            id="color_dark_{{ block_key|replace({'.':'_'}) }}"
+                                                            type="color"
+                                                            class="form-control form-control-color"
+                                                            name="colors_dark[{{ block_key }}]"
+                                                            value="{{ (content_colors[block_key].dark ?? content_colors[block_key])|default('#e4e6eb') }}"
+                                                            title="{{ 'back.content.color_dark.help'|trans({}, 'back') }}"
+                                                        >
+                                                    </div>
                                                 </div>
                                             {% endif %}
 

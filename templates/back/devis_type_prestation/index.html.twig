@@ -1,0 +1,57 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}{{ 'back.devis_type.index.title'|trans(domain='back') }}{% endblock %}
+
+{% block back_content %}
+<h1 class="mb-4">{{ 'back.devis_type.index.heading'|trans(domain='back') }}</h1>
+
+<p>
+    <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_devis_de' : 'app_back_content_devis_fr') }}" class="btn btn-outline-secondary me-2">
+        {{ 'back.devis_type.index.back_to_content'|trans(domain='back') }}
+    </a>
+    <a href="{{ path('app_back_devis_type_prestation_new') }}" class="btn btn-primary">
+        {{ 'back.devis_type.index.add'|trans(domain='back') }}
+    </a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{{ 'back.devis_type.index.th.code'|trans(domain='back') }}</th>
+            <th>{{ 'back.devis_type.index.th.label_fr'|trans(domain='back') }}</th>
+            <th>{{ 'back.devis_type.index.th.label_de'|trans(domain='back') }}</th>
+            <th>{{ 'back.devis_type.index.th.ordre'|trans(domain='back') }}</th>
+            <th>{{ 'back.devis_type.index.th.actif'|trans(domain='back') }}</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in types %}
+        <tr>
+            <td><code>{{ t.code }}</code></td>
+            <td>{{ t.label }}</td>
+            <td>{{ t.labelDe|default('—') }}</td>
+            <td>{{ t.ordre }}</td>
+            <td>{{ t.actif ? 'Oui' : 'Non' }}</td>
+            <td>
+                <a href="{{ path('app_back_devis_type_prestation_edit', { id: t.id }) }}" class="btn btn-sm btn-outline-primary">
+                    {{ 'back.avis.index.edit'|trans(domain='back') }}
+                </a>
+                <form method="post" action="{{ path('app_back_devis_type_prestation_delete', { id: t.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.devis_type.index.confirm_delete'|trans(domain='back') }}');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ t.id) }}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        {{ 'back.avis.index.delete'|trans(domain='back') }}
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" class="text-muted">
+                {{ 'back.devis_type.index.empty'|trans(domain='back') }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}
+    {% if type.id %}
+        {{ 'back.devis_type_carburant.form.title_edit'|trans(domain='back') }}
+    {% else %}
+        {{ 'back.devis_type_carburant.form.title_new'|trans(domain='back') }}
+    {% endif %}
+{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block back_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">
+        {% if type.id %}
+            {{ 'back.devis_type_carburant.form.heading_edit'|trans(domain='back') }}
+        {% else %}
+            {{ 'back.devis_type_carburant.form.heading_new'|trans(domain='back') }}
+        {% endif %}
+    </h1>
+    <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_devis_de' : 'app_back_content_devis_fr') }}" class="btn btn-outline-secondary">
+        {{ 'back.devis_type_carburant.form.back_to_list'|trans(domain='back') }}
+    </a>
+</div>
+
+{{ form_start(form) }}
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white py-3">
+        <h5 class="card-title mb-0">
+            {% if type.id %}
+                {{ 'back.devis_type_carburant.form.card_title_edit'|trans(domain='back') }}
+            {% else %}
+                {{ 'back.devis_type_carburant.form.card_title_new'|trans(domain='back') }}
+            {% endif %}
+        </h5>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-4">
+            <div class="col-md-6">
+                {{ form_row(form.code) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.ordre) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.label) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.labelDe) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.actif) }}
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">
+                {{ 'back.avis.form.save'|trans(domain='back') }}
+            </button>
+            <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_devis_de' : 'app_back_content_devis_fr') }}" class="btn btn-outline-secondary">
+                {{ 'back.avis.form.cancel'|trans(domain='back') }}
+            </a>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+{% endblock %}

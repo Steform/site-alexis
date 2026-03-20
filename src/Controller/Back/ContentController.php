@@ -9,6 +9,10 @@ use App\Form\AboutPhotoType;
 use App\Form\HomeHeroPhotoType;
 use App\Repository\AboutPhotoRepository;
 use App\Repository\AboutSectionRepository;
+use App\Repository\ContentBlockHistoryRepository;
+use App\Repository\DevisTypeCarburantRepository;
+use App\Repository\DevisTypePrestationRepository;
+use App\Repository\GalleryItemRepository;
 use App\Repository\HomeHeroPhotoRepository;
 use App\Service\AboutPhotoImageProcessor;
 use App\Service\ContentBlockManager;
@@ -33,6 +37,7 @@ class ContentController extends AbstractController
      * @brief ContentController constructor.
      *
      * @param ContentBlockManager $contentBlockManager The content block manager.
+     * @param ContentBlockHistoryRepository $historyRepository The content block history repository.
      * @param AboutPhotoRepository $aboutPhotoRepository The about photo repository.
      * @param AboutSectionRepository $aboutSectionRepository The about section repository.
      * @param EntityManagerInterface $entityManager The entity manager.
@@ -44,12 +49,16 @@ class ContentController extends AbstractController
      */
     public function __construct(
         private readonly ContentBlockManager $contentBlockManager,
+        private readonly ContentBlockHistoryRepository $historyRepository,
         private readonly AboutPhotoRepository $aboutPhotoRepository,
         private readonly AboutSectionRepository $aboutSectionRepository,
         private readonly EntityManagerInterface $entityManager,
         private readonly AboutPhotoImageProcessor $aboutPhotoImageProcessor,
         private readonly HomeHeroPhotoRepository $homeHeroPhotoRepository,
         private readonly HomeHeroPhotoImageProcessor $homeHeroPhotoImageProcessor,
+        private readonly DevisTypePrestationRepository $devisTypePrestationRepository,
+        private readonly DevisTypeCarburantRepository $devisTypeCarburantRepository,
+        private readonly GalleryItemRepository $galleryItemRepository,
     ) {
     }
 
@@ -103,6 +112,32 @@ class ContentController extends AbstractController
     public function quiSommesNousDe(Request $request): Response
     {
         return $this->editPage($request, 'qui_sommes_nous', 'de');
+    }
+
+    /**
+     * @brief Edits CMS blocks for the devis page (types de prestation) in French.
+     *
+     * @param Request $request The HTTP request.
+     * @return Response The response.
+     * @date 2026-03-19
+     * @author Stephane H.
+     */
+    public function devisFr(Request $request): Response
+    {
+        return $this->editPage($request, 'devis', 'fr');
+    }
+
+    /**
+     * @brief Edits CMS blocks for the devis page (types de prestation) in German.
+     *
+     * @param Request $request The HTTP request.
+     * @return Response The response.
+     * @date 2026-03-19
+     * @author Stephane H.
+     */
+    public function devisDe(Request $request): Response
+    {
+        return $this->editPage($request, 'devis', 'de');
     }
 
     /**
@@ -333,15 +368,24 @@ class ContentController extends AbstractController
     private function editPage(Request $request, string $pageName, string $locale): Response
     {
         $definitions = $this->contentBlockManager->getPageDefinitions($pageName);
-        if ($definitions === []) {
+        if (!$this->contentBlockManager->hasPage($pageName)) {
             throw $this->createNotFoundException('Unknown CMS page.');
         }
 
         if ($request->isMethod('POST')) {
             $submitted = (array) $request->request->all('content');
             $colors = (array) $request->request->all('colors');
+            $colorsDark = (array) $request->request->all('colors_dark');
 
-            $this->contentBlockManager->savePageContentForLocale($pageName, $locale, $submitted, $colors);
+            $this->contentBlockManager->savePageContentForLocale(
+                $pageName,
+                $locale,
+                $submitted,
+                $colors,
+                $colorsDark,
+                true,
+                $this->getUser()
+            );
             $this->addFlash('success', 'Contenus enregistrés.');
 
             return $this->redirectToRoute($this->getContentRouteName($pageName, $locale));
@@ -355,6 +399,9 @@ class ContentController extends AbstractController
             'content_colors' => $this->contentBlockManager->getEditorColors($pageName),
             'about_photos' => $pageName === 'home' ? $this->aboutPhotoRepository->findAllOrdered() : [],
             'home_hero_photos' => $pageName === 'home' ? $this->homeHeroPhotoRepository->findAllOrdered() : [],
+            'devis_type_prestations' => $pageName === 'devis' ? $this->devisTypePrestationRepository->findAllOrdered() : [],
+            'devis_type_carburants' => $pageName === 'devis' ? $this->devisTypeCarburantRepository->findAllOrdered() : [],
+            'gallery_items' => $pageName === 'gallery' ? $this->galleryItemRepository->findAllOrdered() : [],
         ]);
     }
 
@@ -417,6 +464,53 @@ class ContentController extends AbstractController
     }
 
     /**
+     * @brief Displays content block modification history.
+     *
+     * @param Request $request The HTTP request (for filters).
+     * @return Response The response.
+     * @date 2026-03-19
+     * @author Stephane H.
+     */
+    public function history(Request $request): Response
+    {
+        $pageFilter = $request->query->get('page');
+        $localeFilter = $request->query->get('locale');
+        $entries = $this->historyRepository->findAllOrdered(200, $pageFilter ?: null, $localeFilter ?: null);
+
+        return $this->render('back/content/history.html.twig', [
+            'history_entries' => $entries,
+            'page_filter' => $pageFilter,
+            'locale_filter' => $localeFilter,
+        ]);
+    }
+
+    /**
+     * @brief Restores a content block to a previous state from history.
+     *
+     * @param Request $request The HTTP request.
+     * @param int $id The history entry ID.
+     * @return Response The response.
+     * @date 2026-03-19
+     * @author Stephane H.
+     */
+    public function rollback(Request $request, int $id): Response
+    {
+        if (!$this->isCsrfTokenValid('rollback_content_' . $id, (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token invalide.');
+            return $this->redirectToRoute('app_back_content_history');
+        }
+
+        try {
+            $this->contentBlockManager->rollbackToHistory($id, $this->getUser());
+            $this->addFlash('success', 'Version restaurée.');
+        } catch (\InvalidArgumentException $e) {
+            $this->addFlash('error', $e->getMessage());
+        }
+
+        return $this->redirectToRoute('app_back_content_history');
+    }
+
+    /**
      * @brief Returns the route name for one page and locale.
      *
      * @param string $pageName The page name.
@@ -435,6 +529,14 @@ class ContentController extends AbstractController
             'qui_sommes_nous' => [
                 'fr' => 'app_back_content_qui_sommes_nous_fr',
                 'de' => 'app_back_content_qui_sommes_nous_de',
+            ],
+            'devis' => [
+                'fr' => 'app_back_content_devis_fr',
+                'de' => 'app_back_content_devis_de',
+            ],
+            'gallery' => [
+                'fr' => 'app_back_content_gallery_fr',
+                'de' => 'app_back_content_gallery_de',
             ],
         ];
 

@@ -1,0 +1,54 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}{{ 'back.devis_type_carburant.index.title'|trans(domain='back') }}{% endblock %}
+
+{% block back_content %}
+<h1 class="mb-4">{{ 'back.devis_type_carburant.index.heading'|trans(domain='back') }}</h1>
+
+<p>
+    <a href="{{ path('app_back_devis_type_carburant_new') }}" class="btn btn-primary">
+        {{ 'back.devis_type_carburant.index.add'|trans(domain='back') }}
+    </a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{{ 'back.devis_type_carburant.index.th.code'|trans(domain='back') }}</th>
+            <th>{{ 'back.devis_type_carburant.index.th.label_fr'|trans(domain='back') }}</th>
+            <th>{{ 'back.devis_type_carburant.index.th.label_de'|trans(domain='back') }}</th>
+            <th>{{ 'back.devis_type_carburant.index.th.ordre'|trans(domain='back') }}</th>
+            <th>{{ 'back.devis_type_carburant.index.th.actif'|trans(domain='back') }}</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in types %}
+        <tr>
+            <td><code>{{ t.code }}</code></td>
+            <td>{{ t.label }}</td>
+            <td>{{ t.labelDe|default('—') }}</td>
+            <td>{{ t.ordre }}</td>
+            <td>{{ t.actif ? 'Oui' : 'Non' }}</td>
+            <td>
+                <a href="{{ path('app_back_devis_type_carburant_edit', { id: t.id }) }}" class="btn btn-sm btn-outline-primary">
+                    {{ 'back.avis.index.edit'|trans(domain='back') }}
+                </a>
+                <form method="post" action="{{ path('app_back_devis_type_carburant_delete', { id: t.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.devis_type_carburant.index.confirm_delete'|trans(domain='back') }}');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ t.id) }}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        {{ 'back.avis.index.delete'|trans(domain='back') }}
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" class="text-muted">
+                {{ 'back.devis_type_carburant.index.empty'|trans(domain='back') }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

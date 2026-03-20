@@ -37,11 +37,17 @@
     </div>
     <div class="card-body p-4">
         <div class="row g-4">
-            <div class="col-12">
+            <div class="col-md-6">
                 {{ form_row(form.titre) }}
             </div>
-            <div class="col-12">
+            <div class="col-md-6">
+                {{ form_row(form.titreDe) }}
+            </div>
+            <div class="col-md-6">
                 {{ form_row(form.description) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.descriptionDe) }}
             </div>
             <div class="col-md-6">
                 {{ form_row(form.ordre) }}

@@ -34,6 +34,18 @@ app_horaires_public:
   controller: App\Controller\Public\HorairesPublicController::index
   methods: GET
 
+app_services:
+  path: /services
+  controller: App\Controller\Public\ServicesController::index
+  methods: GET
+
+app_services_show:
+  path: /services/{slug}
+  controller: App\Controller\Public\ServicesController::show
+  methods: GET
+  requirements:
+    slug: '[a-z0-9\-]+'
+
 # Security
 app_login:
   path: /login
@@ -141,14 +153,49 @@ app_back_gallery_delete:
   controller: App\Controller\Back\GalleryController::delete
   methods: POST
 
+app_back_devis_type_prestation_index:
+  path: /back/devis/types
+  controller: App\Controller\Back\DevisTypePrestationController::index
+  methods: GET
+
+app_back_devis_type_prestation_new:
+  path: /back/devis/types/new
+  controller: App\Controller\Back\DevisTypePrestationController::new
+  methods: [GET, POST]
+
+app_back_devis_type_prestation_edit:
+  path: /back/devis/types/{id}/edit
+  controller: App\Controller\Back\DevisTypePrestationController::edit
+  methods: [GET, POST]
+
+app_back_devis_type_prestation_delete:
+  path: /back/devis/types/{id}/delete
+  controller: App\Controller\Back\DevisTypePrestationController::delete
+  methods: POST
+
+app_back_devis_type_carburant_index:
+  path: /back/devis/carburants
+  controller: App\Controller\Back\DevisTypeCarburantController::index
+  methods: GET
+
+app_back_devis_type_carburant_new:
+  path: /back/devis/carburants/new
+  controller: App\Controller\Back\DevisTypeCarburantController::new
+  methods: [GET, POST]
+
+app_back_devis_type_carburant_edit:
+  path: /back/devis/carburants/{id}/edit
+  controller: App\Controller\Back\DevisTypeCarburantController::edit
+  methods: [GET, POST]
+
+app_back_devis_type_carburant_delete:
+  path: /back/devis/carburants/{id}/delete
+  controller: App\Controller\Back\DevisTypeCarburantController::delete
+  methods: POST
+
 app_back_coordinates:
   path: /back/coordinates
   controller: App\Controller\Back\CoordinatesController::index
-  methods: [GET, POST]
-
-app_back_about_section_edit:
-  path: /back/qui-sommes-nous
-  controller: App\Controller\Back\AboutSectionController::edit
   methods: [GET, POST]
 
 app_back_content_home_fr:
@@ -170,6 +217,36 @@ app_back_content_qui_sommes_nous_de:
   path: /back/content/qui-sommes-nous/de
   controller: App\Controller\Back\ContentController::quiSommesNousDe
   methods: [GET, POST]
+
+app_back_content_devis_fr:
+  path: /back/content/devis/fr
+  controller: App\Controller\Back\ContentController::devisFr
+  methods: [GET, POST]
+
+app_back_content_devis_de:
+  path: /back/content/devis/de
+  controller: App\Controller\Back\ContentController::devisDe
+  methods: [GET, POST]
+
+app_back_content_gallery_fr:
+  path: /back/content/gallery/fr
+  controller: App\Controller\Back\ContentController::galleryFr
+  methods: [GET, POST]
+
+app_back_content_gallery_de:
+  path: /back/content/gallery/de
+  controller: App\Controller\Back\ContentController::galleryDe
+  methods: [GET, POST]
+
+app_back_content_history:
+  path: /back/content/history
+  controller: App\Controller\Back\ContentController::history
+  methods: [GET]
+
+app_back_content_rollback:
+  path: /back/content/history/{id}/rollback
+  controller: App\Controller\Back\ContentController::rollback
+  methods: [POST]
 
 app_back_content_home_photo_new:
   path: /back/content/home/{locale}/photos/new

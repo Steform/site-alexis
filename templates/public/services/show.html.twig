@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% set serviceTitle = app.request.locale starts with 'de' and service.titreDe ? service.titreDe : service.titre %}
+{% set serviceDescription = app.request.locale starts with 'de' and service.descriptionDe ? service.descriptionDe : service.description %}
+
+{% block title %}{{ serviceTitle }} - Carrosserie Lino{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('styles/pages/services.css') }}">
+{% endblock %}
+
+{% block body %}
+{% include 'partials/_navbar_public.html.twig' %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="section-title text-center mb-5">{{ serviceTitle }}</h1>
+
+            <div class="row align-items-center g-5 mb-5">
+                <div class="col-md-5 text-center">
+                    <img src="{{ asset(service.image) }}" alt="{{ serviceTitle }}" class="img-fluid service-detail-image" loading="lazy">
+                </div>
+                <div class="col-md-7">
+                    {% if serviceDescription %}
+                        <div class="service-description">{{ serviceDescription|raw }}</div>
+                    {% else %}
+                        <p class="lead">{{ 'services.no_description'|trans }}</p>
+                    {% endif %}
+                    <a href="{{ path('app_devis') }}" class="btn btn-devis rounded-pill mt-3">{{ 'services.cta'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'partials/_footer_public.html.twig' %}
+{% endblock %}
