@@ -1,4 +1,3 @@
-
 {% extends 'back/base.html.twig' %}
 
 {% block title %}{{ 'back.layout.title'|trans({}, 'back') }}{% endblock %}
@@ -7,68 +6,103 @@
 <h1 class="mb-4">{{ 'back.dashboard.title'|trans({}, 'back') }}</h1>
 <p class="lead">{{ 'back.dashboard.welcome'|trans({'%name%': app.user.nom|default(app.user.email)}, 'back') }}</p>
 
-<div class="row g-3">
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ 'back.dashboard.card.horaires.title'|trans({}, 'back') }}</h5>
-                <p class="card-text">{{ 'back.dashboard.card.horaires.text'|trans({}, 'back') }}</p>
-                <a href="{{ path('app_back_horaires_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.horaires.cta'|trans({}, 'back') }}</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ 'back.dashboard.card.avis.title'|trans({}, 'back') }}</h5>
-                <p class="card-text">{{ 'back.dashboard.card.avis.text'|trans({}, 'back') }}</p>
-                <a href="{{ path('app_back_avis_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.avis.cta'|trans({}, 'back') }}</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ 'back.dashboard.card.messages.title'|trans({}, 'back') }}</h5>
-                <p class="card-text">{{ 'back.dashboard.card.messages.text'|trans({}, 'back') }}</p>
-                <a href="{{ path('app_back_message_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.messages.cta'|trans({}, 'back') }}</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ 'back.dashboard.card.gallery.title'|trans({}, 'back') }}</h5>
-                <p class="card-text">{{ 'back.dashboard.card.gallery.text'|trans({}, 'back') }}</p>
-                <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_gallery_de' : 'app_back_content_gallery_fr') }}" class="btn btn-primary">{{ 'back.dashboard.card.gallery.cta'|trans({}, 'back') }}</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ 'back.dashboard.card.texts.title'|trans({}, 'back') }}</h5>
-                <p class="card-text">{{ 'back.dashboard.card.texts.text'|trans({}, 'back') }}</p>
-                <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_home_de' : 'app_back_content_home_fr') }}" class="btn btn-primary">{{ 'back.dashboard.card.texts.cta'|trans({}, 'back') }}</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ 'back.dashboard.card.coordinates.title'|trans({}, 'back') }}</h5>
-                <p class="card-text">{{ 'back.dashboard.card.coordinates.text'|trans({}, 'back') }}</p>
-                <a href="{{ path('app_back_coordinates') }}" class="btn btn-primary">{{ 'back.dashboard.card.coordinates.cta'|trans({}, 'back') }}</a>
+<div class="accordion" id="dashboardAccordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSiteContent">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSiteContent" aria-expanded="true" aria-controls="collapseSiteContent">
+                {{ 'back.layout.nav.site_content'|trans({}, 'back') }}
+            </button>
+        </h2>
+        <div id="collapseSiteContent" class="accordion-collapse collapse show" aria-labelledby="headingSiteContent" data-bs-parent="#dashboardAccordion">
+            <div class="accordion-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ 'back.dashboard.card.horaires.title'|trans({}, 'back') }}</h5>
+                                <p class="card-text">{{ 'back.dashboard.card.horaires.text'|trans({}, 'back') }}</p>
+                                <a href="{{ path('app_back_horaires_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.horaires.cta'|trans({}, 'back') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ 'back.dashboard.card.messages.title'|trans({}, 'back') }}</h5>
+                                <p class="card-text">{{ 'back.dashboard.card.messages.text'|trans({}, 'back') }}</p>
+                                <a href="{{ path('app_back_message_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.messages.cta'|trans({}, 'back') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ 'back.dashboard.card.avis.title'|trans({}, 'back') }}</h5>
+                                <p class="card-text">{{ 'back.dashboard.card.avis.text'|trans({}, 'back') }}</p>
+                                <a href="{{ path('app_back_avis_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.avis.cta'|trans({}, 'back') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ 'back.dashboard.card.gallery.title'|trans({}, 'back') }}</h5>
+                                <p class="card-text">{{ 'back.dashboard.card.gallery.text'|trans({}, 'back') }}</p>
+                                <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_gallery_de' : 'app_back_content_gallery_fr') }}" class="btn btn-primary">{{ 'back.dashboard.card.gallery.cta'|trans({}, 'back') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ 'back.dashboard.card.texts.title'|trans({}, 'back') }}</h5>
+                                <p class="card-text">{{ 'back.dashboard.card.texts.text'|trans({}, 'back') }}</p>
+                                <a href="{{ path(app.request.locale starts with 'de' ? 'app_back_content_home_de' : 'app_back_content_home_fr') }}" class="btn btn-primary">{{ 'back.dashboard.card.texts.cta'|trans({}, 'back') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ 'back.dashboard.card.coordinates.title'|trans({}, 'back') }}</h5>
+                                <p class="card-text">{{ 'back.dashboard.card.coordinates.text'|trans({}, 'back') }}</p>
+                                <a href="{{ path('app_back_coordinates') }}" class="btn btn-primary">{{ 'back.dashboard.card.coordinates.cta'|trans({}, 'back') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     {% if is_granted('ROLE_ADMIN') %}
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ 'back.dashboard.card.users.title'|trans({}, 'back') }}</h5>
-                <p class="card-text">{{ 'back.dashboard.card.users.text'|trans({}, 'back') }}</p>
-                <a href="{{ path('app_back_user_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.users.cta'|trans({}, 'back') }}</a>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingAdmin">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdmin" aria-expanded="false" aria-controls="collapseAdmin">
+                {{ 'back.layout.nav.admin'|trans({}, 'back') }}
+            </button>
+        </h2>
+        <div id="collapseAdmin" class="accordion-collapse collapse" aria-labelledby="headingAdmin" data-bs-parent="#dashboardAccordion">
+            <div class="accordion-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ 'back.dashboard.card.history.title'|trans({}, 'back') }}</h5>
+                                <p class="card-text">{{ 'back.dashboard.card.history.text'|trans({}, 'back') }}</p>
+                                <a href="{{ path('app_back_content_history') }}" class="btn btn-primary">{{ 'back.dashboard.card.history.cta'|trans({}, 'back') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ 'back.dashboard.card.users.title'|trans({}, 'back') }}</h5>
+                                <p class="card-text">{{ 'back.dashboard.card.users.text'|trans({}, 'back') }}</p>
+                                <a href="{{ path('app_back_user_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.users.cta'|trans({}, 'back') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
