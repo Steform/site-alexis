@@ -24,11 +24,11 @@ class MessageType extends AbstractType
     {
         $builder
             ->add('contenu', TextareaType::class, [
-                'label' => 'Contenu FR (ex. Garage fermé du 12 au 22 février)',
+                'label' => 'back.messages.form.label.content_fr',
                 'attr' => ['rows' => 3],
             ])
             ->add('contenuDe', TextareaType::class, [
-                'label' => 'Contenu DE (z.B. Garage vom 12. bis 22. Februar geschlossen)',
+                'label' => 'back.messages.form.label.content_de',
                 'attr' => ['rows' => 3],
             ])
             ->add('dateDebut', DateTimeType::class, [
@@ -46,6 +46,7 @@ class MessageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Message::class,
+            'translation_domain' => 'back',
         ]);
     }
 }

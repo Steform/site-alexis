@@ -51,6 +51,28 @@ class MessageController extends AbstractController
             return $this->redirectToRoute('app_back_message_index');
         }
 
+        // #region agent log
+        @file_put_contents(
+            (string) $this->getParameter('kernel.project_dir') . '/debug-8a5f96.log',
+            json_encode([
+                'sessionId' => '8a5f96',
+                'runId' => 'pre-fix',
+                'hypothesisId' => 'H1',
+                'location' => 'MessageController.php:new',
+                'message' => 'Form fields created for new message',
+                'data' => [
+                    'fields' => array_keys(iterator_to_array($form, true)),
+                    'hasContenu' => $form->has('contenu'),
+                    'hasContenuDe' => $form->has('contenuDe'),
+                    'hasDateDebut' => $form->has('dateDebut'),
+                    'hasDateFin' => $form->has('dateFin'),
+                ],
+                'timestamp' => (int) round(microtime(true) * 1000),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL,
+            FILE_APPEND
+        );
+        // #endregion
+
         return $this->render('back/message/form.html.twig', [
             'message' => $message,
             'form' => $form,
@@ -68,6 +90,26 @@ class MessageController extends AbstractController
 
             return $this->redirectToRoute('app_back_message_index');
         }
+
+        // #region agent log
+        @file_put_contents(
+            (string) $this->getParameter('kernel.project_dir') . '/debug-8a5f96.log',
+            json_encode([
+                'sessionId' => '8a5f96',
+                'runId' => 'pre-fix',
+                'hypothesisId' => 'H2',
+                'location' => 'MessageController.php:edit',
+                'message' => 'Form fields created for edit message',
+                'data' => [
+                    'messageId' => $message->getId(),
+                    'fields' => array_keys(iterator_to_array($form, true)),
+                    'hasContenuDe' => $form->has('contenuDe'),
+                ],
+                'timestamp' => (int) round(microtime(true) * 1000),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL,
+            FILE_APPEND
+        );
+        // #endregion
 
         return $this->render('back/message/form.html.twig', [
             'message' => $message,

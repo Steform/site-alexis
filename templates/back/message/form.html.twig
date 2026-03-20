@@ -50,6 +50,16 @@
                     }
                 }) }}
             </div>
+            <div class="col-12">
+                {{ form_row(form.contenuDe, {
+                    'row_attr': { 'class': 'mb-0' },
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'back.messages.form.placeholder.content_de'|trans(domain='back'),
+                        'rows': 4
+                    }
+                }) }}
+            </div>
             <div class="col-md-6">
                 {{ form_row(form.dateDebut, {
                     'row_attr': { 'class': 'mb-0' },
@@ -77,4 +87,34 @@
     </div>
 </div>
 {{ form_end(form) }}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // #region agent log
+    const fieldFr = document.querySelector('textarea[name="message[contenu]"]');
+    const fieldDe = document.querySelector('textarea[name="message[contenuDe]"]');
+    const actions = document.querySelector('.d-flex.flex-wrap.gap-2');
+    fetch('http://127.0.0.1:7660/ingest/22303807-cf86-4669-8daa-76c32b62b93f', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Debug-Session-Id': '8a5f96'
+        },
+        body: JSON.stringify({
+            sessionId: '8a5f96',
+            runId: 'pre-fix',
+            hypothesisId: 'H3',
+            location: 'back/message/form.html.twig:DOMContentLoaded',
+            message: 'Rendered message fields order snapshot',
+            data: {
+                hasFr: Boolean(fieldFr),
+                hasDe: Boolean(fieldDe),
+                deAfterActions: Boolean(fieldDe && actions && fieldDe.compareDocumentPosition(actions) & Node.DOCUMENT_POSITION_FOLLOWING),
+                deInMainGrid: Boolean(fieldDe && fieldDe.closest('.row.g-4')),
+            },
+            timestamp: Date.now()
+        })
+    }).catch(() => {});
+    // #endregion
+});
+</script>
 {% endblock %}
