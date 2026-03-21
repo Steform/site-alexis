@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-main py-3">
     <div class="container">
-        <a class="navbar-brand" href="{{ path('app_home') }}">
+        <a class="navbar-brand" href="{{ path_locale('app_home') }}">
             <img src="{{ asset('images/logo-carrosserie-lino.svg') }}" alt="Carrosserie Lino" height="60" class="navbar-logo navbar-logo-light">
             <img src="{{ asset('images/logo-carrosserie-lino-dark.svg') }}" alt="Carrosserie Lino" height="60" class="navbar-logo navbar-logo-dark">
         </a>
@@ -10,33 +10,33 @@
         <div class="collapse navbar-collapse" id="navMain">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link {{ app.request.attributes.get('_route') == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">
+                    <a class="nav-link {{ app.request.attributes.get('_route') in ['app_home', 'app_home_de'] ? 'active' : '' }}" href="{{ path_locale('app_home') }}">
                         {{ 'nav.home'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ app.request.attributes.get('_route') == 'app_services' or app.request.attributes.get('_route') == 'app_services_show' ? 'active' : '' }}" href="{{ path('app_services') }}">
+                    <a class="nav-link {{ app.request.attributes.get('_route') in ['app_services', 'app_services_show', 'app_services_de', 'app_services_show_de'] ? 'active' : '' }}" href="{{ path_locale('app_services') }}">
                         {{ 'nav.services'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ app.request.attributes.get('_route') == 'app_gallery' ? 'active' : '' }}" href="{{ path('app_gallery') }}">
+                    <a class="nav-link {{ app.request.attributes.get('_route') in ['app_gallery', 'app_gallery_de'] ? 'active' : '' }}" href="{{ path_locale('app_gallery') }}">
                         {{ 'nav.gallery'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_home') }}#avis">
+                    <a class="nav-link" href="{{ path_locale('app_home') }}#avis">
                         {{ 'nav.reviews'|trans }}
                     </a>
                 </li>
                 <li class="nav-item ms-3">
                     {% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
                     <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'nav.lang_selector_label'|trans }}">
-                        <a href="{{ path('app_switch_locale', { locale: 'fr' }) }}"
+                        <a href="{{ path('app_switch_locale', { locale: 'fr' }) }}?from={{ app.request.pathInfo|url_encode }}"
                            class="btn {{ currentLocale == 'fr' ? 'btn-primary' : 'btn-outline-primary' }}">
                             FR
                         </a>
-                        <a href="{{ path('app_switch_locale', { locale: 'de' }) }}"
+                        <a href="{{ path('app_switch_locale', { locale: 'de' }) }}?from={{ app.request.pathInfo|url_encode }}"
                            class="btn {{ currentLocale == 'de' ? 'btn-primary' : 'btn-outline-primary' }}">
                             DE
                         </a>
@@ -72,7 +72,7 @@
                 {% endif %}
                 <span>
                     {% if horaires_compact is defined and horaires_compact is not empty %}
-                        <a href="{{ path('app_horaires_public') }}" class="">
+                        <a href="{{ path_locale('app_horaires_public') }}" class="">
                             {% include 'components/opening_hours.html.twig' with { rows: horaires_compact, mode: 'compact' } %}
                         </a>
                     {% endif %}
@@ -81,4 +81,5 @@
         </div>
     </div>
 </div>
+{% include 'components/_breadcrumb.html.twig' %}
 

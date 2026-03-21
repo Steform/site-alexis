@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block head_hreflang %}
+<link rel="alternate" hreflang="fr" href="{{ path_for_locale('app_qui_sommes_nous', 'fr') }}">
+<link rel="alternate" hreflang="de" href="{{ path_for_locale('app_qui_sommes_nous', 'de') }}">
+<link rel="alternate" hreflang="x-default" href="{{ path_for_locale('app_qui_sommes_nous', 'fr') }}">
+{% endblock %}
+
 {% block title %}{{ qui_content['title']|default('qui_sommes_nous.title'|trans) }} - Alexis Haffner | Carrosserie Lino{% endblock %}
 
 {% block stylesheets %}
@@ -37,7 +43,10 @@
                     <div class="lead mb-4" style="color: var(--color-alexis-lead, #212529);">{{ qui_content['alexis.lead']|default('qui_sommes_nous.alexis.lead'|trans)|raw }}</div>
                     <div class="mb-4" style="color: var(--color-alexis-text1, #212529);">{{ qui_content['alexis.text1']|default('qui_sommes_nous.alexis.text1'|trans)|raw }}</div>
                     <div class="mb-4" style="color: var(--color-alexis-text2, #212529);">{{ qui_content['alexis.text2']|default('qui_sommes_nous.alexis.text2'|trans)|raw }}</div>
-                    <a href="{{ path('app_devis') }}" class="btn btn-devis rounded-pill" style="color: var(--color-cta-quote, #FFFFFF);">{{ qui_content['cta.quote']|default('qui_sommes_nous.cta.quote'|trans) }}</a>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ path_locale('app_devis') }}" class="btn btn-devis rounded-pill" style="color: var(--color-cta-quote, #FFFFFF);">{{ qui_content['cta.quote']|default('qui_sommes_nous.cta.quote'|trans) }}</a>
+                        <a href="{{ path_locale('app_services') }}" class="btn btn-devis rounded-pill" style="color: #FFFFFF;">{{ 'services.list.title'|trans }}</a>
+                    </div>
                 </div>
             </div>
 

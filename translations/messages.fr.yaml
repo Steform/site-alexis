@@ -8,6 +8,12 @@ nav.menu: "Menu"
 nav.lang_selector_label: "Sélecteur de langue"
 nav.city: "Baldersheim"
 nav.phone: "Téléphone"
+nav.contact: "Contact"
+
+breadcrumb.aria_label: "Fil d'Ariane"
+breadcrumb.horaires: "Horaires"
+breadcrumb.mentions_legales: "Mentions légales"
+breadcrumb.login: "Connexion"
 
 home.title: "Carrosserie Lino - Baldersheim | Réparation & Peinture auto"
 home.hero.top_content: "<p class='text-uppercase mb-2 opacity-90' style='font-size: 0.9rem; letter-spacing: 0.15em;'>Expérimentés &amp; professionnels</p><h1 class='mb-3'>Carrosserie &amp; réparation auto</h1><p class='lead mb-0'>À votre service depuis 2007</p>"
@@ -42,9 +48,10 @@ home.about.services_link: "Nos services"
 
 home.services.title: "Nos services"
 home.services.card1.title: "Réparation & Peinture"
-home.services.card2.title: "Débosselage"
+home.services.card2.title: "Débosselage sans peinture"
 home.services.card3.title: "Pare-brise & Vitrages"
 home.services.card4.title: "Véhicules de courtoisie"
+home.services.card5.title: "Entretien & Mécanique"
 home.services.cta: "Découvrir tous nos services"
 
 home.reviews.title: "Avis clients"
@@ -75,8 +82,55 @@ qui_sommes_nous.card.location.title: "Baldersheim"
 qui_sommes_nous.card.location.text: "Votre garage de proximité à Baldersheim, à votre service depuis 2007."
 
 services.title: "Nos services"
+services.hero.lead: "À votre service depuis 2007."
+services.why.title: "Pourquoi nous choisir ?"
+services.why.how.title: "Comment ça se passe"
+services.why.how.text: "Contactez-nous pour un devis ou un rendez-vous. Nous examinons votre véhicule, établissons un devis détaillé et planifions l'intervention. Transparence et conseils honnêtes à chaque étape."
+services.why.advantages.title: "Les avantages Carrosserie Lino"
+services.why.advantages.text: "Entreprise familiale, véhicules de courtoisie disponibles. Un garage de proximité à Baldersheim, à votre écoute depuis 2007."
+services.why.trust.title: "Pourquoi nous faire confiance ?"
+services.why.trust.text: "Travail soigné, équipe à l'écoute et solutions adaptées à votre budget. Nos clients nous font confiance — consultez leurs avis ci-dessous."
+services.list.title: "Découvrez nos prestations"
+services.cta_discover: "Découvrir"
 services.cta: "Demander un devis"
+services.cta_more: "En savoir plus"
 services.no_description: "Description à venir."
+services.teaser.reparation-carrosserie-peinture: "Un rendu impeccable pour votre véhicule"
+services.teaser.debosselage: "Redonnez forme à votre carrosserie"
+services.teaser.pare-brise-optique: "Remplacement rapide et soigné"
+services.teaser.entretien-mecanique: "Révision et entretien pour tous véhicules"
+services.teaser.vehicule-pret-courtoisie: "Votre mobilité assurée pendant les réparations"
+
+services.detail.description_title: "En détail"
+services.detail.advantages_title: "Ce que vous en retirez"
+services.detail.process_title: "Comment ça se passe"
+services.detail.process.step1: "Contact & devis"
+services.detail.process.step2: "Diagnostic"
+services.detail.process.step3: "Intervention"
+services.detail.process.step4: "Récupération"
+services.detail.cta_lead: "Prêt à démarrer ?"
+services.detail.other_services_title: "Nos autres prestations"
+services.detail.reparation-carrosserie-peinture.advantage1: "Restauration soignée de la carrosserie et de la peinture"
+services.detail.reparation-carrosserie-peinture.advantage2: "Finitions durables, couleur parfaitement assortie"
+services.detail.reparation-carrosserie-peinture.advantage3: "Travail réalisé dans nos ateliers à Baldersheim"
+services.detail.reparation-carrosserie-peinture.placeholder: "Réparation de chocs, rayures et déformations. Peinture complète ou retouche selon les besoins. Nous utilisons des matériaux adaptés pour un rendu durable et une finition soignée."
+services.detail.debosselage.advantage1: "Méthode sans peinture lorsque la tôle le permet"
+services.detail.debosselage.advantage2: "Restauration de la forme d'origine"
+services.detail.debosselage.advantage3: "Gain de temps et d'argent par rapport à une réparation classique"
+services.detail.debosselage.placeholder: "Technique de débosselage qui préserve la peinture d'origine quand c'est possible. Idéal pour les petites bosses, les creux et les déformations légères. Résultat propre sans passage en peinture."
+services.detail.pare-brise-optique.advantage1: "Remplacement rapide, souvent en une demi-journée"
+services.detail.pare-brise-optique.advantage2: "Verre certifié et étanchéité garantie"
+services.detail.pare-brise-optique.advantage3: "Optiques et phares : nettoyage, polish, remplacement"
+services.detail.pare-brise-optique.placeholder: "Remplacement de pare-brise et vitrages. Verre certifié, pose soignée, garantie d'étanchéité. Nous intervenons aussi sur les optiques et phares : polish, correction de phares ternis, remplacement si nécessaire."
+services.detail.entretien-mecanique.advantage1: "Contrôles rigoureux et conseils honnêtes"
+services.detail.entretien-mecanique.advantage2: "Pièces d'origine ou équivalent qualité"
+services.detail.entretien-mecanique.advantage3: "Révisions, freinage, pneumatiques"
+services.detail.entretien-mecanique.placeholder: "Révision, entretien courant et petites réparations mécaniques. Nous contrôlons votre véhicule, vous conseillons et intervenons avec des pièces adaptées. Freinage, pneumatiques, niveaux : tout est vérifié."
+services.detail.vehicule-pret-courtoisie.advantage1: "Mobilité assurée pendant les travaux"
+services.detail.vehicule-pret-courtoisie.advantage2: "Sans frais supplémentaire selon les prestations"
+services.detail.vehicule-pret-courtoisie.advantage3: "Véhicule propre et assuré"
+services.detail.vehicule-pret-courtoisie.placeholder: "Lorsque votre véhicule doit rester en atelier, nous mettons à votre disposition un véhicule de prêt. Pratique, propre et assuré. Conditions selon la prestation — renseignez-vous lors du devis."
+services.detail.placeholder_default: "Prestation réalisée dans nos ateliers à Baldersheim. Contactez-nous pour un devis personnalisé."
 
 gallery.title: "Galerie"
 gallery.lead: "Découvrez nos réalisations"
@@ -103,7 +157,7 @@ form.devis.type.label: "Type de prestation"
 form.devis.type.placeholder: "Sélectionnez..."
 form.devis.type.reparation: "Réparation carrosserie"
 form.devis.type.peinture: "Peinture"
-form.devis.type.debosselage: "Débosselage"
+form.devis.type.debosselage: "Débosselage sans peinture"
 form.devis.type.pare_brise: "Pare-brise / Vitrages"
 form.devis.type.entretien: "Entretien / Mécanique"
 form.devis.type.autre: "Autre"
@@ -112,8 +166,58 @@ form.devis.photos.help: "JPG, PNG, WebP ou GIF. Max 5 Mo par fichier."
 form.devis.message.label: "Message"
 form.devis.message.placeholder: "Décrivez votre demande..."
 
+maintenance.title: "Site en maintenance"
+maintenance.message: "Nous effectuons des travaux d'amélioration. Merci de votre patience. Vous pouvez nous contacter par téléphone ou email."
+
 mentions.title: "Mentions légales"
 mentions.placeholder: "Contenu à venir."
+mentions.section.editor: "Éditeur du site"
+mentions.section.hoster: "Hébergement"
+mentions.section.intellectual: "Propriété intellectuelle"
+mentions.section.hyperlinks: "Liens hypertextes"
+mentions.section.privacy: "Données personnelles"
+mentions.section.cookies: "Cookies"
+mentions.editor: |
+  <p><strong>Éditeur du site</strong></p>
+  <p>Carrosserie Lino<br>
+  Zone artisanale<br>
+  68390 Baldersheim<br>
+  France</p>
+  <p>Téléphone : 03 89 00 00 00<br>
+  Email : contact@carrosserie-lino.fr</p>
+  <p>Forme juridique : Entreprise individuelle<br>
+  SIRET : 123 456 789 00012<br>
+  Siège social : Baldersheim, France</p>
+  <p>Responsable de la publication : Alexis Haffner</p>
+mentions.hoster: |
+  <p><strong>Hébergement</strong></p>
+  <p>Ce site est hébergé par :</p>
+  <p>OVH SAS<br>
+  2 rue Kellermann<br>
+  59100 Roubaix<br>
+  France</p>
+  <p>RCS Lille Métropole : 424 761 419 00045</p>
+mentions.intellectual_property: |
+  <p><strong>Propriété intellectuelle</strong></p>
+  <p>L'ensemble du contenu de ce site (textes, images, logos, graphismes, photographies, etc.) est protégé par le droit d'auteur et les lois relatives à la propriété intellectuelle. Toute reproduction, représentation, modification, publication ou exploitation, totale ou partielle, des éléments du site sans autorisation écrite préalable de Carrosserie Lino est strictement interdite et constitue une contrefaçon au sens des articles L. 335-2 et suivants du Code de propriété intellectuelle.</p>
+  <p>Les marques, logos et signes distinctifs figurant sur le site sont des marques déposées. Toute utilisation non autorisée de ces éléments constitue une contrefaçon passible de poursuites judiciaires.</p>
+mentions.hyperlinks: |
+  <p><strong>Liens hypertextes</strong></p>
+  <p>Les liens hypertextes vers d'autres sites internet ne sauraient engager la responsabilité de Carrosserie Lino. Nous n'exerçons aucun contrôle sur le contenu des sites tiers et déclinons toute responsabilité quant à leur contenu, leur politique de confidentialité ou leurs pratiques.</p>
+  <p>La création de liens vers ce site est autorisée sous réserve que les pages ne soient pas imbriquées dans des frames ou des iframes, que la source soit clairement indiquée et que le lien ouvre une nouvelle fenêtre. Tout lien vers des contenus illicites est interdit.</p>
+mentions.personal_data: |
+  <p><strong>Données personnelles</strong></p>
+  <p>Conformément au Règlement général sur la protection des données (RGPD) et à la loi « Informatique et Libertés », les données collectées via les formulaires de contact et de demande de devis sont utilisées exclusivement pour traiter votre demande, vous recontacter et gérer la relation client.</p>
+  <p><strong>Finalités du traitement :</strong> réponse aux demandes de devis, prise de contact, suivi des demandes.</p>
+  <p><strong>Base légale :</strong> exécution de mesures précontractuelles (demande de devis) et intérêt légitime (relation client).</p>
+  <p><strong>Destinataires :</strong> les données sont traitées uniquement par Carrosserie Lino et ne sont pas cédées à des tiers.</p>
+  <p><strong>Durée de conservation :</strong> les données sont conservées pendant la durée nécessaire au traitement de votre demande, puis archivées conformément aux obligations légales (comptabilité, prescription).</p>
+  <p><strong>Vos droits :</strong> vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation du traitement, de portabilité et d'opposition. Pour exercer ces droits, contactez-nous à l'adresse indiquée sur le site. Vous pouvez également introduire une réclamation auprès de la CNIL (www.cnil.fr).</p>
+mentions.cookies: |
+  <p><strong>Cookies</strong></p>
+  <p>Ce site peut utiliser des cookies techniques strictement nécessaires au bon fonctionnement du site (gestion de session, mémorisation des préférences, sécurité). Ces cookies ne nécessitent pas de consentement préalable conformément aux recommandations de la CNIL.</p>
+  <p>Si des cookies d'analyse ou de mesure d'audience sont utilisés, un bandeau d'information et un mécanisme de consentement vous seront proposés conformément à la réglementation en vigueur.</p>
+  <p>Vous pouvez à tout moment configurer votre navigateur pour refuser les cookies ou être informé de leur dépôt. Pour plus d'informations, consultez l'aide de votre navigateur (ex. : support.google.com pour Chrome, support.mozilla.org pour Firefox).</p>
 
 auth.login.title: "Connexion"
 auth.logout.see_site: "Voir le site (déconnexion)"
@@ -141,4 +245,32 @@ form.contact.email.label: "Email"
 form.contact.email.placeholder: "votre@email.fr"
 form.contact.message.label: "Message"
 form.contact.message.placeholder: "Votre message..."
+
+setup.title: "Initialisation du site"
+setup.subtitle: "Aucun compte administrateur n'a été trouvé. Créez un premier administrateur ou restaurez une sauvegarde existante pour démarrer."
+setup.or: "ou"
+setup.create_admin.title: "Créer un administrateur"
+setup.create_admin.description: "Créez le premier compte administrateur pour accéder au back-office et gérer le site."
+setup.create_admin.name: "Nom"
+setup.create_admin.name_placeholder: "Votre nom"
+setup.create_admin.email: "Email"
+setup.create_admin.email_placeholder: "admin@exemple.fr"
+setup.create_admin.password: "Mot de passe"
+setup.create_admin.password_placeholder: "Minimum 6 caractères"
+setup.create_admin.password_confirm: "Confirmer le mot de passe"
+setup.create_admin.password_confirm_placeholder: "Retapez le mot de passe"
+setup.create_admin.submit: "Créer le compte administrateur"
+setup.restore.title: "Restaurer une sauvegarde"
+setup.restore.description: "Restaurez le site à partir d'une sauvegarde existante. La base de données et les fichiers uploadés seront remplacés par le contenu de la sauvegarde."
+setup.restore.select: "Sauvegarde à restaurer"
+setup.restore.select_placeholder: "— Sélectionnez une sauvegarde —"
+setup.restore.warning: "La restauration remplacera toutes les données actuelles du site par celles de la sauvegarde sélectionnée."
+setup.restore.submit: "Restaurer cette sauvegarde"
+setup.error.required_fields: "L'email et le mot de passe sont obligatoires."
+setup.error.password_mismatch: "Les mots de passe ne correspondent pas."
+setup.error.password_too_short: "Le mot de passe doit contenir au moins 6 caractères."
+setup.error.no_backup_selected: "Veuillez sélectionner une sauvegarde."
+setup.flash.admin_created: "Compte administrateur créé avec succès. Connectez-vous pour accéder au back-office."
+setup.flash.restored: "Site restauré avec succès depuis la sauvegarde. Connectez-vous pour accéder au back-office."
+setup.flash.restore_error: "Erreur lors de la restauration de la sauvegarde."
 

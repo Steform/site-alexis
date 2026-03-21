@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block head_hreflang %}
+<link rel="alternate" hreflang="fr" href="{{ path_for_locale('app_horaires_public', 'fr') }}">
+<link rel="alternate" hreflang="de" href="{{ path_for_locale('app_horaires_public', 'de') }}">
+<link rel="alternate" hreflang="x-default" href="{{ path_for_locale('app_horaires_public', 'fr') }}">
+{% endblock %}
+
 {% block title %}{{ 'hours.title'|trans }} - Carrosserie Lino{% endblock %}
 
 {% block stylesheets %}

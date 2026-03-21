@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block head_hreflang %}
+<link rel="alternate" hreflang="fr" href="{{ path_for_locale('app_home', 'fr') }}">
+<link rel="alternate" hreflang="de" href="{{ path_for_locale('app_home', 'de') }}">
+<link rel="alternate" hreflang="x-default" href="{{ path_for_locale('app_home', 'fr') }}">
+{% endblock %}
+
 {% block title %}{{ 'home.title'|trans }}{% endblock %}
 
 {% block stylesheets %}
@@ -71,95 +77,8 @@
                     {{ home_content['hero.top_content']|default('home.hero.top_content'|trans)|raw }}
                 </div>
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-outline-light btn-lg rounded-pill" href="{{ path('app_services') }}">{{ 'home.hero.services_link'|trans }}</a>
+                    <a class="btn btn-devis btn-lg rounded-pill" href="{{ path_locale('app_services') }}" style="color: #FFFFFF;">{{ 'services.list.title'|trans }}</a>
                 </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{# 3 cartes services rapides #}
-<section class="py-5 section-soft-blue">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="section-title mb-0" style="color: var(--color-quick-services-title, #212529);">{{ 'home.quick.title'|trans }}</h2>
-            <a href="{{ path('app_services') }}" class="btn btn-outline-primary btn-sm">{{ 'home.quick.cta'|trans }}</a>
-        </div>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <a href="{{ path('app_services_show', { slug: 'reparation-carrosserie-peinture' }) }}" class="text-decoration-none">
-                    <div class="card card-service quick-service quick-service--repair h-100 border-0 shadow-sm">
-                        <div class="card-body p-4">
-                            <div class="quick-service-head">
-                                <img
-                                    src="{{ asset('images/services/reparation-carrosserie.svg') }}"
-                                    alt="{{ home_content['quick.card1.title']|default('home.quick.card1.title'|trans) }}"
-                                    class="quick-service-icon"
-                                    width="64"
-                                    height="64"
-                                    loading="lazy"
-                                >
-                                <h5 class="card-title mb-0" style="color: var(--color-quick-card1-title, #0a396a);">{{ home_content['quick.card1.title']|default('home.quick.card1.title'|trans) }}</h5>
-                            </div>
-
-                            <hr class="quick-service-separator">
-
-                            <p class="quick-service-subtext mb-0" style="color: var(--color-quick-card1-text, #5c6773);">
-                                {{ home_content['quick.card1.text']|default('home.quick.card1.text'|trans) }}
-                            </p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{{ path('app_services_show', { slug: 'pare-brise-optique' }) }}" class="text-decoration-none">
-                    <div class="card card-service quick-service quick-service--windshield h-100 border-0 shadow-sm">
-                        <div class="card-body p-4">
-                            <div class="quick-service-head">
-                                <img
-                                    src="{{ asset('images/services/pare-brise-et-vitrage.svg') }}"
-                                    alt="{{ home_content['quick.card2.title']|default('home.quick.card2.title'|trans) }}"
-                                    class="quick-service-icon"
-                                    width="64"
-                                    height="64"
-                                    loading="lazy"
-                                >
-                                <h5 class="card-title mb-0" style="color: var(--color-quick-card2-title, #18416d);">{{ home_content['quick.card2.title']|default('home.quick.card2.title'|trans) }}</h5>
-                            </div>
-
-                            <hr class="quick-service-separator">
-
-                            <p class="quick-service-subtext mb-0" style="color: var(--color-quick-card2-text, #5c6773);">
-                                {{ home_content['quick.card2.text']|default('home.quick.card2.text'|trans) }}
-                            </p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{{ path('app_services_show', { slug: 'entretien-mecanique' }) }}" class="text-decoration-none">
-                    <div class="card card-service quick-service quick-service--maintenance h-100 border-0 shadow-sm">
-                        <div class="card-body p-4">
-                            <div class="quick-service-head">
-                                <img
-                                    src="{{ asset('images/services/entretien-et-mecanique.svg') }}"
-                                    alt="{{ home_content['quick.card3.title']|default('home.quick.card3.title'|trans) }}"
-                                    class="quick-service-icon"
-                                    width="64"
-                                    height="64"
-                                    loading="lazy"
-                                >
-                                <h5 class="card-title mb-0" style="color: var(--color-quick-card3-title, #09365f);">{{ home_content['quick.card3.title']|default('home.quick.card3.title'|trans) }}</h5>
-                            </div>
-
-                            <hr class="quick-service-separator">
-
-                            <p class="quick-service-subtext mb-0" style="color: var(--color-quick-card3-text, #5c6773);">
-                                {{ home_content['quick.card3.text']|default('home.quick.card3.text'|trans) }}
-                            </p>
-                        </div>
-                    </div>
-                </a>
             </div>
         </div>
     </div>
@@ -185,8 +104,8 @@
                     <p class="mb-3" style="color: var(--color-about-body, #6C757D);">{{ 'home.about.text'|trans }}</p>
                 {% endif %}
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-devis rounded-pill" href="{{ path('app_qui_sommes_nous') }}" style="color: var(--color-about-cta, #FFFFFF);">{{ home_content['about.cta']|default('home.about.cta'|trans) }}</a>
-                    <a class="btn btn-outline-primary rounded-pill" href="{{ path('app_services') }}">{{ 'home.about.services_link'|trans }}</a>
+                    <a class="btn btn-devis rounded-pill" href="{{ path_locale('app_qui_sommes_nous') }}" style="color: var(--color-about-cta, #FFFFFF);">{{ home_content['about.cta']|default('home.about.cta'|trans) }}</a>
+                    <a class="btn btn-devis rounded-pill" href="{{ path_locale('app_services') }}" style="color: #FFFFFF;">{{ 'services.list.title'|trans }}</a>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -217,14 +136,25 @@
     </div>
 </section>
 
-{# Nos services (4 cartes avec images) #}
+{# Nos services (5 cartes avec images) #}
 <section id="services" class="py-5 section-soft-blue">
     <div class="container">
+        {% set servicesList = services|default([]) %}
+        {% set s1 = servicesList|filter((s) => s.slug == 'reparation-carrosserie-peinture')|first %}
+        {% set s2 = servicesList|filter((s) => s.slug == 'debosselage')|first %}
+        {% set s3 = servicesList|filter((s) => s.slug == 'pare-brise-optique')|first %}
+        {% set s4 = servicesList|filter((s) => s.slug == 'entretien-mecanique')|first %}
+        {% set s5 = servicesList|filter((s) => s.slug == 'vehicule-pret-courtoisie')|first %}
+        {% set slugReparation = s1 ? s1.getSlugForLocale(currentLocale) : 'reparation-carrosserie-peinture' %}
+        {% set slugDebosselage = s2 ? s2.getSlugForLocale(currentLocale) : 'debosselage' %}
+        {% set slugPareBrise = s3 ? s3.getSlugForLocale(currentLocale) : 'pare-brise-optique' %}
+        {% set slugEntretien = s4 ? s4.getSlugForLocale(currentLocale) : 'entretien-mecanique' %}
+        {% set slugVehicule = s5 ? s5.getSlugForLocale(currentLocale) : 'vehicule-pret-courtoisie' %}
         <h2 class="section-title text-center mb-5" style="color: var(--color-services-title, #212529);">{{ home_content['services.title']|default('home.services.title'|trans) }}</h2>
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-3">
+        <div class="row g-4 justify-content-center">
+            <div class="col-12 col-sm-6 col-lg-4">
                 <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path('app_services_show', { slug: 'reparation-carrosserie-peinture' }) }}">
+                    <a href="{{ path_locale('app_services_show', { slug: slugReparation }) }}">
                         <img src="{{ asset('images/services/reparation.webp') }}" class="card-img-top" alt="{{ home_content['services.card1.title']|default('home.services.card1.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card" style="color: var(--color-services-card1-title, #fff);">{{ home_content['services.card1.title']|default('home.services.card1.title'|trans) }}</span>
@@ -232,9 +162,9 @@
                     </a>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-lg-4">
                 <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path('app_services_show', { slug: 'debosselage' }) }}">
+                    <a href="{{ path_locale('app_services_show', { slug: slugDebosselage }) }}">
                         <img src="{{ asset('images/services/debosselage.webp') }}" class="card-img-top" alt="{{ home_content['services.card2.title']|default('home.services.card2.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card" style="color: var(--color-services-card2-title, #fff);">{{ home_content['services.card2.title']|default('home.services.card2.title'|trans) }}</span>
@@ -242,9 +172,9 @@
                     </a>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-lg-4">
                 <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path('app_services_show', { slug: 'pare-brise-optique' }) }}">
+                    <a href="{{ path_locale('app_services_show', { slug: slugPareBrise }) }}">
                         <img src="{{ asset('images/services/pare-brise.webp') }}" class="card-img-top" alt="{{ home_content['services.card3.title']|default('home.services.card3.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card" style="color: var(--color-services-card3-title, #fff);">{{ home_content['services.card3.title']|default('home.services.card3.title'|trans) }}</span>
@@ -252,9 +182,19 @@
                     </a>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-lg-4 mt-lg-5">
                 <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path('app_services_show', { slug: 'vehicule-pret-courtoisie' }) }}">
+                    <a href="{{ path_locale('app_services_show', { slug: slugEntretien }) }}">
+                        <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80" class="card-img-top" alt="{{ home_content['services.card5.title']|default('home.services.card5.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
+                        <div class="card-body p-0 d-flex justify-content-center">
+                            <span class="btn btn-service-card" style="color: var(--color-services-card5-title, #fff);">{{ home_content['services.card5.title']|default('home.services.card5.title'|trans) }}</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4 mt-lg-5">
+                <div class="card service-card border-0 overflow-hidden h-100">
+                    <a href="{{ path_locale('app_services_show', { slug: slugVehicule }) }}">
                         <img src="{{ asset('images/services/vehicule-pret-courtoisie.webp') }}" class="card-img-top" alt="{{ home_content['services.card4.title']|default('home.services.card4.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card" style="color: var(--color-services-card4-title, #fff);">{{ home_content['services.card4.title']|default('home.services.card4.title'|trans) }}</span>
@@ -264,49 +204,21 @@
             </div>
         </div>
         <div class="text-center mt-4">
-            <a class="btn btn-devis rounded-pill" href="{{ path('app_services') }}" style="color: var(--color-services-cta, #FFFFFF);">{{ home_content['services.cta']|default('home.services.cta'|trans) }}</a>
+            <a class="btn btn-devis rounded-pill" href="{{ path_locale('app_services') }}" style="color: var(--color-services-cta, #FFFFFF);">{{ 'services.list.title'|trans }}</a>
         </div>
     </div>
 </section>
 
-{# Avis clients - StuSlider structure per README #}
-<section id="avis" class="py-5 testimonial-section">
-    <div class="container">
-        <h2 class="section-title text-center mb-5" style="color: var(--color-reviews-title, #212529);">{{ home_content['reviews.title']|default('home.reviews.title'|trans) }}</h2>
-        {% if avis|length > 0 %}
-        <div class="avis-slider-wrapper mx-auto" style="width: 75%; min-height: 280px;">
-        <div class="avis-slider-container">
-            <div class="avis-slider">
-                {% for a in avis %}
-                <div class="avis-slide">
-                    <div class="card border-0 shadow-none bg-transparent h-100">
-                        <div class="card-body text-center">
-                            <div class="avis-quote-icon mb-2">"</div>
-                            <p class="card-text fst-italic mb-2">
-                                {% if currentLocale == 'de' and a.texteDe %}
-                                    {{ a.texteDe }}
-                                {% else %}
-                                    {{ a.texte }}
-                                {% endif %}
-                            </p>
-                            <p class="avis-author fst-italic mb-0">— {{ a.auteur }}, {{ a.date|date('d/m/Y') }}</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        </div>
-        {% else %}
-        {# Témoignage par défaut (maquette) #}
-        <div class="text-center py-5">
-            <div class="avis-quote-icon mb-2">"</div>
-            <p class="fs-5 fst-italic mb-2" style="color: var(--color-reviews-default-text, #2c3e50);">{{ home_content['reviews.default.text']|default('home.reviews.default.text'|trans) }}</p>
-            <p class="avis-author fst-italic" style="color: var(--color-reviews-default-author, #34495e);">{{ home_content['reviews.default.author']|default('home.reviews.default.author'|trans) }}</p>
-        </div>
-        {% endif %}
-    </div>
-</section>
+{% include 'components/_avis_slider.html.twig' with {
+    avis: avis,
+    currentLocale: currentLocale,
+    title: home_content['reviews.title']|default('home.reviews.title'|trans),
+    default_text: home_content['reviews.default.text']|default('home.reviews.default.text'|trans),
+    default_author: home_content['reviews.default.author']|default('home.reviews.default.author'|trans),
+    title_style: 'color: var(--color-reviews-title, #212529);',
+    default_text_style: 'color: var(--color-reviews-default-text, #2c3e50);',
+    default_author_style: 'color: var(--color-reviews-default-author, #34495e);'
+} %}
 
 {% include 'partials/_footer_public.html.twig' %}
 {% endblock %}
@@ -335,12 +247,6 @@
         } catch (error) {
             console.error('About slider init failed:', error);
         }
-    }
-
-    const avisContainer = document.querySelector('.avis-slider-container');
-    if (avisContainer) {
-        const slider = new StuSlider('avis', 10000, '100%', '280px', false, false, false, false);
-        slider.initialize();
     }
 </script>
 {% endblock %}

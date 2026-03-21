@@ -6,6 +6,7 @@ use App\Service\OpeningHoursFormatter;
 use App\Repository\AvisRepository;
 use App\Repository\AboutPhotoRepository;
 use App\Repository\HomeHeroPhotoRepository;
+use App\Repository\ServiceRepository;
 use App\Service\ContentBlockManager;
 use App\Repository\HorairesRepository;
 use App\Repository\MessageRepository;
@@ -31,6 +32,7 @@ class HomeController extends AbstractController
         private readonly MessageRepository $messageRepository,
         private readonly OpeningHoursFormatter $openingHoursFormatter,
         private readonly HtmlContentSanitizer $htmlContentSanitizer,
+        private readonly ServiceRepository $serviceRepository,
     ) {
     }
 
@@ -61,6 +63,7 @@ class HomeController extends AbstractController
             'home_colors' => $homeColors,
             'hero_photos' => $heroPhotos,
             'about_photos' => $aboutPhotos,
+            'services' => $this->serviceRepository->findAllOrdered(),
         ]);
     }
 }

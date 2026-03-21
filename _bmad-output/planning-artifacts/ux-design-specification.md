@@ -105,9 +105,8 @@ Plan des pages et éléments visibles sur la maquette, à soumettre au client po
 
 - **Barre contact** : Localisation (Baldersheim), Téléphone, Horaires
 - **Hero** : « EXPÉRIMENTÉS & PROFESSIONNELS », « CARROSSERIE & RÉPARATION AUTO », « À VOTRE SERVICE DEPUIS 2007 », CTA OBTENEZ UN DEVIS
-- **3 cartes services rapides** : Réparation carrosserie, Remplacement pare-brise, Entretien & mécanique (liens vers pages services ?)
 - **QUI SOMMES-NOUS** : Texte, photo garage, bouton **EN SAVOIR PLUS** → page À propos
-- **NOS SERVICES** : 4 cartes avec images — Réparation & Peinture, Débosselage, Pare-brise & Vitrages, Véhicules de courtoisie
+- **NOS SERVICES** : 5 cartes avec images — Réparation & Peinture, Débosselage, Pare-brise & Vitrages, Entretien & Mécanique, Véhicules de courtoisie
 - **DÉCOUVRIR TOUS NOS SERVICES** → page Services
 - **Témoignage** : « Travail toujours impeccable, on peut avoir confiance ! » — Pierre M.
 
@@ -131,7 +130,7 @@ Plan des pages et éléments visibles sur la maquette, à soumettre au client po
 | **Galerie** | GALERIE (nav) | Post-index |
 | **Avis clients** | AVIS CLIENTS (nav) | Post-index |
 | **Qui sommes-nous** | EN SAVOIR PLUS | Post-index |
-| **Pages services détaillées** | 4 cartes (Réparation & Peinture, Débosselage, Pare-brise & Vitrages, Véhicules de courtoisie) | Post-index |
+| **Pages services détaillées** | 5 cartes (Réparation & Peinture, Débosselage, Pare-brise & Vitrages, Entretien & Mécanique, Véhicules de courtoisie) | Post-index |
 | **Assurance & expertises** | Footer | À valider client |
 | **Véhicules toutes marques** | Footer | À valider client |
 | **Prêt de voiture** | Footer (véhicules de courtoisie) | À valider client |

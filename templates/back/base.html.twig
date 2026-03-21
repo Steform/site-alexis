@@ -21,6 +21,28 @@
                         <li><a class="dropdown-item" href="{{ path('app_back_coordinates') }}">{{ 'back.layout.nav.coordinates'|trans({}, 'back') }}</a></li>
                     </ul>
                 </li>
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_PROPRIETAIRE') %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarMaintenance" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ 'back.maintenance.title'|trans({}, 'back') }}
+                        {% if maintenance_active %}<span class="badge bg-warning text-dark ms-1">ON</span>{% endif %}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarMaintenance">
+                        <li>
+                            <form method="post" action="{{ path('app_back_maintenance_toggle') }}" class="px-2 py-1">
+                                <input type="hidden" name="_token" value="{{ csrf_token('maintenance_toggle') }}">
+                                {% if maintenance_active %}
+                                <button type="submit" class="dropdown-item text-warning">{{ 'back.maintenance.disable'|trans({}, 'back') }}</button>
+                                {% else %}
+                                <button type="submit" class="dropdown-item">{{ 'back.maintenance.enable'|trans({}, 'back') }}</button>
+                                {% endif %}
+                            </form>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ maintenance_active ? path('app_back_maintenance_bypass') : path('app_home') }}">{{ 'back.maintenance.see_site'|trans({}, 'back') }}</a></li>
+                    </ul>
+                </li>
+                {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -29,6 +51,7 @@
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarAdmin">
                         <li><a class="dropdown-item" href="{{ path('app_back_content_history') }}">{{ 'back.layout.nav.history'|trans({}, 'back') }}</a></li>
                         <li><a class="dropdown-item" href="{{ path('app_back_user_index') }}">{{ 'back.layout.nav.users'|trans({}, 'back') }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('app_back_backup_index') }}">{{ 'back.layout.nav.backup'|trans({}, 'back') }}</a></li>
                     </ul>
                 </li>
                 {% endif %}
@@ -45,7 +68,7 @@
                         DE
                     </a>
                 </div>
-                <a href="{{ path('app_home') }}" class="btn btn-outline-light btn-sm" aria-label="Retour au site public">
+                <a href="{{ maintenance_active ? path('app_back_maintenance_bypass') : path('app_home') }}" class="btn btn-outline-light btn-sm" aria-label="{{ maintenance_active ? 'back.maintenance.see_site'|trans({}, 'back') : 'Retour au site public' }}">
                     <i class="bi bi-house-door"></i>
                 </a>
             </div>

@@ -46,6 +46,81 @@ app_services_show:
   requirements:
     slug: '[a-z0-9\-]+'
 
+# Maintenance (public)
+app_maintenance:
+  path: /maintenance
+  controller: App\Controller\Public\MaintenanceController::index
+  methods: GET
+
+# Public (German /de/ prefix)
+app_home_de:
+  path: /de
+  controller: App\Controller\Public\HomeController::index
+  methods: GET
+
+app_contact_de:
+  path: /de/kontakt
+  controller: App\Controller\Public\ContactController::index
+  methods: GET
+
+app_devis_de:
+  path: /de/angebot
+  controller: App\Controller\Public\DevisController::index
+  methods: [GET, POST]
+
+app_gallery_de:
+  path: /de/galerie
+  controller: App\Controller\Public\GalleryController::index
+  methods: GET
+
+app_mentions_legales_de:
+  path: /de/impressum
+  controller: App\Controller\Public\MentionsLegalesController::index
+  methods: GET
+
+app_qui_sommes_nous_de:
+  path: /de/uber-uns
+  controller: App\Controller\Public\QuiSommesNousController::index
+  methods: GET
+
+app_horaires_public_de:
+  path: /de/offnungszeiten
+  controller: App\Controller\Public\HorairesPublicController::index
+  methods: GET
+
+app_services_de:
+  path: /de/leistungen
+  controller: App\Controller\Public\ServicesController::index
+  methods: GET
+
+app_services_show_de:
+  path: /de/leistungen/{slug}
+  controller: App\Controller\Public\ServicesController::show
+  methods: GET
+  requirements:
+    slug: '[a-z0-9\-]+'
+
+app_maintenance_de:
+  path: /de/wartung
+  controller: App\Controller\Public\MaintenanceController::index
+  methods: GET
+
+# Setup (initial site configuration)
+app_setup:
+  path: /setup
+  controller: App\Controller\SetupController::index
+  methods: GET
+
+app_setup_create_admin:
+  path: /setup/create-admin
+  controller: App\Controller\SetupController::createAdmin
+  methods: POST
+
+app_setup_restore:
+  path: /setup/restore-backup
+  controller: App\Controller\SetupController::restoreBackup
+  methods: POST
+
 # Security
 app_login:
   path: /login
@@ -58,6 +133,16 @@ app_logout:
   methods: GET
 
 # Back-office
+app_back_maintenance_toggle:
+  path: /back/maintenance/toggle
+  controller: App\Controller\Back\MaintenanceController::toggle
+  methods: POST
+
+app_back_maintenance_bypass:
+  path: /back/maintenance/bypass
+  controller: App\Controller\Back\MaintenanceController::bypass
+  methods: GET
+
 app_back_dashboard:
   path: /back
   controller: App\Controller\Back\DashboardController::index
@@ -238,6 +323,57 @@ app_back_content_gallery_de:
   controller: App\Controller\Back\ContentController::galleryDe
   methods: [GET, POST]
 
+app_back_content_services_fr:
+  path: /back/content/services/fr
+  controller: App\Controller\Back\ContentController::servicesFr
+  methods: [GET, POST]
+
+app_back_content_services_de:
+  path: /back/content/services/de
+  controller: App\Controller\Back\ContentController::servicesDe
+  methods: [GET, POST]
+
+app_back_content_service_detail_fr:
+  path: /back/content/services/fr/{slug}
+  controller: App\Controller\Back\ContentController::serviceDetailFr
+  methods: [GET, POST]
+
+app_back_content_service_detail_de:
+  path: /back/content/services/de/{slug}
+  controller: App\Controller\Back\ContentController::serviceDetailDe
+  methods: [GET, POST]
+
+app_back_content_mentions_legales_fr:
+  path: /back/content/mentions-legales/fr
+  controller: App\Controller\Back\ContentController::mentionsLegalesFr
+  methods: [GET, POST]
+
+app_back_content_mentions_legales_de:
+  path: /back/content/mentions-legales/de
+  controller: App\Controller\Back\ContentController::mentionsLegalesDe
+  methods: [GET, POST]
+
+app_back_content_services_why_card_new:
+  path: /back/content/services/{locale}/why-cards/new
+  controller: App\Controller\Back\ContentController::servicesWhyCardNew
+  methods: [GET, POST]
+  requirements:
+    locale: fr|de
+
+app_back_content_services_why_card_edit:
+  path: /back/content/services/{locale}/why-cards/{id}/edit
+  controller: App\Controller\Back\ContentController::servicesWhyCardEdit
+  methods: [GET, POST]
+  requirements:
+    locale: fr|de
+
+app_back_content_services_why_card_delete:
+  path: /back/content/services/{locale}/why-cards/{id}/delete
+  controller: App\Controller\Back\ContentController::servicesWhyCardDelete
+  methods: POST
+  requirements:
+    locale: fr|de
+
 app_back_content_history:
   path: /back/content/history
   controller: App\Controller\Back\ContentController::history
@@ -289,6 +425,36 @@ app_back_content_home_hero_photo_delete:
   methods: POST
   requirements:
     locale: fr|de
+
+app_back_backup_index:
+  path: /back/backup
+  controller: App\Controller\Back\BackupController::index
+  methods: GET
+
+app_back_backup_create:
+  path: /back/backup/create
+  controller: App\Controller\Back\BackupController::create
+  methods: POST
+
+app_back_backup_download:
+  path: /back/backup/download/{filename}
+  controller: App\Controller\Back\BackupController::download
+  methods: GET
+
+app_back_backup_restore:
+  path: /back/backup/restore/{filename}
+  controller: App\Controller\Back\BackupController::restore
+  methods: POST
+
+app_back_backup_upload:
+  path: /back/backup/upload
+  controller: App\Controller\Back\BackupController::upload
+  methods: POST
+
+app_back_backup_delete:
+  path: /back/backup/delete/{filename}
+  controller: App\Controller\Back\BackupController::delete
+  methods: POST
 
 app_switch_locale:
   path: /switch-locale/{locale}

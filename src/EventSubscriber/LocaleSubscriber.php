@@ -27,23 +27,30 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
+        $path = $request->getPathInfo();
 
         // Ensure session is started
         $session = $request->getSession();
 
-        // 1. User choice (selector) has priority
-        $sessionLocale = $session->get('_locale');
-        if (\is_string($sessionLocale) && \in_array($sessionLocale, self::SUPPORTED_LOCALES, true)) {
-            $locale = $sessionLocale;
-        } else {
-            // 2. Fallback to browser language
-            $preferred = $request->getPreferredLanguage(self::SUPPORTED_LOCALES);
-            if ($preferred === 'de') {
-                $locale = 'de';
-            } else {
-                $locale = self::DEFAULT_LOCALE;
-            }
+        // 1. URL path has priority when /de or /de/...
+        if ($path === '/de' || str_starts_with($path, '/de/')) {
+            $locale = 'de';
             $session->set('_locale', $locale);
+        } else {
+            // 2. Session (user choice)
+            $sessionLocale = $session->get('_locale');
+            if (\is_string($sessionLocale) && \in_array($sessionLocale, self::SUPPORTED_LOCALES, true)) {
+                $locale = $sessionLocale;
+            } else {
+                // 3. Fallback to browser language
+                $preferred = $request->getPreferredLanguage(self::SUPPORTED_LOCALES);
+                if ($preferred === 'de') {
+                    $locale = 'de';
+                } else {
+                    $locale = self::DEFAULT_LOCALE;
+                }
+                $session->set('_locale', $locale);
+            }
         }
 
         $request->setLocale($locale);

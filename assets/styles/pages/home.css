@@ -177,7 +177,7 @@
   box-sizing: border-box;
   border-radius: 0;
   background: var(--btn-action-gradient);
-  color: #fff;
+  color: #fff !important;
   border: none;
   font-weight: 600;
   padding: 0.5rem 1rem;

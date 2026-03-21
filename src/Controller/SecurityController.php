@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -14,8 +15,21 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  */
 class SecurityController extends AbstractController
 {
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    /**
+     * @brief Displays the login form, or redirects to setup if no users exist.
+     *
+     * @param AuthenticationUtils $authenticationUtils
+     * @param UserRepository $userRepository
+     * @return Response
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function login(AuthenticationUtils $authenticationUtils, UserRepository $userRepository): Response
     {
+        if ($userRepository->count([]) === 0) {
+            return $this->redirectToRoute('app_setup');
+        }
+
         if ($this->getUser()) {
             return $this->redirectToRoute('app_back_dashboard');
         }

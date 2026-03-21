@@ -13,8 +13,24 @@
 {% endblock %}
 
 {% block back_content %}
+{% set fr_route = page_name == 'home' ? 'app_back_content_home_fr' : (page_name == 'devis' ? 'app_back_content_devis_fr' : (page_name == 'gallery' ? 'app_back_content_gallery_fr' : (page_name == 'mentions_legales' ? 'app_back_content_mentions_legales_fr' : (page_name == 'services' ? 'app_back_content_services_fr' : (page_name starts with 'service_' and current_service ? 'app_back_content_service_detail_fr' : (page_name starts with 'service_' ? 'app_back_content_services_fr' : 'app_back_content_qui_sommes_nous_fr')))))) %}
+{% set fr_params = (page_name starts with 'service_' and current_service) ? { slug: current_service.slug } : {} %}
+{% set de_route = page_name == 'home' ? 'app_back_content_home_de' : (page_name == 'devis' ? 'app_back_content_devis_de' : (page_name == 'gallery' ? 'app_back_content_gallery_de' : (page_name == 'mentions_legales' ? 'app_back_content_mentions_legales_de' : (page_name == 'services' ? 'app_back_content_services_de' : (page_name starts with 'service_' and current_service ? 'app_back_content_service_detail_de' : (page_name starts with 'service_' ? 'app_back_content_services_de' : 'app_back_content_qui_sommes_nous_de')))))) %}
+{% set de_params = (page_name starts with 'service_' and current_service) ? { slug: current_service.slug } : {} %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0">{{ 'back.content.heading'|trans({}, 'back') }}</h1>
+    <ul class="nav nav-pills mb-0">
+        <li class="nav-item">
+            <a class="nav-link {{ locale == 'fr' ? 'active' : '' }}" href="{{ path(fr_route, fr_params) }}">
+                {{ 'back.content.locale.short.fr'|trans({}, 'back') }}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ locale == 'de' ? 'active' : '' }}" href="{{ path(de_route, de_params) }}">
+                {{ 'back.content.locale.short.de'|trans({}, 'back') }}
+            </a>
+        </li>
+    </ul>
 </div>
 
 <ul class="nav nav-tabs mb-4">
@@ -38,20 +54,34 @@
             {{ 'back.content.tab.gallery'|trans({}, 'back') }}
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{ (page_name == 'services' or page_name starts with 'service_') ? 'active' : '' }}" href="{{ path(locale == 'fr' ? 'app_back_content_services_fr' : 'app_back_content_services_de') }}">
+            {{ 'back.content.tab.services'|trans({}, 'back') }}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ page_name == 'mentions_legales' ? 'active' : '' }}" href="{{ path(locale == 'fr' ? 'app_back_content_mentions_legales_fr' : 'app_back_content_mentions_legales_de') }}">
+            {{ 'back.content.tab.mentions_legales'|trans({}, 'back') }}
+        </a>
+    </li>
 </ul>
 
-<ul class="nav nav-pills mb-4">
+{% if page_name == 'services' or page_name starts with 'service_' %}
+<ul class="nav nav-tabs mb-4">
     <li class="nav-item">
-        <a class="nav-link {{ locale == 'fr' ? 'active' : '' }}" href="{{ path(page_name == 'home' ? 'app_back_content_home_fr' : (page_name == 'devis' ? 'app_back_content_devis_fr' : (page_name == 'gallery' ? 'app_back_content_gallery_fr' : 'app_back_content_qui_sommes_nous_fr'))) }}">
-            {{ 'back.content.locale.short.fr'|trans({}, 'back') }}
+        <a class="nav-link {{ page_name == 'services' ? 'active' : '' }}" href="{{ path(locale == 'fr' ? 'app_back_content_services_fr' : 'app_back_content_services_de') }}">
+            {{ 'back.content.subtab.services_page'|trans({}, 'back') }}
         </a>
     </li>
+    {% for service in services|default([]) %}
     <li class="nav-item">
-        <a class="nav-link {{ locale == 'de' ? 'active' : '' }}" href="{{ path(page_name == 'home' ? 'app_back_content_home_de' : (page_name == 'devis' ? 'app_back_content_devis_de' : (page_name == 'gallery' ? 'app_back_content_gallery_de' : 'app_back_content_qui_sommes_nous_de'))) }}">
-            {{ 'back.content.locale.short.de'|trans({}, 'back') }}
+        <a class="nav-link {{ (current_service and current_service.id == service.id) ? 'active' : '' }}" href="{{ path(locale == 'fr' ? 'app_back_content_service_detail_fr' : 'app_back_content_service_detail_de', { slug: service.slug }) }}">
+            {{ locale == 'de' ? (service.titreDe|default(service.titre)) : service.titre }}
         </a>
     </li>
+    {% endfor %}
 </ul>
+{% endif %}
 
 <form method="post">
     <div class="card shadow-sm border-0">
@@ -63,7 +93,7 @@
                     'back.content.section.about_home': ['about.title', 'about.lead', 'about.body', 'about.cta'],
                     'back.content.section.about_photos': [],
                     'back.content.section.quick_services': ['quick.card1.title', 'quick.card1.text', 'quick.card2.title', 'quick.card2.text', 'quick.card3.title', 'quick.card3.text'],
-                    'back.content.section.services': ['services.title', 'services.card1.title', 'services.card2.title', 'services.card3.title', 'services.card4.title', 'services.cta'],
+                    'back.content.section.services': ['services.title', 'services.card1.title', 'services.card2.title', 'services.card3.title', 'services.card4.title', 'services.card5.title', 'services.cta'],
                     'back.content.section.reviews': ['reviews.title', 'reviews.default.text', 'reviews.default.author']
                 } %}
             {% elseif page_name == 'qui_sommes_nous' %}
@@ -81,6 +111,29 @@
                 {% set section_map = {
                     'back.content.section.gallery_main': ['gallery.title', 'gallery.lead'],
                     'back.content.section.gallery_items': []
+                } %}
+            {% elseif page_name == 'services' %}
+                {% set section_map = {
+                    'back.content.section.services_why': [],
+                    'back.content.section.services_main': ['why.title', 'list.title', 'cta', 'cta_discover']
+                } %}
+            {% elseif page_name starts with 'service_' %}
+                {% set section_map = {
+                    'back.content.section.service_hero': ['teaser'],
+                    'back.content.section.service_description': ['description_title', 'description'],
+                    'back.content.section.service_advantages': ['advantages_title', 'advantage1', 'advantage2', 'advantage3'],
+                    'back.content.section.service_process': ['process_title', 'process.step1', 'process.step2', 'process.step3', 'process.step4'],
+                    'back.content.section.service_cta': ['cta_lead'],
+                    'back.content.section.service_other': ['other_services_title']
+                } %}
+            {% elseif page_name == 'mentions_legales' %}
+                {% set section_map = {
+                    'back.content.section.mentions_editor': ['editor'],
+                    'back.content.section.mentions_hoster': ['hoster'],
+                    'back.content.section.mentions_intellectual': ['intellectual_property'],
+                    'back.content.section.mentions_hyperlinks': ['hyperlinks'],
+                    'back.content.section.mentions_privacy': ['personal_data'],
+                    'back.content.section.mentions_cookies': ['cookies']
                 } %}
             {% else %}
                 {% set section_map = {} %}
@@ -297,6 +350,43 @@
                                             <div class="col-12">
                                                 <div class="alert alert-info mb-0">
                                                     {{ 'back.about.photos.index.empty'|trans({}, 'back') }}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% elseif section_label == 'back.content.section.services_why' and page_name == 'services' %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <p class="text-muted mb-0">{{ 'back.services_why_card.section.help'|trans({}, 'back') }}</p>
+                                        <a href="{{ path('app_back_content_services_why_card_new', { locale: locale }) }}" class="btn btn-sm btn-primary">
+                                            {{ 'back.services_why_card.index.add'|trans({}, 'back') }}
+                                        </a>
+                                    </div>
+                                    <div class="row g-3">
+                                        {% for card in services_why_cards|default([]) %}
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="card h-100 shadow-sm">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">{{ (locale == 'de' ? card.titleDe : card.titleFr)|default('—') }}</h6>
+                                                        <p class="card-text small text-muted">{% set cardText = (locale == 'de' ? card.textDe : card.textFr)|default('') %}{{ cardText|length > 80 ? cardText|slice(0, 77) ~ '...' : cardText }}</p>
+                                                        <span class="badge text-bg-info">{{ 'back.services_why_card.position'|trans({}, 'back') }} #{{ card.position }}</span>
+                                                    </div>
+                                                    <div class="card-footer bg-transparent d-flex gap-2">
+                                                        <a href="{{ path('app_back_content_services_why_card_edit', { locale: locale, id: card.id }) }}" class="btn btn-sm btn-outline-primary">
+                                                            {{ 'back.avis.index.edit'|trans({}, 'back') }}
+                                                        </a>
+                                                        <form method="post" action="{{ path('app_back_content_services_why_card_delete', { locale: locale, id: card.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.services_why_card.index.confirm_delete'|trans({}, 'back') }}');">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_services_why_card' ~ card.id) }}">
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                {{ 'back.avis.index.delete'|trans({}, 'back') }}
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-12">
+                                                <div class="alert alert-info mb-0">
+                                                    {{ 'back.services_why_card.index.empty'|trans({}, 'back') }}
                                                 </div>
                                             </div>
                                         {% endfor %}

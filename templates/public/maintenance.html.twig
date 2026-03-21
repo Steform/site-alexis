@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block head_hreflang %}
+<link rel="alternate" hreflang="fr" href="{{ path_for_locale('app_maintenance', 'fr') }}">
+<link rel="alternate" hreflang="de" href="{{ path_for_locale('app_maintenance', 'de') }}">
+<link rel="alternate" hreflang="x-default" href="{{ path_for_locale('app_maintenance', 'fr') }}">
+{% endblock %}
+
+{% block title %}{{ 'maintenance.title'|trans }}{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('styles/pages/home.css') }}">
+{% endblock %}
+
+{% block body %}
+{% include 'partials/_navbar_public.html.twig' %}
+
+<section class="py-5 section-soft-blue min-vh-100 d-flex align-items-center">
+    <div class="container text-center">
+        <h1 class="section-title mb-4">{{ 'maintenance.title'|trans }}</h1>
+        <p class="lead text-muted mb-5">{{ 'maintenance.message'|trans }}</p>
+        {% if coordinates %}
+        <p class="text-muted small">
+            {% if coordinates.phone %}<a href="tel:{{ coordinates.phone }}" class="text-decoration-none">{{ coordinates.phone }}</a>{% endif %}
+            {% if coordinates.phone and coordinates.email %} · {% endif %}
+            {% if coordinates.email %}<a href="mailto:{{ coordinates.email }}" class="text-decoration-none">{{ coordinates.email }}</a>{% endif %}
+        </p>
+        {% endif %}
+    </div>
+</section>
+
+{% include 'partials/_footer_public.html.twig' %}
+{% endblock %}

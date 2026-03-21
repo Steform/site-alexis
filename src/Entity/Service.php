@@ -24,6 +24,9 @@ class Service
     #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $slugDe = null;
+
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
@@ -57,6 +60,26 @@ class Service
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public function getSlugDe(): ?string
+    {
+        return $this->slugDe;
+    }
+
+    public function setSlugDe(?string $slugDe): static
+    {
+        $this->slugDe = $slugDe;
+
+        return $this;
+    }
+
+    /**
+     * Returns the slug for the given locale (slug for fr, slugDe for de, fallback to slug).
+     */
+    public function getSlugForLocale(string $locale): string
+    {
+        return ($locale === 'de' && $this->slugDe !== null) ? $this->slugDe : (string) $this->slug;
     }
 
     public function getTitre(): ?string

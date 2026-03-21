@@ -74,6 +74,34 @@
             </div>
         </div>
     </div>
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_PROPRIETAIRE') %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingMaintenance">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMaintenance" aria-expanded="false" aria-controls="collapseMaintenance">
+                {{ 'back.maintenance.title'|trans({}, 'back') }}
+            </button>
+        </h2>
+        <div id="collapseMaintenance" class="accordion-collapse collapse" aria-labelledby="headingMaintenance" data-bs-parent="#dashboardAccordion">
+            <div class="accordion-body">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ 'back.maintenance.card.title'|trans({}, 'back') }}</h5>
+                        <p class="card-text">{{ 'back.maintenance.card.text'|trans({}, 'back') }}</p>
+                        <form method="post" action="{{ path('app_back_maintenance_toggle') }}" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('maintenance_toggle') }}">
+                            {% if maintenance_active %}
+                            <button type="submit" class="btn btn-warning">{{ 'back.maintenance.disable'|trans({}, 'back') }}</button>
+                            {% else %}
+                            <button type="submit" class="btn btn-secondary">{{ 'back.maintenance.enable'|trans({}, 'back') }}</button>
+                            {% endif %}
+                        </form>
+                        <a href="{{ maintenance_active ? path('app_back_maintenance_bypass') : path('app_home') }}" class="btn btn-outline-primary ms-2">{{ 'back.maintenance.see_site'|trans({}, 'back') }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingAdmin">
@@ -99,6 +127,15 @@
                                 <h5 class="card-title">{{ 'back.dashboard.card.users.title'|trans({}, 'back') }}</h5>
                                 <p class="card-text">{{ 'back.dashboard.card.users.text'|trans({}, 'back') }}</p>
                                 <a href="{{ path('app_back_user_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.users.cta'|trans({}, 'back') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ 'back.dashboard.card.backup.title'|trans({}, 'back') }}</h5>
+                                <p class="card-text">{{ 'back.dashboard.card.backup.text'|trans({}, 'back') }}</p>
+                                <a href="{{ path('app_back_backup_index') }}" class="btn btn-primary">{{ 'back.dashboard.card.backup.cta'|trans({}, 'back') }}</a>
                             </div>
                         </div>
                     </div>

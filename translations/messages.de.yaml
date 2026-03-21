@@ -8,6 +8,12 @@ nav.menu: "Menü"
 nav.lang_selector_label: "Sprachauswahl"
 nav.city: "Baldersheim"
 nav.phone: "Telefon"
+nav.contact: "Kontakt"
+
+breadcrumb.aria_label: "Breadcrumb"
+breadcrumb.horaires: "Öffnungszeiten"
+breadcrumb.mentions_legales: "Impressum"
+breadcrumb.login: "Anmeldung"
 
 home.title: "Carrosserie Lino - Baldersheim | Karosserie & Lackierung"
 home.hero.top_content: "<p class='text-uppercase mb-2 opacity-90' style='font-size: 0.9rem; letter-spacing: 0.15em;'>Erfahren &amp; professionell</p><h1 class='mb-3'>Karosserie- und Autoreparatur</h1><p class='lead mb-0'>Seit 2007 für Sie da</p>"
@@ -42,9 +48,10 @@ home.about.services_link: "Unsere Leistungen"
 
 home.services.title: "Unsere Leistungen"
 home.services.card1.title: "Reparatur & Lackierung"
-home.services.card2.title: "Ausbeulen"
+home.services.card2.title: "Beulenfrei ohne Lackierung"
 home.services.card3.title: "Scheiben & Verglasung"
 home.services.card4.title: "Ersatzfahrzeuge"
+home.services.card5.title: "Wartung & Mechanik"
 home.services.cta: "Alle Leistungen entdecken"
 
 home.reviews.title: "Kundenbewertungen"
@@ -75,8 +82,55 @@ qui_sommes_nous.card.location.title: "Baldersheim"
 qui_sommes_nous.card.location.text: "Ihre Werkstatt vor Ort in Baldersheim, seit 2007 für Sie da."
 
 services.title: "Unsere Leistungen"
+services.hero.lead: "Seit 2007 für Sie da."
+services.why.title: "Warum uns wählen?"
+services.why.how.title: "So funktioniert es"
+services.why.how.text: "Kontaktieren Sie uns für eine Offerte oder einen Termin. Wir prüfen Ihr Fahrzeug, erstellen ein detailliertes Angebot und planen die Arbeit. Transparenz und ehrliche Beratung bei jedem Schritt."
+services.why.advantages.title: "Vorteile der Carrosserie Lino"
+services.why.advantages.text: "Familienbetrieb, Ersatzfahrzeuge verfügbar. Eine Werkstatt vor Ort in Baldersheim, seit 2007 für Sie da."
+services.why.trust.title: "Warum uns vertrauen?"
+services.why.trust.text: "Sorgfältige Arbeit, ein Team mit offenen Ohren und Lösungen, die zu Ihrem Budget passen. Unsere Kunden vertrauen uns — lesen Sie ihre Bewertungen unten."
+services.list.title: "Entdecken Sie unsere Leistungen"
+services.cta_discover: "Entdecken"
 services.cta: "Offerte anfordern"
+services.cta_more: "Mehr erfahren"
 services.no_description: "Beschreibung folgt."
+services.teaser.reparation-carrosserie-peinture: "Ein makelloses Ergebnis für Ihr Fahrzeug"
+services.teaser.debosselage: "Ihrer Karosserie wieder Form geben"
+services.teaser.pare-brise-optique: "Schneller und sorgfältiger Austausch"
+services.teaser.entretien-mecanique: "Service und Wartung für alle Fahrzeuge"
+services.teaser.vehicule-pret-courtoisie: "Ihre Mobilität während der Reparaturen"
+
+services.detail.description_title: "Im Detail"
+services.detail.advantages_title: "Was Sie davon haben"
+services.detail.process_title: "So läuft es ab"
+services.detail.process.step1: "Kontakt & Offerte"
+services.detail.process.step2: "Diagnose"
+services.detail.process.step3: "Arbeit"
+services.detail.process.step4: "Abholung"
+services.detail.cta_lead: "Bereit loszulegen?"
+services.detail.other_services_title: "Unsere weiteren Leistungen"
+services.detail.reparation-carrosserie-peinture.advantage1: "Sorgfältige Wiederherstellung von Karosserie und Lack"
+services.detail.reparation-carrosserie-peinture.advantage2: "Langlebige Oberflächen, perfekt abgestimmte Farbe"
+services.detail.reparation-carrosserie-peinture.advantage3: "Arbeit in unserer Werkstatt in Baldersheim"
+services.detail.reparation-carrosserie-peinture.placeholder: "Reparatur von Unfallschäden, Kratzern und Verformungen. Vollständige Lackierung oder Retusche je nach Bedarf. Wir verwenden geeignete Materialien für ein dauerhaftes und gepflegtes Ergebnis."
+services.detail.debosselage.advantage1: "Methode ohne Lackierung, wenn das Blech es zulässt"
+services.detail.debosselage.advantage2: "Wiederherstellung der Originalform"
+services.detail.debosselage.advantage3: "Zeit- und Kostenersparnis gegenüber klassischer Reparatur"
+services.detail.debosselage.placeholder: "Beulenfrei-Technik, die den Originallack erhält, wenn möglich. Ideal für kleine Beulen, Dellen und leichte Verformungen. Sauberes Ergebnis ohne Lackarbeiten."
+services.detail.pare-brise-optique.advantage1: "Schneller Austausch, oft in einem halben Tag"
+services.detail.pare-brise-optique.advantage2: "Zertifiziertes Glas und Dichtheitsgarantie"
+services.detail.pare-brise-optique.advantage3: "Scheinwerfer und Optik: Reinigung, Politur, Austausch"
+services.detail.pare-brise-optique.placeholder: "Austausch von Windschutzscheibe und Verglasung. Zertifiziertes Glas, sorgfältige Montage, Dichtheitsgarantie. Wir kümmern uns auch um Scheinwerfer und Optik: Politur, Aufarbeitung getrübter Scheinwerfer, Austausch bei Bedarf."
+services.detail.entretien-mecanique.advantage1: "Gründliche Kontrollen und ehrliche Beratung"
+services.detail.entretien-mecanique.advantage2: "Originalteile oder gleichwertige Qualität"
+services.detail.entretien-mecanique.advantage3: "Inspektion, Bremsen, Reifen"
+services.detail.entretien-mecanique.placeholder: "Inspektion, laufende Wartung und kleine mechanische Reparaturen. Wir prüfen Ihr Fahrzeug, beraten Sie und arbeiten mit passenden Teilen. Bremsen, Reifen, Flüssigkeitsstände: alles wird kontrolliert."
+services.detail.vehicule-pret-courtoisie.advantage1: "Mobilität während der Arbeiten gesichert"
+services.detail.vehicule-pret-courtoisie.advantage2: "Ohne Aufpreis je nach Leistung"
+services.detail.vehicule-pret-courtoisie.advantage3: "Sauberes und versichertes Fahrzeug"
+services.detail.vehicule-pret-courtoisie.placeholder: "Wenn Ihr Fahrzeug in der Werkstatt bleiben muss, stellen wir Ihnen ein Ersatzfahrzeug zur Verfügung. Praktisch, sauber und versichert. Bedingungen je nach Leistung — fragen Sie bei der Offerte nach."
+services.detail.placeholder_default: "Leistung in unserer Werkstatt in Baldersheim. Kontaktieren Sie uns für ein individuelles Angebot."
 
 gallery.title: "Galerie"
 gallery.lead: "Entdecken Sie unsere Arbeiten"
@@ -103,7 +157,7 @@ form.devis.type.label: "Art der Leistung"
 form.devis.type.placeholder: "Bitte wählen..."
 form.devis.type.reparation: "Karosseriereparatur"
 form.devis.type.peinture: "Lackierung"
-form.devis.type.debosselage: "Ausbeulen"
+form.devis.type.debosselage: "Beulenfrei ohne Lackierung"
 form.devis.type.pare_brise: "Scheiben / Verglasung"
 form.devis.type.entretien: "Wartung / Mechanik"
 form.devis.type.autre: "Sonstiges"
@@ -112,8 +166,58 @@ form.devis.photos.help: "JPG, PNG, WebP oder GIF. Max 5 MB pro Datei."
 form.devis.message.label: "Nachricht"
 form.devis.message.placeholder: "Beschreiben Sie Ihre Anfrage..."
 
+maintenance.title: "Website in Wartung"
+maintenance.message: "Wir führen Verbesserungsarbeiten durch. Vielen Dank für Ihre Geduld. Sie können uns per Telefon oder E-Mail erreichen."
+
 mentions.title: "Impressum"
 mentions.placeholder: "Inhalt folgt."
+mentions.section.editor: "Herausgeber der Website"
+mentions.section.hoster: "Hosting"
+mentions.section.intellectual: "Geistiges Eigentum"
+mentions.section.hyperlinks: "Hyperlinks"
+mentions.section.privacy: "Datenschutz"
+mentions.section.cookies: "Cookies"
+mentions.editor: |
+  <p><strong>Herausgeber der Website</strong></p>
+  <p>Carrosserie Lino<br>
+  Gewerbegebiet<br>
+  68390 Baldersheim<br>
+  Frankreich</p>
+  <p>Telefon: 03 89 00 00 00<br>
+  E-Mail: contact@carrosserie-lino.fr</p>
+  <p>Rechtsform: Einzelunternehmen<br>
+  SIRET: 123 456 789 00012<br>
+  Firmensitz: Baldersheim, Frankreich</p>
+  <p>Verantwortlich für die Veröffentlichung: Alexis Haffner</p>
+mentions.hoster: |
+  <p><strong>Hosting</strong></p>
+  <p>Diese Website wird gehostet von:</p>
+  <p>OVH SAS<br>
+  2 rue Kellermann<br>
+  59100 Roubaix<br>
+  Frankreich</p>
+  <p>RCS Lille Métropole : 424 761 419 00045</p>
+mentions.intellectual_property: |
+  <p><strong>Geistiges Eigentum</strong></p>
+  <p>Der gesamte Inhalt dieser Website (Texte, Bilder, Logos, Grafiken, Fotos usw.) unterliegt dem Urheberrecht und den Gesetzen zum geistigen Eigentum. Jede Vervielfältigung, Darstellung, Änderung, Veröffentlichung oder Nutzung, ganz oder teilweise, der Elemente der Website ohne vorherige schriftliche Genehmigung der Carrosserie Lino ist strengstens untersagt und stellt eine Verletzung gemäß den Artikeln L. 335-2 und folgenden des französischen Gesetzbuches zum geistigen Eigentum dar.</p>
+  <p>Die auf der Website erscheinenden Marken, Logos und Kennzeichen sind eingetragene Marken. Jede unbefugte Verwendung dieser Elemente stellt eine Verletzung dar, die gerichtlich verfolgt werden kann.</p>
+mentions.hyperlinks: |
+  <p><strong>Hyperlinks</strong></p>
+  <p>Hyperlinks zu anderen Websites können die Haftung der Carrosserie Lino nicht begründen. Wir üben keine Kontrolle über den Inhalt externer Websites aus und lehnen jede Verantwortung für deren Inhalt, Datenschutzrichtlinien oder Praktiken ab.</p>
+  <p>Die Erstellung von Links zu dieser Website ist unter der Voraussetzung gestattet, dass die Seiten nicht in Frames oder iframes eingebettet werden, die Quelle deutlich angegeben wird und der Link ein neues Fenster öffnet. Jeder Link zu rechtswidrigen Inhalten ist untersagt.</p>
+mentions.personal_data: |
+  <p><strong>Datenschutz</strong></p>
+  <p>Gemäß der Datenschutz-Grundverordnung (DSGVO) und dem französischen Datenschutzgesetz werden die über die Kontakt- und Offertanfrageformulare erhobenen Daten ausschließlich zur Bearbeitung Ihrer Anfrage, zur Kontaktaufnahme und zur Kundenbeziehung verwendet.</p>
+  <p><strong>Zweck der Verarbeitung:</strong> Beantwortung von Offertanfragen, Kontaktaufnahme, Nachverfolgung von Anfragen.</p>
+  <p><strong>Rechtsgrundlage:</strong> Durchführung vorvertraglicher Maßnahmen (Offertanfrage) und berechtigtes Interesse (Kundenbeziehung).</p>
+  <p><strong>Empfänger:</strong> Die Daten werden ausschließlich von der Carrosserie Lino verarbeitet und nicht an Dritte weitergegeben.</p>
+  <p><strong>Aufbewahrungsdauer:</strong> Die Daten werden für die Dauer der Bearbeitung Ihrer Anfrage aufbewahrt und anschließend gemäß den gesetzlichen Aufbewahrungspflichten (Buchführung, Verjährung) archiviert.</p>
+  <p><strong>Ihre Rechte:</strong> Sie haben das Recht auf Zugang, Berichtigung, Löschung, Einschränkung der Verarbeitung, Übertragbarkeit und Widerspruch. Um diese Rechte auszuüben, kontaktieren Sie uns unter der auf der Website angegebenen Adresse. Sie können auch eine Beschwerde bei der CNIL (www.cnil.fr) einreichen.</p>
+mentions.cookies: |
+  <p><strong>Cookies</strong></p>
+  <p>Diese Website kann technisch notwendige Cookies für die ordnungsgemäße Funktion der Website verwenden (Sitzungsverwaltung, Speicherung von Einstellungen, Sicherheit). Diese Cookies erfordern gemäß den Empfehlungen der CNIL keine vorherige Zustimmung.</p>
+  <p>Falls Analyse- oder Besucherzählungs-Cookies verwendet werden, werden Ihnen ein Informationsbanner und ein Zustimmungsmechanismus gemäß den geltenden Vorschriften angeboten.</p>
+  <p>Sie können Ihren Browser jederzeit so einstellen, dass er Cookies ablehnt oder Sie über deren Speicherung informiert. Weitere Informationen finden Sie in der Hilfe Ihres Browsers (z.B. support.google.com für Chrome, support.mozilla.org für Firefox).</p>
 
 auth.login.title: "Anmeldung"
 auth.logout.see_site: "Website anzeigen (Abmeldung)"
@@ -141,4 +245,32 @@ form.contact.email.label: "E-Mail"
 form.contact.email.placeholder: "ihre@email.de"
 form.contact.message.label: "Nachricht"
 form.contact.message.placeholder: "Ihre Nachricht..."
+
+setup.title: "Website-Einrichtung"
+setup.subtitle: "Es wurde kein Administratorkonto gefunden. Erstellen Sie einen ersten Administrator oder stellen Sie eine bestehende Sicherung wieder her."
+setup.or: "oder"
+setup.create_admin.title: "Administrator erstellen"
+setup.create_admin.description: "Erstellen Sie das erste Administratorkonto, um auf das Back-Office zuzugreifen und die Website zu verwalten."
+setup.create_admin.name: "Name"
+setup.create_admin.name_placeholder: "Ihr Name"
+setup.create_admin.email: "E-Mail"
+setup.create_admin.email_placeholder: "admin@beispiel.de"
+setup.create_admin.password: "Passwort"
+setup.create_admin.password_placeholder: "Mindestens 6 Zeichen"
+setup.create_admin.password_confirm: "Passwort bestätigen"
+setup.create_admin.password_confirm_placeholder: "Passwort erneut eingeben"
+setup.create_admin.submit: "Administratorkonto erstellen"
+setup.restore.title: "Sicherung wiederherstellen"
+setup.restore.description: "Stellen Sie die Website aus einer bestehenden Sicherung wieder her. Die Datenbank und hochgeladene Dateien werden durch den Inhalt der Sicherung ersetzt."
+setup.restore.select: "Wiederherzustellende Sicherung"
+setup.restore.select_placeholder: "— Sicherung auswählen —"
+setup.restore.warning: "Die Wiederherstellung ersetzt alle aktuellen Website-Daten durch die der ausgewählten Sicherung."
+setup.restore.submit: "Diese Sicherung wiederherstellen"
+setup.error.required_fields: "E-Mail und Passwort sind erforderlich."
+setup.error.password_mismatch: "Die Passwörter stimmen nicht überein."
+setup.error.password_too_short: "Das Passwort muss mindestens 6 Zeichen lang sein."
+setup.error.no_backup_selected: "Bitte wählen Sie eine Sicherung aus."
+setup.flash.admin_created: "Administratorkonto erfolgreich erstellt. Melden Sie sich an, um auf das Back-Office zuzugreifen."
+setup.flash.restored: "Website erfolgreich aus der Sicherung wiederhergestellt. Melden Sie sich an, um auf das Back-Office zuzugreifen."
+setup.flash.restore_error: "Fehler bei der Wiederherstellung der Sicherung."
 

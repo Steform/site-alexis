@@ -1,5 +1,12 @@
 {% extends 'base.html.twig' %}
 
+{% block head_hreflang %}
+<link rel="alternate" hreflang="fr" href="{{ path_for_locale('app_mentions_legales', 'fr') }}">
+<link rel="alternate" hreflang="de" href="{{ path_for_locale('app_mentions_legales', 'de') }}">
+<link rel="alternate" hreflang="x-default" href="{{ path_for_locale('app_mentions_legales', 'fr') }}">
+{% endblock %}
+
+{% set mentions_content = mentions_content|default({}) %}
 {% block title %}{{ 'mentions.title'|trans }} - Carrosserie Lino{% endblock %}
 
 {% block stylesheets %}
@@ -10,8 +17,53 @@
 {% block body %}
 {% include 'partials/_navbar_public.html.twig' %}
 <div class="container py-5">
-    <h1 class="section-title mb-4">{{ 'mentions.title'|trans }}</h1>
-    <p class="text-muted">{{ 'mentions.placeholder'|trans }}</p>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="section-title mb-5">{{ 'mentions.title'|trans }}</h1>
+
+            <section class="mb-5" id="editor">
+                <h2 class="h4 mb-3">{{ 'mentions.section.editor'|trans }}</h2>
+                <div class="mentions-section">
+                    {{ (mentions_content.editor|default(''))|trim ? (mentions_content.editor|raw) : ('mentions.editor'|trans)|raw }}
+                </div>
+            </section>
+
+            <section class="mb-5" id="hoster">
+                <h2 class="h4 mb-3">{{ 'mentions.section.hoster'|trans }}</h2>
+                <div class="mentions-section">
+                    {{ (mentions_content.hoster|default(''))|trim ? (mentions_content.hoster|raw) : ('mentions.hoster'|trans)|raw }}
+                </div>
+            </section>
+
+            <section class="mb-5" id="intellectual">
+                <h2 class="h4 mb-3">{{ 'mentions.section.intellectual'|trans }}</h2>
+                <div class="mentions-section">
+                    {{ (mentions_content.intellectual_property|default(''))|trim ? (mentions_content.intellectual_property|raw) : ('mentions.intellectual_property'|trans)|raw }}
+                </div>
+            </section>
+
+            <section class="mb-5" id="hyperlinks">
+                <h2 class="h4 mb-3">{{ 'mentions.section.hyperlinks'|trans }}</h2>
+                <div class="mentions-section">
+                    {{ (mentions_content.hyperlinks|default(''))|trim ? (mentions_content.hyperlinks|raw) : ('mentions.hyperlinks'|trans)|raw }}
+                </div>
+            </section>
+
+            <section class="mb-5" id="privacy">
+                <h2 class="h4 mb-3">{{ 'mentions.section.privacy'|trans }}</h2>
+                <div class="mentions-section">
+                    {{ (mentions_content.personal_data|default(''))|trim ? (mentions_content.personal_data|raw) : ('mentions.personal_data'|trans)|raw }}
+                </div>
+            </section>
+
+            <section class="mb-5" id="cookies">
+                <h2 class="h4 mb-3">{{ 'mentions.section.cookies'|trans }}</h2>
+                <div class="mentions-section">
+                    {{ (mentions_content.cookies|default(''))|trim ? (mentions_content.cookies|raw) : ('mentions.cookies'|trans)|raw }}
+                </div>
+            </section>
+        </div>
+    </div>
 </div>
 {% include 'partials/_footer_public.html.twig' %}
 {% endblock %}

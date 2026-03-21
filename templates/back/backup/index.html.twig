@@ -1,0 +1,211 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}{{ 'back.backup.title'|trans({}, 'back') }} - {{ 'back.layout.brand'|trans({}, 'back') }}{% endblock %}
+
+{% block back_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>{{ 'back.backup.title'|trans({}, 'back') }}</h1>
+        <p class="text-muted mb-0">{{ 'back.backup.description'|trans({}, 'back') }}</p>
+    </div>
+    <form method="post" action="{{ path('app_back_backup_create') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('backup_create') }}">
+        <button type="submit" class="btn btn-primary" id="btnCreateBackup">
+            <i class="bi bi-download me-1"></i>
+            {{ 'back.backup.create'|trans({}, 'back') }}
+        </button>
+    </form>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-warning text-dark">
+        <i class="bi bi-upload me-2"></i>{{ 'back.backup.upload.title'|trans({}, 'back') }}
+    </div>
+    <div class="card-body">
+        <p class="text-muted small mb-3">{{ 'back.backup.upload.description'|trans({}, 'back') }}</p>
+        <form method="post" action="{{ path('app_back_backup_upload') }}" enctype="multipart/form-data">
+            <input type="hidden" name="_token" value="{{ csrf_token('backup_upload') }}">
+            <div class="row align-items-end">
+                <div class="col-md-8 mb-2">
+                    <label for="backup_file" class="form-label">{{ 'back.backup.upload.file_label'|trans({}, 'back') }}</label>
+                    <input type="file" name="backup_file" id="backup_file" class="form-control" accept=".zip" required>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#uploadConfirmModal">
+                        <i class="bi bi-upload me-1"></i>
+                        {{ 'back.backup.upload.submit'|trans({}, 'back') }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="uploadConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    {{ 'back.backup.upload.title'|trans({}, 'back') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'back.backup.upload.confirm'|trans({}, 'back') }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {{ 'back.common.cancel'|trans({}, 'back') }}
+                </button>
+                <button type="button" class="btn btn-warning" id="btnConfirmUpload">
+                    <i class="bi bi-upload me-1"></i>
+                    {{ 'back.backup.upload.submit'|trans({}, 'back') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if backups|length > 0 %}
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>{{ 'back.backup.table.filename'|trans({}, 'back') }}</th>
+                    <th>{{ 'back.backup.table.date'|trans({}, 'back') }}</th>
+                    <th>{{ 'back.backup.table.size'|trans({}, 'back') }}</th>
+                    <th class="text-end">{{ 'back.backup.table.actions'|trans({}, 'back') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for backup in backups %}
+                <tr>
+                    <td class="align-middle">
+                        <i class="bi bi-file-earmark-zip me-1 text-muted"></i>
+                        {{ backup.filename }}
+                    </td>
+                    <td class="align-middle">{{ backup.date|date('d/m/Y H:i:s') }}</td>
+                    <td class="align-middle">{{ format_size(backup.size) }}</td>
+                    <td class="align-middle text-end">
+                        <a href="{{ path('app_back_backup_download', { filename: backup.filename }) }}"
+                           class="btn btn-sm btn-outline-primary me-1"
+                           title="{{ 'back.backup.download'|trans({}, 'back') }}">
+                            <i class="bi bi-cloud-arrow-down"></i>
+                            {{ 'back.backup.download'|trans({}, 'back') }}
+                        </a>
+                        <button type="button"
+                                class="btn btn-sm btn-outline-warning me-1"
+                                data-bs-toggle="modal"
+                                data-bs-target="#restoreModal{{ loop.index }}"
+                                title="{{ 'back.backup.restore'|trans({}, 'back') }}">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                            {{ 'back.backup.restore'|trans({}, 'back') }}
+                        </button>
+                        <button type="button"
+                                class="btn btn-sm btn-outline-danger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal{{ loop.index }}"
+                                title="{{ 'back.backup.delete'|trans({}, 'back') }}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+
+                {# Restore confirmation modal #}
+                <tr class="d-none">
+                    <td colspan="4">
+                        <div class="modal fade" id="restoreModal{{ loop.index }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-warning">
+                                        <h5 class="modal-title">
+                                            <i class="bi bi-exclamation-triangle me-2"></i>
+                                            {{ 'back.backup.restore'|trans({}, 'back') }}
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>{{ 'back.backup.confirm_restore'|trans({}, 'back') }}</p>
+                                        <p class="text-muted small mb-0">
+                                            <strong>{{ backup.filename }}</strong><br>
+                                            {{ backup.date|date('d/m/Y H:i:s') }} — {{ format_size(backup.size) }}
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            {{ 'back.common.cancel'|trans({}, 'back') }}
+                                        </button>
+                                        <form method="post" action="{{ path('app_back_backup_restore', { filename: backup.filename }) }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('backup_restore_' ~ backup.filename) }}">
+                                            <button type="submit" class="btn btn-warning">
+                                                <i class="bi bi-arrow-counterclockwise me-1"></i>
+                                                {{ 'back.backup.restore'|trans({}, 'back') }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                {# Delete confirmation modal #}
+                <tr class="d-none">
+                    <td colspan="4">
+                        <div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title">
+                                            <i class="bi bi-trash me-2"></i>
+                                            {{ 'back.backup.delete'|trans({}, 'back') }}
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>{{ 'back.backup.confirm_delete'|trans({}, 'back') }}</p>
+                                        <p class="text-muted small mb-0"><strong>{{ backup.filename }}</strong></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            {{ 'back.common.cancel'|trans({}, 'back') }}
+                                        </button>
+                                        <form method="post" action="{{ path('app_back_backup_delete', { filename: backup.filename }) }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('backup_delete_' ~ backup.filename) }}">
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="bi bi-trash me-1"></i>
+                                                {{ 'back.backup.delete'|trans({}, 'back') }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>
+    {{ 'back.backup.empty'|trans({}, 'back') }}
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var btnConfirm = document.getElementById('btnConfirmUpload');
+    if (btnConfirm) {
+        btnConfirm.addEventListener('click', function() {
+            var form = document.getElementById('backup_file').closest('form');
+            if (form) form.submit();
+        });
+    }
+});
+</script>
+{% endblock %}

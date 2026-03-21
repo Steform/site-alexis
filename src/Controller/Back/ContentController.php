@@ -5,8 +5,11 @@ namespace App\Controller\Back;
 use App\Entity\AboutPhoto;
 use App\Entity\AboutSection;
 use App\Entity\HomeHeroPhoto;
+use App\Entity\Service;
+use App\Entity\ServicesWhyCard;
 use App\Form\AboutPhotoType;
 use App\Form\HomeHeroPhotoType;
+use App\Form\ServicesWhyCardType;
 use App\Repository\AboutPhotoRepository;
 use App\Repository\AboutSectionRepository;
 use App\Repository\ContentBlockHistoryRepository;
@@ -14,6 +17,8 @@ use App\Repository\DevisTypeCarburantRepository;
 use App\Repository\DevisTypePrestationRepository;
 use App\Repository\GalleryItemRepository;
 use App\Repository\HomeHeroPhotoRepository;
+use App\Repository\ServiceRepository;
+use App\Repository\ServicesWhyCardRepository;
 use App\Service\AboutPhotoImageProcessor;
 use App\Service\ContentBlockManager;
 use App\Service\HomeHeroPhotoImageProcessor;
@@ -59,6 +64,8 @@ class ContentController extends AbstractController
         private readonly DevisTypePrestationRepository $devisTypePrestationRepository,
         private readonly DevisTypeCarburantRepository $devisTypeCarburantRepository,
         private readonly GalleryItemRepository $galleryItemRepository,
+        private readonly ServicesWhyCardRepository $servicesWhyCardRepository,
+        private readonly ServiceRepository $serviceRepository,
     ) {
     }
 
@@ -138,6 +145,209 @@ class ContentController extends AbstractController
     public function devisDe(Request $request): Response
     {
         return $this->editPage($request, 'devis', 'de');
+    }
+
+    /**
+     * @brief Edits CMS blocks for the gallery page in French.
+     *
+     * @param Request $request The HTTP request.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function galleryFr(Request $request): Response
+    {
+        return $this->editPage($request, 'gallery', 'fr');
+    }
+
+    /**
+     * @brief Edits CMS blocks for the gallery page in German.
+     *
+     * @param Request $request The HTTP request.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function galleryDe(Request $request): Response
+    {
+        return $this->editPage($request, 'gallery', 'de');
+    }
+
+    /**
+     * @brief Edits CMS blocks for the legal mentions page in French.
+     *
+     * @param Request $request The HTTP request.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function mentionsLegalesFr(Request $request): Response
+    {
+        return $this->editPage($request, 'mentions_legales', 'fr');
+    }
+
+    /**
+     * @brief Edits CMS blocks for the legal mentions page in German.
+     *
+     * @param Request $request The HTTP request.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function mentionsLegalesDe(Request $request): Response
+    {
+        return $this->editPage($request, 'mentions_legales', 'de');
+    }
+
+    /**
+     * @brief Edits CMS blocks for the services page in French.
+     *
+     * @param Request $request The HTTP request.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function servicesFr(Request $request): Response
+    {
+        return $this->editPage($request, 'services', 'fr');
+    }
+
+    /**
+     * @brief Edits CMS blocks for the services page in German.
+     *
+     * @param Request $request The HTTP request.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function servicesDe(Request $request): Response
+    {
+        return $this->editPage($request, 'services', 'de');
+    }
+
+    /**
+     * @brief Edits CMS blocks for a service detail page in French.
+     *
+     * @param Request $request The HTTP request.
+     * @param string $slug The service slug.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function serviceDetailFr(Request $request, string $slug): Response
+    {
+        $service = $this->serviceRepository->findBySlug($slug);
+        if ($service === null) {
+            throw $this->createNotFoundException('Service not found.');
+        }
+
+        return $this->editPage($request, $this->contentBlockManager->getServiceDetailPageName($service->getSlug()), 'fr', $service);
+    }
+
+    /**
+     * @brief Edits CMS blocks for a service detail page in German.
+     *
+     * @param Request $request The HTTP request.
+     * @param string $slug The service slug.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function serviceDetailDe(Request $request, string $slug): Response
+    {
+        $service = $this->serviceRepository->findBySlug($slug);
+        if ($service === null) {
+            throw $this->createNotFoundException('Service not found.');
+        }
+
+        return $this->editPage($request, $this->contentBlockManager->getServiceDetailPageName($service->getSlug()), 'de', $service);
+    }
+
+    /**
+     * @brief Creates a new "Why choose us" card from the services content editor.
+     *
+     * @param Request $request The HTTP request.
+     * @param string $locale The current locale.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function servicesWhyCardNew(Request $request, string $locale): Response
+    {
+        $card = new ServicesWhyCard();
+        $card->setPosition($this->servicesWhyCardRepository->count([]));
+
+        $form = $this->createForm(ServicesWhyCardType::class, $card);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->persist($card);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'Carte ajoutée.');
+
+            return $this->redirectToRoute($this->getContentRouteName('services', $locale));
+        }
+
+        return $this->render('back/content/services_why_card_form.html.twig', [
+            'card' => $card,
+            'form' => $form,
+            'locale' => $locale,
+        ]);
+    }
+
+    /**
+     * @brief Edits a "Why choose us" card from the services content editor.
+     *
+     * @param Request $request The HTTP request.
+     * @param ServicesWhyCard $card The card to edit.
+     * @param string $locale The current locale.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function servicesWhyCardEdit(Request $request, ServicesWhyCard $card, string $locale): Response
+    {
+        $form = $this->createForm(ServicesWhyCardType::class, $card);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+            $this->addFlash('success', 'Carte mise à jour.');
+
+            return $this->redirectToRoute($this->getContentRouteName('services', $locale));
+        }
+
+        return $this->render('back/content/services_why_card_form.html.twig', [
+            'card' => $card,
+            'form' => $form,
+            'locale' => $locale,
+        ]);
+    }
+
+    /**
+     * @brief Deletes a "Why choose us" card from the services content editor.
+     *
+     * @param Request $request The HTTP request.
+     * @param ServicesWhyCard $card The card to delete.
+     * @param string $locale The current locale.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function servicesWhyCardDelete(Request $request, ServicesWhyCard $card, string $locale): Response
+    {
+        if (!$this->isCsrfTokenValid('delete_services_why_card' . $card->getId(), (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token invalide.');
+            return $this->redirectToRoute($this->getContentRouteName('services', $locale));
+        }
+
+        $this->entityManager->remove($card);
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'Carte supprimée.');
+
+        return $this->redirectToRoute($this->getContentRouteName('services', $locale));
     }
 
     /**
@@ -361,11 +571,12 @@ class ContentController extends AbstractController
      * @param Request $request The HTTP request.
      * @param string $pageName The page name.
      * @param string $locale The selected locale.
+     * @param Service|null $currentService The current service when editing a service detail page.
      * @return Response The response.
      * @date 2026-03-19
      * @author Stephane H.
      */
-    private function editPage(Request $request, string $pageName, string $locale): Response
+    private function editPage(Request $request, string $pageName, string $locale, ?Service $currentService = null): Response
     {
         $definitions = $this->contentBlockManager->getPageDefinitions($pageName);
         if (!$this->contentBlockManager->hasPage($pageName)) {
@@ -388,8 +599,13 @@ class ContentController extends AbstractController
             );
             $this->addFlash('success', 'Contenus enregistrés.');
 
-            return $this->redirectToRoute($this->getContentRouteName($pageName, $locale));
+            $routeName = $this->getContentRouteName($pageName, $locale);
+            $routeParams = $this->getContentRouteParams($pageName, $currentService);
+
+            return $this->redirectToRoute($routeName, $routeParams);
         }
+
+        $isServicesContext = $pageName === 'services' || str_starts_with($pageName, 'service_');
 
         return $this->render('back/content/edit.html.twig', [
             'page_name' => $pageName,
@@ -402,6 +618,9 @@ class ContentController extends AbstractController
             'devis_type_prestations' => $pageName === 'devis' ? $this->devisTypePrestationRepository->findAllOrdered() : [],
             'devis_type_carburants' => $pageName === 'devis' ? $this->devisTypeCarburantRepository->findAllOrdered() : [],
             'gallery_items' => $pageName === 'gallery' ? $this->galleryItemRepository->findAllOrdered() : [],
+            'services_why_cards' => $pageName === 'services' ? $this->servicesWhyCardRepository->findAllOrdered() : [],
+            'services' => $isServicesContext ? $this->serviceRepository->findAllOrdered() : [],
+            'current_service' => $currentService,
         ]);
     }
 
@@ -521,6 +740,10 @@ class ContentController extends AbstractController
      */
     private function getContentRouteName(string $pageName, string $locale): string
     {
+        if (str_starts_with($pageName, 'service_')) {
+            return $locale === 'fr' ? 'app_back_content_service_detail_fr' : 'app_back_content_service_detail_de';
+        }
+
         $routes = [
             'home' => [
                 'fr' => 'app_back_content_home_fr',
@@ -538,9 +761,35 @@ class ContentController extends AbstractController
                 'fr' => 'app_back_content_gallery_fr',
                 'de' => 'app_back_content_gallery_de',
             ],
+            'services' => [
+                'fr' => 'app_back_content_services_fr',
+                'de' => 'app_back_content_services_de',
+            ],
+            'mentions_legales' => [
+                'fr' => 'app_back_content_mentions_legales_fr',
+                'de' => 'app_back_content_mentions_legales_de',
+            ],
         ];
 
         return $routes[$pageName][$locale] ?? 'app_back_dashboard';
+    }
+
+    /**
+     * @brief Returns route parameters for redirect (e.g. slug for service detail).
+     *
+     * @param string $pageName The page name.
+     * @param Service|null $currentService The current service when editing a service detail page.
+     * @return array<string, mixed> Route parameters.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    private function getContentRouteParams(string $pageName, ?Service $currentService): array
+    {
+        if (str_starts_with($pageName, 'service_') && $currentService !== null) {
+            return ['slug' => $currentService->getSlug()];
+        }
+
+        return [];
     }
 }
 

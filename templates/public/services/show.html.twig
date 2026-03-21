@@ -1,39 +1,168 @@
 {% extends 'base.html.twig' %}
 
-{% set serviceTitle = app.request.locale starts with 'de' and service.titreDe ? service.titreDe : service.titre %}
-{% set serviceDescription = app.request.locale starts with 'de' and service.descriptionDe ? service.descriptionDe : service.description %}
+{% block head_hreflang %}
+<link rel="alternate" hreflang="fr" href="{{ path_for_locale('app_services_show', 'fr', { slug: service.slug }) }}">
+<link rel="alternate" hreflang="de" href="{{ path_for_locale('app_services_show', 'de', { slug: service.slugDe ?? service.slug }) }}">
+<link rel="alternate" hreflang="x-default" href="{{ path_for_locale('app_services_show', 'fr', { slug: service.slug }) }}">
+{% endblock %}
+
+{% set service_content = service_content|default({}) %}
+{% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
+{% set serviceTitle = currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre %}
+{% set serviceDescription = (service_content.description|default(''))|trim %}
+{% if not serviceDescription %}
+    {% set serviceDescription = (currentLocale == 'de' and service.descriptionDe) ? service.descriptionDe : service.description %}
+{% endif %}
+{% if not serviceDescription %}
+    {% set placeholderKey = 'services.detail.' ~ service.slug ~ '.placeholder' %}
+    {% set serviceDescription = placeholderKey|trans %}
+    {% if serviceDescription is same as placeholderKey %}
+        {% set serviceDescription = 'services.detail.placeholder_default'|trans %}
+    {% endif %}
+{% endif %}
+{% set serviceTeaser = (service_content.teaser|default(''))|trim %}
+{% if not serviceTeaser %}
+    {% set serviceTeaser = ('services.teaser.' ~ service.slug)|trans %}
+{% endif %}
 
 {% block title %}{{ serviceTitle }} - Carrosserie Lino{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('styles/pages/services.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/pages/home.css') }}">
 {% endblock %}
 
 {% block body %}
 {% include 'partials/_navbar_public.html.twig' %}
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <h1 class="section-title text-center mb-5">{{ serviceTitle }}</h1>
-
-            <div class="row align-items-center g-5 mb-5">
-                <div class="col-md-5 text-center">
-                    <img src="{{ asset(service.image) }}" alt="{{ serviceTitle }}" class="img-fluid service-detail-image" loading="lazy">
+{# Hero — image large, titre, teaser #}
+<section class="service-detail-hero py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="service-hero-image-wrapper rounded overflow-hidden mb-4 mb-md-5">
+                    <img src="{{ asset(service.image) }}" alt="{{ serviceTitle }}" class="img-fluid w-100 service-detail-hero-img" loading="eager">
                 </div>
-                <div class="col-md-7">
-                    {% if serviceDescription %}
-                        <div class="service-description">{{ serviceDescription|raw }}</div>
-                    {% else %}
-                        <p class="lead">{{ 'services.no_description'|trans }}</p>
+                <h1 class="section-title text-center mb-2">{{ serviceTitle }}</h1>
+                {% if serviceTeaser and serviceTeaser is not same as ('services.teaser.' ~ service.slug) %}
+                <p class="lead text-center text-muted mb-0">{{ serviceTeaser }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Description #}
+<section class="py-5 section-soft-blue">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="h4 mb-4">{{ (service_content.description_title|default(''))|trim ?: 'services.detail.description_title'|trans }}</h2>
+                <div class="service-description">{{ serviceDescription|raw }}</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Avantages #}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h2 class="h4 mb-4 text-center">{{ (service_content.advantages_title|default(''))|trim ?: 'services.detail.advantages_title'|trans }}</h2>
+                <div class="row g-4">
+                    {% for i in 1..3 %}
+                    {% set advText = (service_content['advantage' ~ i]|default(''))|trim %}
+                    {% if not advText %}
+                        {% set advKey = 'services.detail.' ~ service.slug ~ '.advantage' ~ i %}
+                        {% set advText = advKey|trans %}
                     {% endif %}
-                    <a href="{{ path('app_devis') }}" class="btn btn-devis rounded-pill mt-3">{{ 'services.cta'|trans }}</a>
+                    {% if advText and advText is not same as ('services.detail.' ~ service.slug ~ '.advantage' ~ i) %}
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-3">
+                            <span class="service-advantage-bullet flex-shrink-0" aria-hidden="true">✓</span>
+                            <p class="mb-0 text-muted">{{ advText }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+{# Processus #}
+<section class="py-5 section-soft-blue">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h2 class="h4 mb-4 text-center">{{ (service_content.process_title|default(''))|trim ?: 'services.detail.process_title'|trans }}</h2>
+                <div class="service-process-steps d-flex flex-wrap justify-content-center gap-3 gap-md-4">
+                    <div class="service-process-step">
+                        <span class="service-process-num">1</span>
+                        <span>{{ (service_content['process.step1']|default(''))|trim ?: 'services.detail.process.step1'|trans }}</span>
+                    </div>
+                    <span class="service-process-arrow d-none d-md-inline" aria-hidden="true">→</span>
+                    <div class="service-process-step">
+                        <span class="service-process-num">2</span>
+                        <span>{{ (service_content['process.step2']|default(''))|trim ?: 'services.detail.process.step2'|trans }}</span>
+                    </div>
+                    <span class="service-process-arrow d-none d-md-inline" aria-hidden="true">→</span>
+                    <div class="service-process-step">
+                        <span class="service-process-num">3</span>
+                        <span>{{ (service_content['process.step3']|default(''))|trim ?: 'services.detail.process.step3'|trans }}</span>
+                    </div>
+                    <span class="service-process-arrow d-none d-md-inline" aria-hidden="true">→</span>
+                    <div class="service-process-step">
+                        <span class="service-process-num">4</span>
+                        <span>{{ (service_content['process.step4']|default(''))|trim ?: 'services.detail.process.step4'|trans }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# CTA #}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <p class="lead mb-4">{{ (service_content.cta_lead|default(''))|trim ?: 'services.detail.cta_lead'|trans }}</p>
+                <a href="{{ path_locale('app_devis') }}" class="btn btn-devis btn-lg rounded-pill">{{ 'services.cta'|trans }}</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Autres prestations — cartes comme sur l'accueil, véhicule de prêt en dernier #}
+{% if other_services|default([]) is not empty %}
+<section class="py-5 section-soft-blue">
+    <div class="container">
+        <h2 class="h4 mb-4 text-center">{{ (service_content.other_services_title|default(''))|trim ?: 'services.detail.other_services_title'|trans }}</h2>
+        <div class="row g-4 justify-content-center">
+            {% for other in other_services %}
+            {% set otherTitle = currentLocale == 'de' and other.titreDe ? other.titreDe : other.titre %}
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card service-card border-0 overflow-hidden h-100">
+                    <a href="{{ path_locale('app_services_show', { slug: other.getSlugForLocale(currentLocale) }) }}">
+                        <img src="{{ asset(other.image) }}" class="card-img-top" alt="{{ otherTitle }}" style="height: 200px; object-fit: cover;" loading="lazy">
+                        <div class="card-body p-0 d-flex justify-content-center">
+                            <span class="btn btn-service-card text-white">{{ otherTitle }}</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ path_locale('app_services') }}" class="btn btn-devis rounded-pill">{{ 'services.list.title'|trans }}</a>
+        </div>
+    </div>
+</section>
+{% endif %}
 
 {% include 'partials/_footer_public.html.twig' %}
 {% endblock %}

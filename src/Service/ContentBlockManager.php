@@ -42,6 +42,7 @@ class ContentBlockManager
             'services.card2.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'services.card3.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'services.card4.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card5.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'services.cta' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
             'reviews.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'reviews.default.text' => ['light' => '#2c3e50', 'dark' => '#d0d5dc'],
@@ -70,6 +71,36 @@ class ContentBlockManager
             'gallery.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'gallery.lead' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
         ],
+        'services' => [
+            'why.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'list.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'cta' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
+            'cta_discover' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+        ],
+        'service_detail' => [
+            'teaser' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'description' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'advantage1' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
+            'advantage2' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
+            'advantage3' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
+            'description_title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'advantages_title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'process_title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'cta_lead' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'other_services_title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'process.step1' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'process.step2' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'process.step3' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'process.step4' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+        ],
+        'mentions_legales' => [
+            'editor' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'hoster' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'intellectual_property' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'hyperlinks' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'personal_data' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'cookies' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+        ],
     ];
 
     /**
@@ -96,6 +127,7 @@ class ContentBlockManager
             'services.card2.title' => ['type' => 'plain', 'translation_key' => 'home.services.card2.title'],
             'services.card3.title' => ['type' => 'plain', 'translation_key' => 'home.services.card3.title'],
             'services.card4.title' => ['type' => 'plain', 'translation_key' => 'home.services.card4.title'],
+            'services.card5.title' => ['type' => 'plain', 'translation_key' => 'home.services.card5.title'],
             'services.cta' => ['type' => 'plain', 'translation_key' => 'home.services.cta'],
             'reviews.title' => ['type' => 'plain', 'translation_key' => 'home.reviews.title'],
             'reviews.default.text' => ['type' => 'plain', 'translation_key' => 'home.reviews.default.text'],
@@ -123,6 +155,20 @@ class ContentBlockManager
         'gallery' => [
             'gallery.title' => ['type' => 'plain', 'translation_key' => 'gallery.title'],
             'gallery.lead' => ['type' => 'plain', 'translation_key' => 'gallery.lead'],
+        ],
+        'services' => [
+            'why.title' => ['type' => 'plain', 'translation_key' => 'services.why.title'],
+            'list.title' => ['type' => 'plain', 'translation_key' => 'services.list.title'],
+            'cta' => ['type' => 'plain', 'translation_key' => 'services.cta'],
+            'cta_discover' => ['type' => 'plain', 'translation_key' => 'services.cta_discover'],
+        ],
+        'mentions_legales' => [
+            'editor' => ['type' => 'rich', 'translation_key' => 'mentions.editor'],
+            'hoster' => ['type' => 'rich', 'translation_key' => 'mentions.hoster'],
+            'intellectual_property' => ['type' => 'rich', 'translation_key' => 'mentions.intellectual_property'],
+            'hyperlinks' => ['type' => 'rich', 'translation_key' => 'mentions.hyperlinks'],
+            'personal_data' => ['type' => 'rich', 'translation_key' => 'mentions.personal_data'],
+            'cookies' => ['type' => 'rich', 'translation_key' => 'mentions.cookies'],
         ],
     ];
 
@@ -157,6 +203,47 @@ class ContentBlockManager
     }
 
     /**
+     * @brief Returns the page name for a service detail page.
+     *
+     * @param string $slug The service slug.
+     * @return string The page name (e.g. service_reparation_carrosserie_peinture).
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function getServiceDetailPageName(string $slug): string
+    {
+        return 'service_' . $slug;
+    }
+
+    /**
+     * @brief Returns editable block definitions for a service detail page.
+     *
+     * @param string $slug The service slug.
+     * @return array<string, array{type: string, translation_key: string}> Page definitions.
+     * @date 2026-03-21
+     * @author Stephane H.
+     */
+    public function getPageDefinitionsForService(string $slug): array
+    {
+        return [
+            'teaser' => ['type' => 'plain', 'translation_key' => 'services.teaser.' . $slug],
+            'description' => ['type' => 'rich', 'translation_key' => 'services.detail.' . $slug . '.placeholder'],
+            'advantage1' => ['type' => 'plain', 'translation_key' => 'services.detail.' . $slug . '.advantage1'],
+            'advantage2' => ['type' => 'plain', 'translation_key' => 'services.detail.' . $slug . '.advantage2'],
+            'advantage3' => ['type' => 'plain', 'translation_key' => 'services.detail.' . $slug . '.advantage3'],
+            'description_title' => ['type' => 'plain', 'translation_key' => 'services.detail.description_title'],
+            'advantages_title' => ['type' => 'plain', 'translation_key' => 'services.detail.advantages_title'],
+            'process_title' => ['type' => 'plain', 'translation_key' => 'services.detail.process_title'],
+            'cta_lead' => ['type' => 'plain', 'translation_key' => 'services.detail.cta_lead'],
+            'other_services_title' => ['type' => 'plain', 'translation_key' => 'services.detail.other_services_title'],
+            'process.step1' => ['type' => 'plain', 'translation_key' => 'services.detail.process.step1'],
+            'process.step2' => ['type' => 'plain', 'translation_key' => 'services.detail.process.step2'],
+            'process.step3' => ['type' => 'plain', 'translation_key' => 'services.detail.process.step3'],
+            'process.step4' => ['type' => 'plain', 'translation_key' => 'services.detail.process.step4'],
+        ];
+    }
+
+    /**
      * @brief Checks if a page exists in the CMS configuration.
      *
      * @param string $pageName The page name.
@@ -166,7 +253,11 @@ class ContentBlockManager
      */
     public function hasPage(string $pageName): bool
     {
-        return array_key_exists($pageName, self::PAGE_DEFINITIONS);
+        if (array_key_exists($pageName, self::PAGE_DEFINITIONS)) {
+            return true;
+        }
+
+        return str_starts_with($pageName, 'service_');
     }
 
     /**
@@ -179,7 +270,17 @@ class ContentBlockManager
      */
     public function getPageDefinitions(string $pageName): array
     {
-        return self::PAGE_DEFINITIONS[$pageName] ?? [];
+        if (array_key_exists($pageName, self::PAGE_DEFINITIONS)) {
+            return self::PAGE_DEFINITIONS[$pageName];
+        }
+
+        if (str_starts_with($pageName, 'service_')) {
+            $slug = substr($pageName, 8);
+
+            return $this->getPageDefinitionsForService($slug);
+        }
+
+        return [];
     }
 
     /**
@@ -568,7 +669,9 @@ class ContentBlockManager
      */
     public function getDefaultColors(string $pageName, string $blockKey): array
     {
-        $defaults = self::DEFAULT_COLORS[$pageName][$blockKey] ?? ['light' => '#212529', 'dark' => '#e4e6eb'];
+        $defaults = self::DEFAULT_COLORS[$pageName][$blockKey]
+            ?? (str_starts_with($pageName, 'service_') ? (self::DEFAULT_COLORS['service_detail'][$blockKey] ?? null) : null)
+            ?? ['light' => '#212529', 'dark' => '#e4e6eb'];
 
         return is_array($defaults) ? $defaults : ['light' => (string) $defaults, 'dark' => '#e4e6eb'];
     }

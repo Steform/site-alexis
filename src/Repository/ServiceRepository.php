@@ -34,13 +34,20 @@ class ServiceRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find a service by slug.
+     * Find a service by slug (FR) or slugDe (DE).
      *
-     * @param string $slug The service slug.
+     * @param string $slug The service slug (FR or DE).
      * @return Service|null The service or null if not found.
+     * @author Stephane H.
+     * @date 2026-03-21
      */
     public function findBySlug(string $slug): ?Service
     {
-        return $this->findOneBy(['slug' => $slug]);
+        $service = $this->findOneBy(['slug' => $slug]);
+        if ($service) {
+            return $service;
+        }
+
+        return $this->findOneBy(['slugDe' => $slug]);
     }
 }

@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'setup.title'|trans }} - Carrosserie Lino{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .setup-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .setup-header {
+        text-align: center;
+        padding: 2rem 0 1rem;
+    }
+    .setup-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+    }
+    .setup-header p {
+        color: #6c757d;
+        font-size: 1.05rem;
+    }
+    .setup-card {
+        border: 2px solid #dee2e6;
+        border-radius: 0.75rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .setup-card:hover {
+        border-color: #0d6efd;
+        box-shadow: 0 0.25rem 1rem rgba(13, 110, 253, 0.15);
+    }
+    .setup-card .card-header {
+        border-radius: 0.65rem 0.65rem 0 0;
+        font-weight: 600;
+    }
+    .setup-divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+    .setup-divider::before,
+    .setup-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #dee2e6;
+    }
+    .setup-divider span {
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="setup-container">
+        <div class="setup-header">
+            <h1><i class="bi bi-gear-wide-connected me-2"></i>{{ 'setup.title'|trans }}</h1>
+            <p>{{ 'setup.subtitle'|trans }}</p>
+        </div>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                    {{ message|trans }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="card setup-card mb-4">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-person-plus me-2"></i>{{ 'setup.create_admin.title'|trans }}
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted mb-4">{{ 'setup.create_admin.description'|trans }}</p>
+                <form method="post" action="{{ path('app_setup_create_admin') }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('setup_create_admin') }}">
+
+                    <div class="mb-3">
+                        <label for="setup_nom" class="form-label">{{ 'setup.create_admin.name'|trans }}</label>
+                        <input type="text" name="nom" id="setup_nom" class="form-control"
+                               placeholder="{{ 'setup.create_admin.name_placeholder'|trans }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="setup_email" class="form-label">{{ 'setup.create_admin.email'|trans }} <span class="text-danger">*</span></label>
+                        <input type="email" name="email" id="setup_email" class="form-control" required
+                               placeholder="{{ 'setup.create_admin.email_placeholder'|trans }}">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="setup_password" class="form-label">{{ 'setup.create_admin.password'|trans }} <span class="text-danger">*</span></label>
+                            <input type="password" name="password" id="setup_password" class="form-control" required minlength="6"
+                                   placeholder="{{ 'setup.create_admin.password_placeholder'|trans }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="setup_password_confirm" class="form-label">{{ 'setup.create_admin.password_confirm'|trans }} <span class="text-danger">*</span></label>
+                            <input type="password" name="password_confirm" id="setup_password_confirm" class="form-control" required minlength="6"
+                                   placeholder="{{ 'setup.create_admin.password_confirm_placeholder'|trans }}">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-1"></i>
+                        {{ 'setup.create_admin.submit'|trans }}
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if backups|length > 0 %}
+        <div class="setup-divider">
+            <span>{{ 'setup.or'|trans }}</span>
+        </div>
+
+        <div class="card setup-card">
+            <div class="card-header bg-warning text-dark">
+                <i class="bi bi-arrow-counterclockwise me-2"></i>{{ 'setup.restore.title'|trans }}
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted mb-4">{{ 'setup.restore.description'|trans }}</p>
+                <form method="post" action="{{ path('app_setup_restore') }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('setup_restore') }}">
+
+                    <div class="mb-3">
+                        <label for="setup_backup" class="form-label">{{ 'setup.restore.select'|trans }}</label>
+                        <select name="filename" id="setup_backup" class="form-select" required>
+                            <option value="">{{ 'setup.restore.select_placeholder'|trans }}</option>
+                            {% for backup in backups %}
+                                <option value="{{ backup.filename }}">
+                                    {{ backup.filename }} — {{ backup.date|date('d/m/Y H:i') }} — {{ format_size(backup.size) }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="alert alert-warning small mb-3">
+                        <i class="bi bi-exclamation-triangle me-1"></i>
+                        {{ 'setup.restore.warning'|trans }}
+                    </div>
+
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>
+                        {{ 'setup.restore.submit'|trans }}
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

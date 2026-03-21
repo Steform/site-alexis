@@ -1,0 +1,78 @@
+{#
+    Breadcrumb component.
+    Internal logic: does not render on home page (app_home, app_home_de).
+    Renders on all other public pages with appropriate trail.
+#}
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% if currentRoute not in ['app_home', 'app_home_de'] %}
+    {% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
+    {% set items = [] %}
+
+    {# Build breadcrumb items based on route #}
+    {% if currentRoute in ['app_services', 'app_services_de'] %}
+        {% set items = [
+            { label: 'nav.home'|trans, url: path_locale('app_home') },
+            { label: 'nav.services'|trans, url: null }
+        ] %}
+    {% elseif currentRoute in ['app_services_show', 'app_services_show_de'] and service is defined and service %}
+        {% set serviceTitle = currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre %}
+        {% set items = [
+            { label: 'nav.home'|trans, url: path_locale('app_home') },
+            { label: 'nav.services'|trans, url: path_locale('app_services') },
+            { label: serviceTitle, url: null }
+        ] %}
+    {% elseif currentRoute in ['app_gallery', 'app_gallery_de'] %}
+        {% set items = [
+            { label: 'nav.home'|trans, url: path_locale('app_home') },
+            { label: 'nav.gallery'|trans, url: null }
+        ] %}
+    {% elseif currentRoute in ['app_devis', 'app_devis_de'] %}
+        {% set items = [
+            { label: 'nav.home'|trans, url: path_locale('app_home') },
+            { label: 'nav.quote'|trans, url: null }
+        ] %}
+    {% elseif currentRoute in ['app_contact', 'app_contact_de'] %}
+        {% set items = [
+            { label: 'nav.home'|trans, url: path_locale('app_home') },
+            { label: 'nav.contact'|trans, url: null }
+        ] %}
+    {% elseif currentRoute in ['app_qui_sommes_nous', 'app_qui_sommes_nous_de'] %}
+        {% set items = [
+            { label: 'nav.home'|trans, url: path_locale('app_home') },
+            { label: 'nav.about'|trans, url: null }
+        ] %}
+    {% elseif currentRoute in ['app_horaires_public', 'app_horaires_public_de'] %}
+        {% set items = [
+            { label: 'nav.home'|trans, url: path_locale('app_home') },
+            { label: 'breadcrumb.horaires'|trans, url: null }
+        ] %}
+    {% elseif currentRoute in ['app_mentions_legales', 'app_mentions_legales_de'] %}
+        {% set items = [
+            { label: 'nav.home'|trans, url: path_locale('app_home') },
+            { label: 'breadcrumb.mentions_legales'|trans, url: null }
+        ] %}
+    {% elseif currentRoute == 'app_login' %}
+        {% set items = [
+            { label: 'nav.home'|trans, url: path_locale('app_home') },
+            { label: 'breadcrumb.login'|trans, url: null }
+        ] %}
+    {% endif %}
+
+    {% if items is not empty %}
+<nav aria-label="{{ 'breadcrumb.aria_label'|trans }}" class="breadcrumb-wrapper py-2">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            {% for item in items %}
+            <li class="breadcrumb-item {{ item.url is null ? 'active' : '' }}" {{ item.url is null ? 'aria-current="page"' : '' }}>
+                {% if item.url %}
+                    <a href="{{ item.url }}">{{ item.label }}</a>
+                {% else %}
+                    {{ item.label }}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+</nav>
+    {% endif %}
+{% endif %}

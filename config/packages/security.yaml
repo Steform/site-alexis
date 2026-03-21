@@ -27,4 +27,5 @@ security:
 
     access_control:
         - { path: ^/back/users, roles: ROLE_ADMIN }
+        - { path: ^/back/backup, roles: ROLE_ADMIN }
         - { path: ^/back, roles: ROLE_USER }

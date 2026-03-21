@@ -1,40 +1,91 @@
 {% extends 'base.html.twig' %}
 
+{% block head_hreflang %}
+<link rel="alternate" hreflang="fr" href="{{ path_for_locale('app_services', 'fr') }}">
+<link rel="alternate" hreflang="de" href="{{ path_for_locale('app_services', 'de') }}">
+<link rel="alternate" hreflang="x-default" href="{{ path_for_locale('app_services', 'fr') }}">
+{% endblock %}
+
 {% block title %}{{ 'services.title'|trans }} - Carrosserie Lino{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('styles/pages/services.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/pages/home.css') }}">
 {% endblock %}
 
 {% block body %}
 {% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
 {% include 'partials/_navbar_public.html.twig' %}
 
+{# Pourquoi nous choisir — section masquée si aucune carte #}
+{% if services_why_cards|default([]) is not empty %}
 <section class="py-5 section-soft-blue">
     <div class="container">
-        <h1 class="section-title text-center mb-5">{{ 'services.title'|trans }}</h1>
+        <h1 class="section-title text-center mb-5">{{ services_content['why.title']|default('services.why.title'|trans) }}</h1>
         <div class="row g-4">
-            {% for service in services %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path('app_services_show', { slug: service.slug }) }}" class="text-decoration-none">
-                        <img src="{{ asset(service.image) }}" class="card-img-top" alt="{{ currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre }}" style="height: 200px; object-fit: cover;" loading="lazy">
-                        <div class="card-body p-0 d-flex justify-content-center">
-                            <span class="btn btn-service-card" style="color: #fff;">
-                                {{ currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre }}
-                            </span>
-                        </div>
-                    </a>
+            {% for card in services_why_cards %}
+            <div class="col-md-4">
+                <div class="h-100 p-4 rounded bg-white shadow-sm">
+                    <h3 class="h5 mb-3">{{ currentLocale == 'de' ? card.titleDe : card.titleFr }}</h3>
+                    <p class="text-muted mb-0 small">{{ currentLocale == 'de' ? card.textDe : card.textFr }}</p>
                 </div>
             </div>
             {% endfor %}
         </div>
-        <div class="text-center mt-4">
-            <a class="btn btn-devis rounded-pill" href="{{ path('app_devis') }}">{{ 'services.cta'|trans }}</a>
+    </div>
+</section>
+{% endif %}
+
+{# Liste services (teaser avec vignette image) #}
+<section class="py-5 section-soft-blue">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">{{ services_content['list.title']|default('services.list.title'|trans) }}</h2>
+        {% set unsplash_images = {
+            'reparation-carrosserie-peinture': 'https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=800&q=80',
+            'debosselage': 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80',
+            'pare-brise-optique': 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800&q=80',
+            'entretien-mecanique': 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80',
+            'vehicule-pret-courtoisie': 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80'
+        } %}
+        <div class="row justify-content-center g-4">
+            {% for service in services %}
+            {% set serviceTitle = currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre %}
+            {% set serviceTeaser = ('services.teaser.' ~ service.slug)|trans %}
+            {% set serviceImage = unsplash_images[service.slug] ?? asset(service.image) %}
+            <div class="col-12 col-lg-10">
+                <a href="{{ path_locale('app_services_show', { slug: service.getSlugForLocale(currentLocale) }) }}" class="service-teaser-row row g-0 text-decoration-none text-reset rounded overflow-hidden bg-white shadow-sm">
+                    <div class="col-12 col-md-6 service-teaser-thumb">
+                        <img src="{{ serviceImage }}" alt="{{ serviceTitle }}" class="w-100 h-100" loading="lazy">
+                    </div>
+                    <div class="col-12 col-md-6 d-flex flex-column justify-content-center py-4 px-4">
+                        <h3 class="h5 mb-2 fw-semibold">{{ serviceTitle }}</h3>
+                        {% if serviceTeaser is not same as ('services.teaser.' ~ service.slug) %}
+                        <p class="text-muted mb-0">{{ serviceTeaser }}</p>
+                        {% endif %}
+                        <span class="btn btn-devis rounded-pill align-self-start mt-3">{{ services_content['cta_discover']|default('services.cta_discover'|trans) }}</span>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a class="btn btn-devis rounded-pill" href="{{ path_locale('app_devis') }}">{{ services_content['cta']|default('services.cta'|trans) }}</a>
         </div>
     </div>
 </section>
 
+{% include 'components/_avis_slider.html.twig' with {
+    avis: avis,
+    currentLocale: currentLocale,
+    title: 'home.reviews.title'|trans,
+    default_text: 'home.reviews.default.text'|trans,
+    default_author: 'home.reviews.default.author'|trans
+} %}
+
 {% include 'partials/_footer_public.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
 {% endblock %}

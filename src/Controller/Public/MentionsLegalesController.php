@@ -2,27 +2,42 @@
 
 namespace App\Controller\Public;
 
+use App\Repository\CoordinatesRepository;
+use App\Service\ContentBlockManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Mentions légales page (placeholder - content to be added later).
+ * @brief Renders the legal mentions page (editable via Content).
  *
+ * @date 2026-03-21
  * @author Stephane H.
- * @created 2026-03-11
- *
- * @inputs  None
- * @outputs Mentions légales page
  */
 class MentionsLegalesController extends AbstractController
 {
+    public function __construct(
+        private readonly ContentBlockManager $contentBlockManager,
+        private readonly CoordinatesRepository $coordinatesRepository,
+    ) {
+    }
+
     /**
-     * Renders the legal mentions page.
+     * @brief Renders the legal mentions page.
      *
-     * @return Response
+     * @param Request $request The HTTP request.
+     * @return Response The response.
+     * @date 2026-03-21
+     * @author Stephane H.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->render('public/mentions_legales.html.twig');
+        $locale = $request->getLocale();
+        $contentLocale = str_starts_with($locale, 'de') ? 'de' : 'fr';
+
+        return $this->render('public/mentions_legales.html.twig', [
+            'mentions_content' => $this->contentBlockManager->getPageContent('mentions_legales', $contentLocale),
+            'coordinates' => $this->coordinatesRepository->findSingle(),
+        ]);
     }
 }

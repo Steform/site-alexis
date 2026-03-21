@@ -1,0 +1,63 @@
+{#
+    Avis slider component.
+    Displays client reviews section with StuSlider when multiple avis.
+    Variables: avis, currentLocale, title, default_text, default_author
+    Optional: title_style, default_text_style, default_author_style (for home page colors)
+#}
+{% set title = title|default('home.reviews.title'|trans) %}
+{% set default_text = default_text|default('home.reviews.default.text'|trans) %}
+{% set default_author = default_author|default('home.reviews.default.author'|trans) %}
+{% set title_style = title_style|default('') %}
+{% set default_text_style = default_text_style|default('') %}
+{% set default_author_style = default_author_style|default('') %}
+
+<section id="avis" class="py-5 testimonial-section">
+    <div class="container">
+        <h2 class="section-title text-center mb-5"{% if title_style %} style="{{ title_style }}"{% endif %}>{{ title }}</h2>
+        {% if avis|length > 0 %}
+        <div class="avis-slider-wrapper mx-auto" style="width: 75%; min-height: 280px;">
+            <div class="avis-slider-container">
+                <div class="avis-slider">
+                    {% for a in avis %}
+                    <div class="avis-slide">
+                        <div class="card border-0 shadow-none bg-transparent h-100">
+                            <div class="card-body text-center">
+                                <div class="avis-quote-icon mb-2">"</div>
+                                <p class="card-text fst-italic mb-2">
+                                    {% if currentLocale == 'de' and a.texteDe %}
+                                        {{ a.texteDe }}
+                                    {% else %}
+                                        {{ a.texte }}
+                                    {% endif %}
+                                </p>
+                                <p class="avis-author fst-italic mb-0">— {{ a.auteur }}, {{ a.date|date('d/m/Y') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% if avis|length > 1 %}
+        <script type="module">
+            import { StuSlider } from 'https://cdn.jsdelivr.net/npm/stuslider@0.5.3/dist/stuslider.js';
+            const avisContainer = document.querySelector('.avis-slider-container');
+            if (avisContainer) {
+                try {
+                    const slider = new StuSlider('avis', 10000, '100%', '280px', false, false, false, false);
+                    slider.initialize();
+                } catch (e) {
+                    console.error('Avis slider init failed:', e);
+                }
+            }
+        </script>
+        {% endif %}
+        {% else %}
+        <div class="text-center py-5">
+            <div class="avis-quote-icon mb-2">"</div>
+            <p class="fs-5 fst-italic mb-2"{% if default_text_style %} style="{{ default_text_style }}"{% else %} class="text-muted"{% endif %}>{{ default_text }}</p>
+            <p class="avis-author fst-italic"{% if default_author_style %} style="{{ default_author_style }}"{% else %} class="text-muted"{% endif %}>{{ default_author }}</p>
+        </div>
+        {% endif %}
+    </div>
+</section>

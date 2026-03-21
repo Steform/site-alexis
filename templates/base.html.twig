@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ app.request.locale|default('fr')|slice(0, 2) }}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,7 @@
             (function(){var s=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',s||(d?'dark':'light'));})();
         </script>
         {{ importmap('app') }}
+        {% block head_hreflang %}{% endblock %}
         {% block stylesheets %}{% endblock %}
     </head>
     <body class="d-flex flex-column min-vh-100">
@@ -19,7 +20,7 @@
         <button type="button" class="btn btn-darkmode position-fixed bottom-0 end-0 m-3 shadow" id="btn-darkmode" aria-label="Passer en mode sombre" title="Passer en mode sombre" style="z-index: 1000;">🌙</button>
         {% block javascripts %}{% endblock %}
         <script>
-            document.addEventListener('DOMContentLoaded',function(){var btn=document.getElementById('btn-darkmode');if(btn){function updateBtn(){var t=document.documentElement.getAttribute('data-theme');btn.textContent=t==='dark'?'☀️':'🌙';btn.setAttribute('aria-label',t==='dark'?'Passer en mode clair':'Passer en mode sombre');btn.setAttribute('title',t==='dark'?'Passer en mode clair':'Passer en mode sombre');}updateBtn();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('theme',n);updateBtn();};}});
+            (function(){if(window.__darkModeInit)return;window.__darkModeInit=1;function updateBtn(){var btn=document.getElementById('btn-darkmode');if(!btn)return;var t=document.documentElement.getAttribute('data-theme');btn.textContent=t==='dark'?'☀️':'🌙';btn.setAttribute('aria-label',t==='dark'?'Passer en mode clair':'Passer en mode sombre');btn.setAttribute('title',t==='dark'?'Passer en mode clair':'Passer en mode sombre');}function initTheme(){updateBtn();}document.addEventListener('DOMContentLoaded',initTheme);document.addEventListener('turbo:load',initTheme);document.addEventListener('click',function(e){var btn=e.target.closest('#btn-darkmode');if(btn){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('theme',n);updateBtn();}});})();
         </script>
     </body>
 </html>
