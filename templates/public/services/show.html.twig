@@ -25,7 +25,10 @@
 {% if not serviceTeaser %}
     {% set serviceTeaser = ('services.teaser.' ~ service.slug)|trans %}
 {% endif %}
-{% set serviceHeroImage = service.detailHeroImage ? service.detailHeroImage : service.image %}
+{# Hero image: level 3 (detail hero) -> level 2 (list teaser) -> level 1 (home CMS card) #}
+{% set detailHeroTrim = service.detailHeroImage|default('')|trim %}
+{% set listImageTrim = service.image|default('')|trim %}
+{% set serviceHeroImage = detailHeroTrim ? detailHeroTrim : (listImageTrim ? service.image : service_home_card_image(service, home_page_content)) %}
 
 {% block title %}{{ serviceTitle }} - Carrosserie Lino{% endblock %}
 

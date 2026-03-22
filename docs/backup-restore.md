@@ -1,7 +1,7 @@
 # Sauvegarde et restauration (back-office)
 
 **Date :** 2026-03-22  
-**Dernière mise à jour :** 2026-03-22 (manifest `backup-manifest.json` **v0.3** ; section réinitialisation site BO)  
+**Dernière mise à jour :** 2026-03-22 (manifest **v0.3** ; réinitialisation site BO ; images prestations trois niveaux)  
 **Auteur :** Stephane H.
 
 Ce document décrit le périmètre des archives ZIP générées depuis le back-office et la procédure de **reprise après sinistre** complète (hors seule restauration applicative).
@@ -52,6 +52,18 @@ La **restauration** réinjecte le SQL puis **remplace tout le contenu** de `publ
 6. Vider le cache Symfony : `php bin/console cache:clear` (environnement adapté).
 
 Les archives **v0.1** (restauration partielle de `uploads/`) restent exploitables : le ZIP contient déjà tout l’arbre `uploads/` ; avec l’application à jour (formats **v0.2** / **v0.3**), la restauration réécrit désormais **l’ensemble** de ce périmètre.
+
+## Images prestations (trois niveaux, référence)
+
+Pour le périmètre **fichiers + base**, une sauvegarde complète couvre déjà tout ; côté éditorial il existe **trois niveaux** d’images distinctes :
+
+| Niveau | Rôle | Où c’est géré |
+|--------|------|----------------|
+| **1** | Cartes style accueil (y compris « autres prestations » en bas des pages détail) | Blocs CMS page `home` (`services.card1`…`services.card5`) |
+| **2** | Vignettes de la liste publique « Nos services » | Champ `service.image` (uploads sur la page CMS **Services**) |
+| **3** | Bandeau hero en tête de page détail d’une prestation | Champ `service.detail_hero_image` (upload par prestation dans le BO) |
+
+Les chemins pointent vers des fichiers sous `public/uploads/` ; les métadonnées sont en base (`content_block`, table `service`). Le manifeste **v0.3** peut documenter le périmètre logique des cartes accueil (`cmsHomeServiceCards`) ; les champs entité restent dans `database.sql`.
 
 ## Réinitialisation site (back-office)
 

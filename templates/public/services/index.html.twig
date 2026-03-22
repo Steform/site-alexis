@@ -47,7 +47,7 @@
             {% set cmsCardTitle = service_home_card_title(service, home_page_content, currentLocale) %}
             {% set serviceTitle = cmsCardTitle|trim ? cmsCardTitle : (currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre) %}
             {% set serviceTeaser = ('services.teaser.' ~ service.slug)|trans %}
-            {% set serviceImage = asset(service_home_card_image(service, home_page_content)) %}
+            {% set serviceImage = asset(service_list_teaser_image(service, home_page_content)) %}
             <div class="col-12 col-lg-10">
                 <a href="{{ path_locale('app_services_show', { slug: service.getSlugForLocale(currentLocale) }) }}" class="service-teaser-row row g-0 text-decoration-none text-reset rounded overflow-hidden bg-white shadow-sm">
                     <div class="col-12 col-md-6 service-teaser-thumb">

@@ -43,7 +43,7 @@ class HomeServiceCardImagePathResolver
     ];
 
     /**
-     * @brief Returns the image path for list thumbnails and "other services" cards (home card CMS or fallback).
+     * @brief Returns the image path for home-style cards (CMS slots 1–5, defaults, or entity image when unmapped).
      *
      * Uses services.cardN.image from home page content when the service FR slug matches a home card; otherwise service.image.
      *
@@ -68,6 +68,25 @@ class HomeServiceCardImagePathResolver
         }
 
         return self::SLOT_DEFAULT_IMAGE[$slot] ?? (string) ($service->getImage() ?? '');
+    }
+
+    /**
+     * @brief Returns the public "Nos services" list thumbnail path: entity list image (level 2) or home card path (level 1) as fallback.
+     *
+     * @param Service $service The service entity.
+     * @param array<string, string> $homePageContent Flat home page content for the current locale.
+     * @return string Relative path suitable for asset().
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function getListTeaserImagePath(Service $service, array $homePageContent): string
+    {
+        $fromEntity = trim((string) ($service->getImage() ?? ''));
+        if ($fromEntity !== '') {
+            return $fromEntity;
+        }
+
+        return $this->getImagePathForService($service, $homePageContent);
     }
 
     /**
