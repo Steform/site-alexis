@@ -10,6 +10,9 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+# Debug / session logs (do not commit)
+/debug-*.log
+
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
