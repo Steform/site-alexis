@@ -1,7 +1,7 @@
 # Sauvegarde et restauration (back-office)
 
 **Date :** 2026-03-22  
-**Dernière mise à jour :** 2026-03-22 (manifest `backup-manifest.json` **v0.3**)  
+**Dernière mise à jour :** 2026-03-22 (manifest `backup-manifest.json` **v0.3** ; section réinitialisation site BO)  
 **Auteur :** Stephane H.
 
 Ce document décrit le périmètre des archives ZIP générées depuis le back-office et la procédure de **reprise après sinistre** complète (hors seule restauration applicative).
@@ -52,6 +52,23 @@ La **restauration** réinjecte le SQL puis **remplace tout le contenu** de `publ
 6. Vider le cache Symfony : `php bin/console cache:clear` (environnement adapté).
 
 Les archives **v0.1** (restauration partielle de `uploads/`) restent exploitables : le ZIP contient déjà tout l’arbre `uploads/` ; avec l’application à jour (formats **v0.2** / **v0.3**), la restauration réécrit désormais **l’ensemble** de ce périmètre.
+
+## Réinitialisation site (back-office)
+
+Depuis l’écran **Sauvegardes**, une action **Réinitialiser le site** ramène l’application à l’état « assistant d’installation » (aucun compte utilisateur), aligné sur un périmètre proche d’une archive vide.
+
+| Élément | Comportement |
+|---------|----------------|
+| **Base de données** | `TRUNCATE` de **toutes** les tables **BASE TABLE** du schéma courant, **sauf** `doctrine_migration_versions` (historique des migrations conservé pour éviter un `doctrine:migrations:migrate` manuel après reset). |
+| **`public/uploads/`** | Vidage récursif (même logique que lors d’une restauration de sauvegarde). |
+| **Archives locales `var/backups/`** | **Toutes** les archives ZIP sont supprimées. Option : cocher **Créer une dernière sauvegarde ZIP avant réinitialisation** pour générer une archive complète **avant** la purge ; ce fichier est alors **conservé** pendant l’opération puis le reste des ZIP est supprimé. Sans cette option, **aucune** archive ne subsiste sur le serveur. |
+| **Session / accès** | La session est **invalidée** puis redirection vers **`/setup`** (assistant public). L’administrateur n’a plus de session valide tant qu’un premier compte n’est pas recréé via le setup. |
+
+**Sécurité :** réservé aux comptes **ROLE_ADMIN**, avec jeton CSRF dédié et confirmation explicite dans l’interface (perte **irréversible** de contenu, médias et sauvegardes locales selon les options).
+
+**Audit base de données :** la table d’audit admin est vidée avec les autres tables ; un **log applicatif** (`notice` / `error`) enregistre l’identifiant admin et le déroulement avant/après l’opération.
+
+**À part :** l’action **Ne garder qu’une archive** (prune) conserve une sauvegarde fraîche et supprime les autres ZIP **sans** toucher à la base ni à `public/uploads/` — comportement distinct du reset complet.
 
 ## Voir aussi
 

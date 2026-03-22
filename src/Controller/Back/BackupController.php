@@ -5,12 +5,14 @@ namespace App\Controller\Back;
 use App\Service\AdminAuditActions;
 use App\Service\AdminAuditLogger;
 use App\Service\BackupService;
+use App\Service\SiteResetService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -25,6 +27,7 @@ class BackupController extends AbstractController
 {
     public function __construct(
         private readonly BackupService $backupService,
+        private readonly SiteResetService $siteResetService,
         private readonly AdminAuditLogger $adminAuditLogger,
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
@@ -179,41 +182,76 @@ class BackupController extends AbstractController
      * @date 2026-03-22
      * @author Stephane H.
      */
-    public function deleteAll(Request $request): Response
+    public function pruneBackups(Request $request): Response
     {
-        if (!$this->isCsrfTokenValid('backup_delete_all', (string) $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('backup_prune', (string) $request->request->get('_token'))) {
             $this->addFlash('error', 'Token CSRF invalide.');
             return $this->redirectToRoute('app_back_backup_index');
         }
 
         try {
-            $preservedFilename = $this->backupService->createBackup();
-            $list = $this->backupService->listBackups();
-            $deletedCount = 0;
-            foreach ($list as $row) {
-                if ($row['filename'] === $preservedFilename) {
-                    continue;
-                }
-                $this->backupService->deleteBackup($row['filename']);
-                ++$deletedCount;
-            }
+            $result = $this->backupService->pruneBackupsKeepLatest();
             $this->adminAuditLogger->log(AdminAuditActions::BACKUP_DELETE_ALL, [
-                'preserved_filename' => $preservedFilename,
-                'deleted_count' => $deletedCount,
+                'preserved_filename' => $result['preserved_filename'],
+                'deleted_count' => $result['deleted_count'],
             ], $this->getUser());
             $this->addFlash(
                 'success',
-                $this->translator->trans('back.backup.flash.delete_all_success', [
-                    '%filename%' => $preservedFilename,
-                    '%count%' => (string) $deletedCount,
+                $this->translator->trans('back.backup.flash.prune_success', [
+                    '%filename%' => $result['preserved_filename'],
+                    '%count%' => (string) $result['deleted_count'],
                 ], 'back')
             );
         } catch (\Throwable $e) {
-            $this->logger->error('Backup delete-all failed.', ['exception' => $e]);
+            $this->logger->error('Backup prune failed.', ['exception' => $e]);
             $this->addFlash('error', 'back.backup.flash.error');
         }
 
         return $this->redirectToRoute('app_back_backup_index');
+    }
+
+    /**
+     * @brief Resets the site to setup state: optional emergency ZIP, purge archives, truncate DB (except migrations), clear uploads, logout.
+     *
+     * @param Request $request The HTTP request.
+     * @return Response Redirect to public setup wizard.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function resetSite(Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('backup_site_reset', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token CSRF invalide.');
+            return $this->redirectToRoute('app_back_backup_index');
+        }
+
+        $user = $this->getUser();
+        $adminLabel = $user instanceof UserInterface ? $user->getUserIdentifier() : 'unknown';
+
+        try {
+            $createEmergency = $request->request->has('emergency_backup');
+            $this->logger->notice('Site reset to setup state started.', [
+                'admin' => $adminLabel,
+                'emergency_backup' => $createEmergency,
+            ]);
+
+            $result = $this->siteResetService->resetToSetupState($createEmergency);
+
+            $this->logger->notice('Site reset to setup state completed.', [
+                'admin' => $adminLabel,
+                'preserved_backup' => $result['preserved_backup'],
+                'deleted_zip_count' => $result['deleted_zip_count'],
+            ]);
+
+            $request->getSession()->invalidate();
+        } catch (\Throwable $e) {
+            $this->logger->error('Site reset failed.', ['exception' => $e, 'admin' => $adminLabel]);
+            $this->addFlash('error', 'back.backup.flash.reset_error');
+
+            return $this->redirectToRoute('app_back_backup_index');
+        }
+
+        return $this->redirectToRoute('app_setup');
     }
 
     /**

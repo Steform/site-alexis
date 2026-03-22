@@ -169,6 +169,68 @@ class BackupService
     }
 
     /**
+     * @brief Removes all files and subdirectories under public/uploads/ (keeps the root directory).
+     *
+     * @return void
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function clearPublicUploads(): void
+    {
+        if (is_dir($this->uploadsDir)) {
+            $this->clearDirectory($this->uploadsDir);
+        }
+    }
+
+    /**
+     * @brief Deletes every backup ZIP in var/backups/, optionally preserving one filename.
+     *
+     * @param string|null $preserveFilename If set, this archive is not deleted (e.g. emergency backup before site reset).
+     * @return int Number of deleted files.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function deleteAllBackupArchives(?string $preserveFilename): int
+    {
+        $this->ensureBackupDir();
+        $deleted = 0;
+        foreach ($this->listBackups() as $row) {
+            if ($preserveFilename !== null && $row['filename'] === $preserveFilename) {
+                continue;
+            }
+            $this->deleteBackup($row['filename']);
+            ++$deleted;
+        }
+
+        return $deleted;
+    }
+
+    /**
+     * @brief Creates a new backup, then deletes all other ZIP archives (keeps the new snapshot only).
+     *
+     * @return array{preserved_filename: string, deleted_count: int}
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function pruneBackupsKeepLatest(): array
+    {
+        $preservedFilename = $this->createBackup();
+        $deletedCount = 0;
+        foreach ($this->listBackups() as $row) {
+            if ($row['filename'] === $preservedFilename) {
+                continue;
+            }
+            $this->deleteBackup($row['filename']);
+            ++$deletedCount;
+        }
+
+        return [
+            'preserved_filename' => $preservedFilename,
+            'deleted_count' => $deletedCount,
+        ];
+    }
+
+    /**
      * @brief Imports an uploaded ZIP backup into var/backups/ and restores it.
      *
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $uploadedFile The uploaded ZIP file.
