@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @brief Displays the public contact page.
@@ -34,6 +35,7 @@ class ContactController extends AbstractController
         private readonly CoordinatesRepository $coordinatesRepository,
         private readonly HorairesRepository $horairesRepository,
         private readonly OpeningHoursFormatter $openingHoursFormatter,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -80,7 +82,7 @@ class ContactController extends AbstractController
 
             $mailer->send($email);
 
-            $this->addFlash('success', $this->trans('contact.flash.success'));
+            $this->addFlash('success', $this->translator->trans('contact.flash.success'));
 
             return $this->redirectToRoute('app_contact');
         }

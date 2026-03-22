@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Public quote request controller.
@@ -26,6 +27,7 @@ class DevisController extends AbstractController
         private readonly DevisTypePrestationRepository $devisTypeRepository,
         private readonly DevisTypeCarburantRepository $devisTypeCarburantRepository,
         private readonly ContentBlockManager $contentBlockManager,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -76,7 +78,7 @@ class DevisController extends AbstractController
 
             $mailer->send($email);
 
-            $this->addFlash('success', $this->trans('devis.flash.success'));
+            $this->addFlash('success', $this->translator->trans('devis.flash.success'));
 
             return $this->redirectToRoute('app_devis');
         }

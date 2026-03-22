@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @brief Back-office backup management (admin only).
@@ -26,6 +27,7 @@ class BackupController extends AbstractController
         private readonly BackupService $backupService,
         private readonly AdminAuditLogger $adminAuditLogger,
         private readonly LoggerInterface $logger,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -201,7 +203,7 @@ class BackupController extends AbstractController
             ], $this->getUser());
             $this->addFlash(
                 'success',
-                $this->trans('back.backup.flash.delete_all_success', [
+                $this->translator->trans('back.backup.flash.delete_all_success', [
                     '%filename%' => $preservedFilename,
                     '%count%' => (string) $deletedCount,
                 ], 'back')
@@ -256,11 +258,11 @@ class BackupController extends AbstractController
     {
         $msg = $e->getMessage();
         if ($this->isBackupManifestRelatedErrorMessage($msg)) {
-            $this->addFlash('error', $this->trans('back.backup.flash.manifest_invalid', ['%details%' => $msg], 'back'));
+            $this->addFlash('error', $this->translator->trans('back.backup.flash.manifest_invalid', ['%details%' => $msg], 'back'));
 
             return;
         }
-        $this->addFlash('error', $this->trans('back.backup.flash.restore_failed_detail', ['%details%' => $msg], 'back'));
+        $this->addFlash('error', $this->translator->trans('back.backup.flash.restore_failed_detail', ['%details%' => $msg], 'back'));
     }
 
     /**
