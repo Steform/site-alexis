@@ -114,7 +114,7 @@ class BackupController extends AbstractController
             ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.restored');
         } catch (\Throwable $e) {
-            $this->addFlash('error', 'back.backup.flash.error');
+            $this->addBackupRestoreErrorFlash($e);
         }
 
         return $this->redirectToRoute('app_back_backup_index');
@@ -155,10 +155,46 @@ class BackupController extends AbstractController
             ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.upload_restored');
         } catch (\Throwable $e) {
-            $this->addFlash('error', 'back.backup.flash.error');
+            $this->addBackupRestoreErrorFlash($e);
         }
 
         return $this->redirectToRoute('app_back_backup_index');
+    }
+
+    /**
+     * @brief Adds an error flash for backup restore failures, with detail when manifest validation fails.
+     *
+     * @param \Throwable $e The exception thrown during restore.
+     * @return void
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function addBackupRestoreErrorFlash(\Throwable $e): void
+    {
+        $msg = $e->getMessage();
+        if ($this->isBackupManifestRelatedErrorMessage($msg)) {
+            $this->addFlash('error', $this->trans('back.backup.flash.manifest_invalid', ['%details%' => $msg], 'back'));
+
+            return;
+        }
+        $this->addFlash('error', 'back.backup.flash.error');
+    }
+
+    /**
+     * @brief Returns whether the exception message indicates manifest or content validation failure.
+     *
+     * @param string $message The exception message.
+     * @return bool True if the user-facing manifest message should be shown.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function isBackupManifestRelatedErrorMessage(string $message): bool
+    {
+        $lower = strtolower($message);
+
+        return str_contains($lower, 'manifest')
+            || str_contains($lower, 'mismatch')
+            || str_contains($lower, 'json');
     }
 
     /**

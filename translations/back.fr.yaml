@@ -651,4 +651,5 @@ back.backup.flash.upload_restored: "Le fichier a été importé et le site a ét
 back.backup.flash.upload_invalid: "Le fichier envoyé est invalide."
 back.backup.flash.upload_not_zip: "Le fichier doit être au format ZIP."
 back.backup.flash.error: "Une erreur est survenue lors de l'opération."
+back.backup.flash.manifest_invalid: "Validation de la sauvegarde : %details%"
 

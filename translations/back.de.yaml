@@ -650,4 +650,5 @@ back.backup.flash.upload_restored: "Die Datei wurde importiert und die Website w
 back.backup.flash.upload_invalid: "Die hochgeladene Datei ist ungültig."
 back.backup.flash.upload_not_zip: "Die Datei muss im ZIP-Format vorliegen."
 back.backup.flash.error: "Bei der Operation ist ein Fehler aufgetreten."
+back.backup.flash.manifest_invalid: "Sicherungsvalidierung: %details%"
 

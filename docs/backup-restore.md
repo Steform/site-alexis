@@ -1,6 +1,7 @@
 # Sauvegarde et restauration (back-office)
 
 **Date :** 2026-03-22  
+**Dernière mise à jour :** 2026-03-22 (manifest `backup-manifest.json`)  
 **Auteur :** Stephane H.
 
 Ce document décrit le périmètre des archives ZIP générées depuis le back-office et la procédure de **reprise après sinistre** complète (hors seule restauration applicative).
@@ -9,10 +10,27 @@ Ce document décrit le périmètre des archives ZIP générées depuis le back-o
 
 | Élément | Inclus |
 |---------|--------|
+| **`backup-manifest.json`** | Métadonnées JSON (format **0.2**) : `formatVersion`, `createdAt`, taille de `database.sql`, nombre de fichiers et octets sous `uploads/`. Présent sur les **nouvelles** sauvegardes créées avec l’application à jour. |
 | **Base de données** | Toutes les tables du schéma connecté (structure + données), fichier `database.sql` dans le ZIP. |
 | **Fichiers utilisateur** | **Intégralité** de `public/uploads/` (récursif) : galeries, vignettes, hero, historique des fichiers remplacés sous `uploads/historique/`, etc. |
 
 La **restauration** réinjecte le SQL puis **remplace tout le contenu** de `public/uploads/` par une copie miroir de l’arborescence `uploads/` extraite du ZIP (aligné sur la sauvegarde).
+
+### Manifeste et validation
+
+- Si **`backup-manifest.json` est absent** (archives **0.2** créées avant l’introduction du manifeste, ou ZIP externes) : restauration **sans** contrôle strict du manifeste (comportement historique).
+- Si le fichier est **présent** : le code vérifie que `formatVersion` est **supportée** (voir `BackupService::BACKUP_MANIFEST_SUPPORTED_FORMATS` / `isBackupFormatSupported()`), puis que les tailles et compteurs correspondent au contenu extrait (cohérence anti-fichier tronqué ou archive altérée).
+
+### Rétrocompatibilité (baseline v0.2)
+
+- Les archives **v0.2** **sans** manifeste restent restaurables.
+- Les archives **v0.2** **avec** manifeste sont validées puis restaurées comme ci-dessus.
+- Les archives **v0.1** (restauration partielle d’`uploads/` côté ancien code) : le ZIP contient en général déjà tout l’arbre `uploads/` ; avec l’application à jour, la restauration réécrit **l’ensemble** de `public/uploads/`.
+
+### Évolution des versions (0.3+)
+
+- Lors d’un changement de structure d’archive : incrémenter `BACKUP_ARCHIVE_FORMAT_VERSION`, enrichir le schéma du manifeste, ajouter la version à la liste des formats supportés et adapter la validation dans [`BackupService`](../src/Service/BackupService.php).
+- Documenter ici tout changement incompatible ou toute procédure de migration manuelle.
 
 ## Hors périmètre du ZIP (reprise « site complet »)
 

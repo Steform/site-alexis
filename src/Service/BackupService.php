@@ -17,6 +17,23 @@ class BackupService
      */
     public const BACKUP_ARCHIVE_FORMAT_VERSION = '0.2';
 
+    /**
+     * @brief Manifest file name at the root of each new backup ZIP (format 0.2+).
+     */
+    public const BACKUP_MANIFEST_FILENAME = 'backup-manifest.json';
+
+    /**
+     * @brief Supported manifest formatVersion values for strict validation when the manifest is present.
+     *
+     * @var list<string>
+     */
+    private const BACKUP_MANIFEST_SUPPORTED_FORMATS = ['0.2'];
+
+    /**
+     * @brief Minimum archive format version accepted when a manifest is present (same baseline as legacy 0.2 ZIPs without manifest).
+     */
+    public const MIN_SUPPORTED_BACKUP_FORMAT = '0.2';
+
     private const BACKUP_DIR = 'var/backups';
     private const UPLOADS_DIR = 'public/uploads';
 
@@ -51,6 +68,10 @@ class BackupService
         }
 
         $sqlDump = $this->generateSqlDump();
+        $uploadsStats = $this->collectDirectoryFileStats($this->uploadsDir);
+        $manifestJson = $this->buildBackupManifest($sqlDump, $uploadsStats);
+
+        $zip->addFromString(self::BACKUP_MANIFEST_FILENAME, $manifestJson);
         $zip->addFromString('database.sql', $sqlDump);
 
         $this->addDirectoryToZip($zip, $this->uploadsDir, 'uploads');
@@ -83,6 +104,11 @@ class BackupService
         $tempDir = sys_get_temp_dir() . '/site_restore_' . uniqid();
         $zip->extractTo($tempDir);
         $zip->close();
+
+        $manifestPath = $tempDir . '/' . self::BACKUP_MANIFEST_FILENAME;
+        if (is_file($manifestPath)) {
+            $this->validateExtractedBackupManifest($tempDir, (string) file_get_contents($manifestPath));
+        }
 
         $sqlFile = $tempDir . '/database.sql';
         if (file_exists($sqlFile)) {
@@ -207,6 +233,167 @@ class BackupService
     private function formatVersionFileSegment(): string
     {
         return 'v' . self::BACKUP_ARCHIVE_FORMAT_VERSION;
+    }
+
+    /**
+     * @brief Builds the JSON manifest describing backup contents for validation on restore.
+     *
+     * @param string $sqlDump Full SQL dump string stored as database.sql in the archive.
+     * @param array{fileCount: int, totalBytes: int} $uploadsStats Stats for public/uploads before zipping.
+     * @return string JSON string (UTF-8).
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function buildBackupManifest(string $sqlDump, array $uploadsStats): string
+    {
+        $payload = [
+            'formatVersion' => self::BACKUP_ARCHIVE_FORMAT_VERSION,
+            'createdAt' => (new \DateTimeImmutable('now'))->format(\DateTimeInterface::ATOM),
+            'contents' => [
+                'database' => [
+                    'file' => 'database.sql',
+                    'bytes' => strlen($sqlDump),
+                ],
+                'uploads' => [
+                    'rootInZip' => 'uploads',
+                    'fileCount' => $uploadsStats['fileCount'],
+                    'totalBytes' => $uploadsStats['totalBytes'],
+                ],
+            ],
+        ];
+
+        return json_encode(
+            $payload,
+            \JSON_THROW_ON_ERROR | \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
+        );
+    }
+
+    /**
+     * @brief Counts files and total byte size under a directory (recursive).
+     *
+     * @param string $dir Absolute directory path.
+     * @return array{fileCount: int, totalBytes: int}
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function collectDirectoryFileStats(string $dir): array
+    {
+        $fileCount = 0;
+        $totalBytes = 0;
+
+        if (!is_dir($dir)) {
+            return ['fileCount' => 0, 'totalBytes' => 0];
+        }
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                ++$fileCount;
+                $totalBytes += $file->getSize();
+            }
+        }
+
+        return ['fileCount' => $fileCount, 'totalBytes' => $totalBytes];
+    }
+
+    /**
+     * @brief Returns whether a manifest formatVersion string is supported by this application.
+     *
+     * @param string $version Version from the manifest (e.g. "0.2").
+     * @return bool True if restore validation may proceed.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public static function isBackupFormatSupported(string $version): bool
+    {
+        return \in_array($version, self::BACKUP_MANIFEST_SUPPORTED_FORMATS, true);
+    }
+
+    /**
+     * @brief Validates extracted archive contents against backup-manifest.json when present.
+     *
+     * @param string $extractRoot Temporary directory where the ZIP was extracted.
+     * @param string $manifestRaw Raw JSON file contents.
+     * @return void
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function validateExtractedBackupManifest(string $extractRoot, string $manifestRaw): void
+    {
+        try {
+            $data = json_decode($manifestRaw, true, 512, \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \RuntimeException('Invalid backup manifest JSON: ' . $e->getMessage(), 0, $e);
+        }
+
+        if (!\is_array($data)) {
+            throw new \RuntimeException('Backup manifest must be a JSON object.');
+        }
+
+        $formatVersion = $data['formatVersion'] ?? null;
+        if (!\is_string($formatVersion) || !self::isBackupFormatSupported($formatVersion)) {
+            throw new \RuntimeException(
+                'Unsupported backup manifest formatVersion: ' . (string) $formatVersion
+            );
+        }
+
+        $contents = $data['contents'] ?? null;
+        if (!\is_array($contents)) {
+            throw new \RuntimeException('Backup manifest missing "contents" object.');
+        }
+
+        $db = $contents['database'] ?? null;
+        if (!\is_array($db)) {
+            throw new \RuntimeException('Backup manifest missing contents.database.');
+        }
+
+        $dbFile = $db['file'] ?? 'database.sql';
+        $expectedDbBytes = $db['bytes'] ?? null;
+        $sqlPath = $extractRoot . '/' . $dbFile;
+
+        if (!is_file($sqlPath)) {
+            throw new \RuntimeException('Backup manifest expects database file missing from archive: ' . $dbFile);
+        }
+
+        if (\is_int($expectedDbBytes) && filesize($sqlPath) !== $expectedDbBytes) {
+            throw new \RuntimeException(
+                'database.sql size mismatch: expected ' . $expectedDbBytes . ' bytes, got ' . filesize($sqlPath)
+            );
+        }
+
+        $up = $contents['uploads'] ?? null;
+        if (!\is_array($up)) {
+            throw new \RuntimeException('Backup manifest missing contents.uploads.');
+        }
+
+        $rootInZip = $up['rootInZip'] ?? 'uploads';
+        $expectedFileCount = $up['fileCount'] ?? null;
+        $expectedTotalBytes = $up['totalBytes'] ?? null;
+
+        $uploadsPath = $extractRoot . '/' . $rootInZip;
+        if (!is_dir($uploadsPath)) {
+            if (($expectedFileCount === 0 || $expectedFileCount === null)
+                && ($expectedTotalBytes === 0 || $expectedTotalBytes === null)) {
+                return;
+            }
+            throw new \RuntimeException('Backup manifest expects uploads directory missing from archive: ' . $rootInZip);
+        }
+
+        $stats = $this->collectDirectoryFileStats($uploadsPath);
+        if (\is_int($expectedFileCount) && $stats['fileCount'] !== $expectedFileCount) {
+            throw new \RuntimeException(
+                'uploads file count mismatch: expected ' . $expectedFileCount . ', got ' . $stats['fileCount']
+            );
+        }
+        if (\is_int($expectedTotalBytes) && $stats['totalBytes'] !== $expectedTotalBytes) {
+            throw new \RuntimeException(
+                'uploads total size mismatch: expected ' . $expectedTotalBytes . ' bytes, got ' . $stats['totalBytes']
+            );
+        }
     }
 
     /**
