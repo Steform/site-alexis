@@ -1,0 +1,22 @@
+{# One home-style service card: CMS title/image when mapped, else entity title / service image. #}
+{% if current_service is defined and current_service and service.id == current_service.id %}
+{% else %}
+{% set cmsTitle = service_home_card_title(service, home_page_content, currentLocale) %}
+{% set displayTitle = cmsTitle|trim ? cmsTitle : (currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre) %}
+{% set cardImage = service_home_card_image(service, home_page_content) %}
+{% set linkSlug = service.getSlugForLocale(currentLocale) %}
+<div class="{{ column_class|default('col-12 col-sm-6 col-lg-4') }}">
+    <div class="card service-card border-0 overflow-hidden h-100">
+        <a href="{{ path_locale('app_services_show', { slug: linkSlug }) }}" title="{{ displayTitle }}">
+            <img src="{{ asset(cardImage) }}" class="card-img-top" alt="{{ displayTitle }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
+            <div class="card-body p-0 d-flex justify-content-center">
+                {% if variant|default('home') == 'home' %}
+                    <span class="btn btn-service-card" style="color: var(--color-services-card{{ slot }}-title, #fff);">{{ displayTitle }}</span>
+                {% else %}
+                    <span class="btn btn-service-card text-white">{{ displayTitle }}</span>
+                {% endif %}
+            </div>
+        </a>
+    </div>
+</div>
+{% endif %}

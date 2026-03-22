@@ -5,15 +5,21 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Service;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @brief Resolves public image path for a service using home CMS card slots (same mapping as index.html.twig).
+ * @brief Resolves public image path and card title for a service using home CMS card slots (same mapping as index.html.twig).
  *
  * @date 2026-03-22
  * @author Stephane H.
  */
 class HomeServiceCardImagePathResolver
 {
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {
+    }
+
     /**
      * French slug to home card slot (1–5), aligned with templates/public/index.html.twig.
      */
@@ -62,5 +68,34 @@ class HomeServiceCardImagePathResolver
         }
 
         return self::SLOT_DEFAULT_IMAGE[$slot] ?? (string) ($service->getImage() ?? '');
+    }
+
+    /**
+     * @brief Returns the visible card title from home CMS or translation fallback when the service maps to a home card slot.
+     *
+     * When the French slug has no mapped slot, returns an empty string so callers can use the entity title.
+     *
+     * @param Service $service The service entity.
+     * @param array<string, string> $homePageContent Flat home page content for the current locale.
+     * @param string $contentLocale Content locale (`fr` or `de`).
+     * @return string Non-empty title for mapped services; empty string when not mapped to a home card.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function getCardTitleForService(Service $service, array $homePageContent, string $contentLocale): string
+    {
+        $slug = (string) ($service->getSlug() ?? '');
+        if ($slug === '' || !isset(self::SLUG_TO_SLOT[$slug])) {
+            return '';
+        }
+
+        $slot = self::SLUG_TO_SLOT[$slug];
+        $key = 'services.card' . $slot . '.title';
+        $fromCms = isset($homePageContent[$key]) ? trim((string) $homePageContent[$key]) : '';
+        if ($fromCms !== '') {
+            return $fromCms;
+        }
+
+        return $this->translator->trans('home.services.card' . $slot . '.title', [], 'messages', $contentLocale);
     }
 }

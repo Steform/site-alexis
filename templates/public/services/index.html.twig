@@ -44,7 +44,8 @@
         <h2 class="section-title text-center mb-5">{{ services_content['list.title']|default('services.list.title'|trans) }}</h2>
         <div class="row justify-content-center g-4">
             {% for service in services %}
-            {% set serviceTitle = currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre %}
+            {% set cmsCardTitle = service_home_card_title(service, home_page_content, currentLocale) %}
+            {% set serviceTitle = cmsCardTitle|trim ? cmsCardTitle : (currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre) %}
             {% set serviceTeaser = ('services.teaser.' ~ service.slug)|trans %}
             {% set serviceImage = asset(service_home_card_image(service, home_page_content)) %}
             <div class="col-12 col-lg-10">

@@ -10,7 +10,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
- * @brief Twig helpers for home service card image paths on public services pages.
+ * @brief Twig helpers for home service card image paths and titles on public pages.
  *
  * @date 2026-03-22
  * @author Stephane H.
@@ -33,6 +33,7 @@ class HomeServiceCardImageExtension extends AbstractExtension
     {
         return [
             new TwigFunction('service_home_card_image', [$this, 'serviceHomeCardImage']),
+            new TwigFunction('service_home_card_title', [$this, 'serviceHomeCardTitle']),
         ];
     }
 
@@ -53,5 +54,25 @@ class HomeServiceCardImageExtension extends AbstractExtension
         }
 
         return $this->homeServiceCardImagePathResolver->getImagePathForService($service, $flat);
+    }
+
+    /**
+     * @brief Resolves the card title for a service (home CMS slot, translation fallback, or empty for entity title).
+     *
+     * @param Service $service The service.
+     * @param array<string, mixed> $homePageContent Home page content array.
+     * @param string $contentLocale Content locale (`fr` or `de`).
+     * @return string Title string; may be empty when the service is not mapped to a home card slot.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function serviceHomeCardTitle(Service $service, array $homePageContent, string $contentLocale): string
+    {
+        $flat = [];
+        foreach ($homePageContent as $k => $v) {
+            $flat[(string) $k] = \is_scalar($v) ? (string) $v : '';
+        }
+
+        return $this->homeServiceCardImagePathResolver->getCardTitleForService($service, $flat, $contentLocale);
     }
 }

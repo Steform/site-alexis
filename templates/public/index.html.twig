@@ -145,63 +145,27 @@
         {% set s3 = servicesList|filter((s) => s.slug == 'pare-brise-optique')|first %}
         {% set s4 = servicesList|filter((s) => s.slug == 'entretien-mecanique')|first %}
         {% set s5 = servicesList|filter((s) => s.slug == 'vehicule-pret-courtoisie')|first %}
-        {% set slugReparation = s1 ? s1.getSlugForLocale(currentLocale) : 'reparation-carrosserie-peinture' %}
-        {% set slugDebosselage = s2 ? s2.getSlugForLocale(currentLocale) : 'debosselage' %}
-        {% set slugPareBrise = s3 ? s3.getSlugForLocale(currentLocale) : 'pare-brise-optique' %}
-        {% set slugEntretien = s4 ? s4.getSlugForLocale(currentLocale) : 'entretien-mecanique' %}
-        {% set slugVehicule = s5 ? s5.getSlugForLocale(currentLocale) : 'vehicule-pret-courtoisie' %}
+        {% set home_service_cards = [
+            { slot: 1, service: s1, column_class: 'col-12 col-sm-6 col-lg-4' },
+            { slot: 2, service: s2, column_class: 'col-12 col-sm-6 col-lg-4' },
+            { slot: 3, service: s3, column_class: 'col-12 col-sm-6 col-lg-4' },
+            { slot: 5, service: s4, column_class: 'col-12 col-sm-6 col-lg-4 mt-lg-5' },
+            { slot: 4, service: s5, column_class: 'col-12 col-sm-6 col-lg-4 mt-lg-5' },
+        ] %}
         <h2 class="section-title text-center mb-5" style="color: var(--color-services-title, #212529);">{{ home_content['services.title']|default('home.services.title'|trans) }}</h2>
         <div class="row g-4 justify-content-center">
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugReparation }) }}" title="{{ home_content['services.card1.title']|default('home.services.card1.title'|trans) }}">
-                        <img src="{{ asset(home_content['services.card1.image']|default('images/services/reparation-carrosserie-peinture.webp')) }}" class="card-img-top" alt="{{ home_content['services.card1.title']|default('home.services.card1.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
-                        <div class="card-body p-0 d-flex justify-content-center">
-                            <span class="btn btn-service-card" style="color: var(--color-services-card1-title, #fff);">{{ home_content['services.card1.title']|default('home.services.card1.title'|trans) }}</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugDebosselage }) }}" title="{{ home_content['services.card2.title']|default('home.services.card2.title'|trans) }}">
-                        <img src="{{ asset(home_content['services.card2.image']|default('images/services/debosselage.webp')) }}" class="card-img-top" alt="{{ home_content['services.card2.title']|default('home.services.card2.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
-                        <div class="card-body p-0 d-flex justify-content-center">
-                            <span class="btn btn-service-card" style="color: var(--color-services-card2-title, #fff);">{{ home_content['services.card2.title']|default('home.services.card2.title'|trans) }}</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugPareBrise }) }}" title="{{ home_content['services.card3.title']|default('home.services.card3.title'|trans) }}">
-                        <img src="{{ asset(home_content['services.card3.image']|default('images/services/pare-brise.webp')) }}" class="card-img-top" alt="{{ home_content['services.card3.title']|default('home.services.card3.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
-                        <div class="card-body p-0 d-flex justify-content-center">
-                            <span class="btn btn-service-card" style="color: var(--color-services-card3-title, #fff);">{{ home_content['services.card3.title']|default('home.services.card3.title'|trans) }}</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-4 mt-lg-5">
-                <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugEntretien }) }}" title="{{ home_content['services.card5.title']|default('home.services.card5.title'|trans) }}">
-                        <img src="{{ asset(home_content['services.card5.image']|default('images/services/mecanique.webp')) }}" class="card-img-top" alt="{{ home_content['services.card5.title']|default('home.services.card5.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
-                        <div class="card-body p-0 d-flex justify-content-center">
-                            <span class="btn btn-service-card" style="color: var(--color-services-card5-title, #fff);">{{ home_content['services.card5.title']|default('home.services.card5.title'|trans) }}</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-4 mt-lg-5">
-                <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugVehicule }) }}" title="{{ home_content['services.card4.title']|default('home.services.card4.title'|trans) }}">
-                        <img src="{{ asset(home_content['services.card4.image']|default('images/services/vehicule-pret-courtoisie.webp')) }}" class="card-img-top" alt="{{ home_content['services.card4.title']|default('home.services.card4.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
-                        <div class="card-body p-0 d-flex justify-content-center">
-                            <span class="btn btn-service-card" style="color: var(--color-services-card4-title, #fff);">{{ home_content['services.card4.title']|default('home.services.card4.title'|trans) }}</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
+            {% for row in home_service_cards %}
+                {% if row.service %}
+                    {% include 'components/_service_home_card.html.twig' with {
+                        service: row.service,
+                        slot: row.slot,
+                        column_class: row.column_class,
+                        home_page_content: home_content,
+                        currentLocale: currentLocale,
+                        variant: 'home',
+                    } only %}
+                {% endif %}
+            {% endfor %}
         </div>
         <div class="text-center mt-4">
             <a class="btn btn-devis rounded-pill" href="{{ path_locale('app_services') }}" style="color: var(--color-services-cta, #FFFFFF);">{{ 'services.list.title'|trans }}</a>

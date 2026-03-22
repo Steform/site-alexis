@@ -15,7 +15,7 @@ class BackupService
     /**
      * @brief Semantic version of the backup archive layout (ZIP contents and naming convention).
      */
-    public const BACKUP_ARCHIVE_FORMAT_VERSION = '0.2';
+    public const BACKUP_ARCHIVE_FORMAT_VERSION = '0.3';
 
     /**
      * @brief Manifest file name at the root of each new backup ZIP (format 0.2+).
@@ -27,7 +27,7 @@ class BackupService
      *
      * @var list<string>
      */
-    private const BACKUP_MANIFEST_SUPPORTED_FORMATS = ['0.2'];
+    private const BACKUP_MANIFEST_SUPPORTED_FORMATS = ['0.2', '0.3'];
 
     /**
      * @brief Minimum archive format version accepted when a manifest is present (same baseline as legacy 0.2 ZIPs without manifest).
@@ -224,7 +224,7 @@ class BackupService
     }
 
     /**
-     * @brief Builds the version segment used in backup archive filenames (e.g. v0.2).
+     * @brief Builds the version segment used in backup archive filenames (e.g. v0.3).
      *
      * @return string Version segment including the leading "v".
      * @date 2026-03-22
@@ -236,7 +236,10 @@ class BackupService
     }
 
     /**
-     * @brief Builds the JSON manifest describing backup contents for validation on restore.
+     * @brief Builds the JSON manifest describing backup contents for validation on restore (format v0.3).
+     *
+     * Adds `contents.scope` with `cmsHomeServiceCards` so archives explicitly record coverage of home page
+     * service card CMS (`services.card1`..`services.card5`) alongside full DB and uploads tree.
      *
      * @param string $sqlDump Full SQL dump string stored as database.sql in the archive.
      * @param array{fileCount: int, totalBytes: int} $uploadsStats Stats for public/uploads before zipping.
@@ -258,6 +261,12 @@ class BackupService
                     'rootInZip' => 'uploads',
                     'fileCount' => $uploadsStats['fileCount'],
                     'totalBytes' => $uploadsStats['totalBytes'],
+                ],
+                // v0.3+: declarative scope (same ZIP layout as v0.2). Home service cards CMS is in DB; card media under uploads/.
+                'scope' => [
+                    'fullDatabase' => true,
+                    'fullUploadsTree' => true,
+                    'cmsHomeServiceCards' => true,
                 ],
             ],
         ];
@@ -303,7 +312,7 @@ class BackupService
     /**
      * @brief Returns whether a manifest formatVersion string is supported by this application.
      *
-     * @param string $version Version from the manifest (e.g. "0.2").
+     * @param string $version Version from the manifest (e.g. "0.3").
      * @return bool True if restore validation may proceed.
      * @date 2026-03-22
      * @author Stephane H.
@@ -406,7 +415,7 @@ class BackupService
     private function generateSqlDump(): string
     {
         $sql = '-- Site backup: ' . date('Y-m-d H:i:s') . ', archive format v' . self::BACKUP_ARCHIVE_FORMAT_VERSION
-            . '; uploads: full tree under public/uploads (restore mirrors entire directory)' . "\n";
+            . '; DB includes CMS (e.g. home service cards); uploads: full tree under public/uploads (restore mirrors entire directory)' . "\n";
         $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n";
         $sql .= "SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\n";
         $sql .= "SET NAMES utf8mb4;\n\n";

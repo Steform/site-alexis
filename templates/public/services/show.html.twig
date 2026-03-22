@@ -141,17 +141,15 @@
         <h2 class="h4 mb-4 text-center">{{ (service_content.other_services_title|default(''))|trim ?: 'services.detail.other_services_title'|trans }}</h2>
         <div class="row g-4 justify-content-center">
             {% for other in other_services %}
-            {% set otherTitle = currentLocale == 'de' and other.titreDe ? other.titreDe : other.titre %}
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: other.getSlugForLocale(currentLocale) }) }}">
-                        <img src="{{ asset(service_home_card_image(other, home_page_content)) }}" class="card-img-top" alt="{{ otherTitle }}" style="height: 200px; object-fit: cover;" loading="lazy">
-                        <div class="card-body p-0 d-flex justify-content-center">
-                            <span class="btn btn-service-card text-white">{{ otherTitle }}</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
+            {% include 'components/_service_home_card.html.twig' with {
+                service: other,
+                home_page_content: home_page_content,
+                currentLocale: currentLocale,
+                slot: 1,
+                column_class: 'col-12 col-sm-6 col-lg-3',
+                variant: 'detail',
+                current_service: service,
+            } only %}
             {% endfor %}
         </div>
         <div class="text-center mt-4">
