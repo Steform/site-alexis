@@ -528,6 +528,11 @@ app_back_backup_delete:
   controller: App\Controller\Back\BackupController::delete
   methods: POST
 
+app_back_backup_delete_all:
+  path: /back/backup/delete-all
+  controller: App\Controller\Back\BackupController::deleteAll
+  methods: POST
+
 app_switch_locale:
   path: /switch-locale/{locale}
   controller: App\Controller\LocaleController::switch

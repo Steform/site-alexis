@@ -277,4 +277,5 @@ setup.flash.admin_created: "Compte administrateur créé avec succès. Connectez
 setup.flash.restored: "Site restauré avec succès depuis la sauvegarde. Connectez-vous pour accéder au back-office."
 setup.flash.upload_restored: "Sauvegarde importée et restaurée avec succès. Connectez-vous pour accéder au back-office."
 setup.flash.restore_error: "Erreur lors de la restauration de la sauvegarde."
+setup.flash.restore_error_detail: "Erreur lors de la restauration : %details%"
 

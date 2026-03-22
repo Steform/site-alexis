@@ -651,4 +651,8 @@ back.backup.flash.upload_invalid: "Die hochgeladene Datei ist ungültig."
 back.backup.flash.upload_not_zip: "Die Datei muss im ZIP-Format vorliegen."
 back.backup.flash.error: "Bei der Operation ist ein Fehler aufgetreten."
 back.backup.flash.manifest_invalid: "Sicherungsvalidierung: %details%"
+back.backup.delete_all: "Alle löschen"
+back.backup.delete_all_confirm: "Es wird zuerst eine neue Sicherung erstellt; anschließend werden alle vorhandenen Archive gelöscht, außer dieser neuen Kopie. Fortfahren?"
+back.backup.flash.delete_all_success: "Sicherheitskopie erstellt: %filename%. %count% alte(s) Archiv(e) gelöscht."
+back.backup.flash.restore_failed_detail: "Wiederherstellung fehlgeschlagen: %details%"
 

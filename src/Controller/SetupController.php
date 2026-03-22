@@ -7,9 +7,11 @@ use App\Repository\UserRepository;
 use App\Service\BackupService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Translation\TranslatableMessage;
 
 /**
  * @brief Initial site setup when no users exist in the database.
@@ -24,6 +26,7 @@ class SetupController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly BackupService $backupService,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -128,7 +131,15 @@ class SetupController extends AbstractController
             $this->backupService->restoreBackup($filename);
             $this->addFlash('success', 'setup.flash.restored');
         } catch (\Throwable $e) {
-            $this->addFlash('error', 'setup.flash.restore_error');
+            $this->logger->error('Setup restore from existing backup failed.', [
+                'filename' => $filename,
+                'exception' => $e,
+            ]);
+            $this->addFlash(
+                'error',
+                new TranslatableMessage('setup.flash.restore_error_detail', ['%details%' => $e->getMessage()])
+            );
+
             return $this->redirectToRoute('app_setup');
         }
 
@@ -170,7 +181,14 @@ class SetupController extends AbstractController
             $this->backupService->importAndRestore($file);
             $this->addFlash('success', 'setup.flash.upload_restored');
         } catch (\Throwable $e) {
-            $this->addFlash('error', 'setup.flash.restore_error');
+            $this->logger->error('Setup restore from uploaded backup failed.', [
+                'exception' => $e,
+            ]);
+            $this->addFlash(
+                'error',
+                new TranslatableMessage('setup.flash.restore_error_detail', ['%details%' => $e->getMessage()])
+            );
+
             return $this->redirectToRoute('app_setup');
         }
 

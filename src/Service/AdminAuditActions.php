@@ -72,6 +72,8 @@ final class AdminAuditActions
 
     public const BACKUP_UPLOAD_RESTORE = 'backup.upload_restore';
 
+    public const BACKUP_DELETE_ALL = 'backup.delete_all';
+
     public const SLIDER_ABOUT_REORDER = 'slider.about.reorder';
 
     public const SLIDER_HERO_REORDER = 'slider.hero.reorder';

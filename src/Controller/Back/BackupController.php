@@ -5,6 +5,7 @@ namespace App\Controller\Back;
 use App\Service\AdminAuditActions;
 use App\Service\AdminAuditLogger;
 use App\Service\BackupService;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,7 @@ class BackupController extends AbstractController
     public function __construct(
         private readonly BackupService $backupService,
         private readonly AdminAuditLogger $adminAuditLogger,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -64,6 +66,7 @@ class BackupController extends AbstractController
             ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.created');
         } catch (\Throwable $e) {
+            $this->logger->error('Backup create failed.', ['exception' => $e]);
             $this->addFlash('error', 'back.backup.flash.error');
         }
 
@@ -114,6 +117,10 @@ class BackupController extends AbstractController
             ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.restored');
         } catch (\Throwable $e) {
+            $this->logger->error('Backup restore failed.', [
+                'filename' => $filename,
+                'exception' => $e,
+            ]);
             $this->addBackupRestoreErrorFlash($e);
         }
 
@@ -155,6 +162,7 @@ class BackupController extends AbstractController
             ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.upload_restored');
         } catch (\Throwable $e) {
+            $this->logger->error('Backup upload-restore failed.', ['exception' => $e]);
             $this->addBackupRestoreErrorFlash($e);
         }
 
@@ -162,39 +170,48 @@ class BackupController extends AbstractController
     }
 
     /**
-     * @brief Adds an error flash for backup restore failures, with detail when manifest validation fails.
+     * @brief Creates a fresh backup then deletes all other backup archives (keeps the new snapshot only).
      *
-     * @param \Throwable $e The exception thrown during restore.
-     * @return void
+     * @param Request $request The HTTP request.
+     * @return Response Redirect to the backup list.
      * @date 2026-03-22
      * @author Stephane H.
      */
-    private function addBackupRestoreErrorFlash(\Throwable $e): void
+    public function deleteAll(Request $request): Response
     {
-        $msg = $e->getMessage();
-        if ($this->isBackupManifestRelatedErrorMessage($msg)) {
-            $this->addFlash('error', $this->trans('back.backup.flash.manifest_invalid', ['%details%' => $msg], 'back'));
-
-            return;
+        if (!$this->isCsrfTokenValid('backup_delete_all', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token CSRF invalide.');
+            return $this->redirectToRoute('app_back_backup_index');
         }
-        $this->addFlash('error', 'back.backup.flash.error');
-    }
 
-    /**
-     * @brief Returns whether the exception message indicates manifest or content validation failure.
-     *
-     * @param string $message The exception message.
-     * @return bool True if the user-facing manifest message should be shown.
-     * @date 2026-03-22
-     * @author Stephane H.
-     */
-    private function isBackupManifestRelatedErrorMessage(string $message): bool
-    {
-        $lower = strtolower($message);
+        try {
+            $preservedFilename = $this->backupService->createBackup();
+            $list = $this->backupService->listBackups();
+            $deletedCount = 0;
+            foreach ($list as $row) {
+                if ($row['filename'] === $preservedFilename) {
+                    continue;
+                }
+                $this->backupService->deleteBackup($row['filename']);
+                ++$deletedCount;
+            }
+            $this->adminAuditLogger->log(AdminAuditActions::BACKUP_DELETE_ALL, [
+                'preserved_filename' => $preservedFilename,
+                'deleted_count' => $deletedCount,
+            ], $this->getUser());
+            $this->addFlash(
+                'success',
+                $this->trans('back.backup.flash.delete_all_success', [
+                    '%filename%' => $preservedFilename,
+                    '%count%' => (string) $deletedCount,
+                ], 'back')
+            );
+        } catch (\Throwable $e) {
+            $this->logger->error('Backup delete-all failed.', ['exception' => $e]);
+            $this->addFlash('error', 'back.backup.flash.error');
+        }
 
-        return str_contains($lower, 'manifest')
-            || str_contains($lower, 'mismatch')
-            || str_contains($lower, 'json');
+        return $this->redirectToRoute('app_back_backup_index');
     }
 
     /**
@@ -220,9 +237,46 @@ class BackupController extends AbstractController
             ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.deleted');
         } catch (\Throwable $e) {
+            $this->logger->error('Backup delete failed.', ['filename' => $filename, 'exception' => $e]);
             $this->addFlash('error', 'back.backup.flash.error');
         }
 
         return $this->redirectToRoute('app_back_backup_index');
+    }
+
+    /**
+     * @brief Adds an error flash for backup restore failures, with detail when manifest validation fails.
+     *
+     * @param \Throwable $e The exception thrown during restore.
+     * @return void
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function addBackupRestoreErrorFlash(\Throwable $e): void
+    {
+        $msg = $e->getMessage();
+        if ($this->isBackupManifestRelatedErrorMessage($msg)) {
+            $this->addFlash('error', $this->trans('back.backup.flash.manifest_invalid', ['%details%' => $msg], 'back'));
+
+            return;
+        }
+        $this->addFlash('error', $this->trans('back.backup.flash.restore_failed_detail', ['%details%' => $msg], 'back'));
+    }
+
+    /**
+     * @brief Returns whether the exception message indicates manifest or content validation failure.
+     *
+     * @param string $message The exception message.
+     * @return bool True if the user-facing manifest message should be shown.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function isBackupManifestRelatedErrorMessage(string $message): bool
+    {
+        $lower = strtolower($message);
+
+        return str_contains($lower, 'manifest')
+            || str_contains($lower, 'mismatch')
+            || str_contains($lower, 'json');
     }
 }

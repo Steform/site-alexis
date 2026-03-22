@@ -277,4 +277,5 @@ setup.flash.admin_created: "Administratorkonto erfolgreich erstellt. Melden Sie 
 setup.flash.restored: "Website erfolgreich aus der Sicherung wiederhergestellt. Melden Sie sich an, um auf das Back-Office zuzugreifen."
 setup.flash.upload_restored: "Sicherung erfolgreich importiert und wiederhergestellt. Melden Sie sich an, um auf das Back-Office zuzugreifen."
 setup.flash.restore_error: "Fehler bei der Wiederherstellung der Sicherung."
+setup.flash.restore_error_detail: "Fehler bei der Wiederherstellung: %details%"
 
