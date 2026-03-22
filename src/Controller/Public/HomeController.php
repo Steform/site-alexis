@@ -54,6 +54,8 @@ class HomeController extends AbstractController
         $heroPhotos = $this->homeHeroPhotoRepository->findActiveOrdered();
         $aboutPhotos = $this->aboutPhotoRepository->findActiveOrdered();
 
+        $services = $this->serviceRepository->findAllOrdered();
+
         return $this->render('public/index.html.twig', [
             'horaires' => $horaires,
             'horaires_compact' => $this->openingHoursFormatter->formatCompact($horaires, $locale),
@@ -63,7 +65,7 @@ class HomeController extends AbstractController
             'home_colors' => $homeColors,
             'hero_photos' => $heroPhotos,
             'about_photos' => $aboutPhotos,
-            'services' => $this->serviceRepository->findAllOrdered(),
+            'services' => $services,
         ]);
     }
 }

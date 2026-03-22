@@ -2,6 +2,8 @@
 
 namespace App\Controller\Back;
 
+use App\Service\AdminAuditActions;
+use App\Service\AdminAuditLogger;
 use App\Service\BackupService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -21,6 +23,7 @@ class BackupController extends AbstractController
 {
     public function __construct(
         private readonly BackupService $backupService,
+        private readonly AdminAuditLogger $adminAuditLogger,
     ) {
     }
 
@@ -35,6 +38,7 @@ class BackupController extends AbstractController
     {
         return $this->render('back/backup/index.html.twig', [
             'backups' => $this->backupService->listBackups(),
+            'backup_format_version' => BackupService::BACKUP_ARCHIVE_FORMAT_VERSION,
         ]);
     }
 
@@ -55,6 +59,9 @@ class BackupController extends AbstractController
 
         try {
             $filename = $this->backupService->createBackup();
+            $this->adminAuditLogger->log(AdminAuditActions::BACKUP_CREATE, [
+                'filename' => $filename,
+            ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.created');
         } catch (\Throwable $e) {
             $this->addFlash('error', 'back.backup.flash.error');
@@ -102,6 +109,9 @@ class BackupController extends AbstractController
 
         try {
             $this->backupService->restoreBackup($filename);
+            $this->adminAuditLogger->log(AdminAuditActions::BACKUP_RESTORE, [
+                'filename' => $filename,
+            ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.restored');
         } catch (\Throwable $e) {
             $this->addFlash('error', 'back.backup.flash.error');
@@ -140,6 +150,9 @@ class BackupController extends AbstractController
 
         try {
             $filename = $this->backupService->importAndRestore($file);
+            $this->adminAuditLogger->log(AdminAuditActions::BACKUP_UPLOAD_RESTORE, [
+                'filename' => $filename,
+            ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.upload_restored');
         } catch (\Throwable $e) {
             $this->addFlash('error', 'back.backup.flash.error');
@@ -166,6 +179,9 @@ class BackupController extends AbstractController
 
         try {
             $this->backupService->deleteBackup($filename);
+            $this->adminAuditLogger->log(AdminAuditActions::BACKUP_DELETE, [
+                'filename' => $filename,
+            ], $this->getUser());
             $this->addFlash('success', 'back.backup.flash.deleted');
         } catch (\Throwable $e) {
             $this->addFlash('error', 'back.backup.flash.error');

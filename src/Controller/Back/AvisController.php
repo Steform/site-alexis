@@ -5,6 +5,10 @@ namespace App\Controller\Back;
 use App\Entity\Avis;
 use App\Form\AvisType;
 use App\Repository\AvisRepository;
+use App\Service\AdminAuditActions;
+use App\Service\AdminAuditLogger;
+use App\Service\EntitySnapshotDomain;
+use App\Service\EntitySnapshotRecorder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +27,8 @@ class AvisController extends AbstractController
     public function __construct(
         private readonly AvisRepository $repository,
         private readonly EntityManagerInterface $em,
+        private readonly AdminAuditLogger $adminAuditLogger,
+        private readonly EntitySnapshotRecorder $entitySnapshotRecorder,
     ) {
     }
 
@@ -44,6 +50,16 @@ class AvisController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($avis);
             $this->em->flush();
+
+            $this->entitySnapshotRecorder->recordAfterCreate($this->em, $avis, EntitySnapshotDomain::AVIS, $this->getUser());
+            $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::AVIS_CREATE, [
+                'id' => $avis->getId(),
+                'auteur' => (string) ($avis->getAuteur() ?? ''),
+                'note' => $avis->getNote(),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Avis ajouté.');
 
             return $this->redirectToRoute('app_back_avis_index');
@@ -62,6 +78,13 @@ class AvisController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::AVIS_UPDATE, [
+                'id' => $avis->getId(),
+                'auteur' => (string) ($avis->getAuteur() ?? ''),
+                'note' => $avis->getNote(),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Avis modifié.');
 
             return $this->redirectToRoute('app_back_avis_index');
@@ -79,6 +102,14 @@ class AvisController extends AbstractController
             $this->addFlash('error', 'Token invalide.');
             return $this->redirectToRoute('app_back_avis_index');
         }
+
+        $this->entitySnapshotRecorder->recordBeforeDelete($this->em, $avis, EntitySnapshotDomain::AVIS, $this->getUser());
+
+        $this->adminAuditLogger->log(AdminAuditActions::AVIS_DELETE, [
+            'id' => $avis->getId(),
+            'auteur' => (string) ($avis->getAuteur() ?? ''),
+        ], $this->getUser());
+
         $this->em->remove($avis);
         $this->em->flush();
         $this->addFlash('success', 'Avis supprimé.');

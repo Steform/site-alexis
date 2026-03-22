@@ -5,6 +5,10 @@ namespace App\Controller\Back;
 use App\Entity\Horaires;
 use App\Form\HorairesType;
 use App\Repository\HorairesRepository;
+use App\Service\AdminAuditActions;
+use App\Service\AdminAuditLogger;
+use App\Service\EntitySnapshotDomain;
+use App\Service\EntitySnapshotRecorder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +29,8 @@ class HorairesController extends AbstractController
     public function __construct(
         private readonly HorairesRepository $repository,
         private readonly EntityManagerInterface $em,
+        private readonly AdminAuditLogger $adminAuditLogger,
+        private readonly EntitySnapshotRecorder $entitySnapshotRecorder,
     ) {
     }
 
@@ -53,7 +59,14 @@ class HorairesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->entitySnapshotRecorder->recordBeforeUpdate($this->em, $horaires, EntitySnapshotDomain::HORAIRES, $this->getUser());
             $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::HORAIRES_UPDATE, [
+                'id' => $horaires->getId(),
+                'jour' => (string) ($horaires->getJour() ?? ''),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Horaires mis à jour.');
 
             return $this->redirectToRoute('app_back_horaires_index');

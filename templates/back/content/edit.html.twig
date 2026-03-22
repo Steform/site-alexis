@@ -10,6 +10,18 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="https://unpkg.com/trix@1.3.1/dist/trix.js"></script>
+    <script>
+    function submitDelete(action, token, confirmMsg) {
+        if (!confirm(confirmMsg)) return;
+        var f = document.createElement('form');
+        f.method = 'post';
+        f.action = action;
+        f.style.display = 'none';
+        f.innerHTML = '<input type="hidden" name="_token" value="' + token + '">';
+        document.body.appendChild(f);
+        f.submit();
+    }
+    </script>
 {% endblock %}
 
 {% block back_content %}
@@ -92,8 +104,7 @@
                     'back.content.section.hero_photos': ['hero.custom_css'],
                     'back.content.section.about_home': ['about.title', 'about.lead', 'about.body', 'about.cta'],
                     'back.content.section.about_photos': [],
-                    'back.content.section.quick_services': ['quick.card1.title', 'quick.card1.text', 'quick.card2.title', 'quick.card2.text', 'quick.card3.title', 'quick.card3.text'],
-                    'back.content.section.services': ['services.title', 'services.card1.title', 'services.card2.title', 'services.card3.title', 'services.card4.title', 'services.card5.title', 'services.cta'],
+                    'back.content.section.services': ['services.title', 'services.card1.title', 'services.card1.image', 'services.card2.title', 'services.card2.image', 'services.card3.title', 'services.card3.image', 'services.card4.title', 'services.card4.image', 'services.card5.title', 'services.card5.image', 'services.cta'],
                     'back.content.section.reviews': ['reviews.title', 'reviews.default.text', 'reviews.default.author']
                 } %}
             {% elseif page_name == 'qui_sommes_nous' %}
@@ -122,7 +133,8 @@
                     'back.content.section.service_hero': ['teaser'],
                     'back.content.section.service_description': ['description_title', 'description'],
                     'back.content.section.service_advantages': ['advantages_title', 'advantage1', 'advantage2', 'advantage3'],
-                    'back.content.section.service_process': ['process_title', 'process.step1', 'process.step2', 'process.step3', 'process.step4'],
+                    'back.content.section.service_process_title': ['process_title'],
+                    'back.content.section.service_process_steps': [],
                     'back.content.section.service_cta': ['cta_lead'],
                     'back.content.section.service_other': ['other_services_title']
                 } %}
@@ -191,12 +203,9 @@
                                                     <a href="{{ path('app_back_devis_type_prestation_edit', { id: t.id }) }}" class="btn btn-sm btn-outline-primary">
                                                         {{ 'back.avis.index.edit'|trans({}, 'back') }}
                                                     </a>
-                                                    <form method="post" action="{{ path('app_back_devis_type_prestation_delete', { id: t.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.devis_type.index.confirm_delete'|trans({}, 'back') }}');">
-                                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ t.id) }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                            {{ 'back.avis.index.delete'|trans({}, 'back') }}
-                                                        </button>
-                                                    </form>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitDelete('{{ path('app_back_devis_type_prestation_delete', { id: t.id }) }}', '{{ csrf_token('delete' ~ t.id) }}', '{{ 'back.devis_type.index.confirm_delete'|trans({}, 'back') }}')">
+                                                        {{ 'back.avis.index.delete'|trans({}, 'back') }}
+                                                    </button>
                                                 </td>
                                             </tr>
                                             {% else %}
@@ -238,12 +247,9 @@
                                                     <a href="{{ path('app_back_devis_type_carburant_edit', { id: t.id }) }}" class="btn btn-sm btn-outline-primary">
                                                         {{ 'back.avis.index.edit'|trans({}, 'back') }}
                                                     </a>
-                                                    <form method="post" action="{{ path('app_back_devis_type_carburant_delete', { id: t.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.devis_type_carburant.index.confirm_delete'|trans({}, 'back') }}');">
-                                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ t.id) }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                            {{ 'back.avis.index.delete'|trans({}, 'back') }}
-                                                        </button>
-                                                    </form>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitDelete('{{ path('app_back_devis_type_carburant_delete', { id: t.id }) }}', '{{ csrf_token('delete' ~ t.id) }}', '{{ 'back.devis_type_carburant.index.confirm_delete'|trans({}, 'back') }}')">
+                                                        {{ 'back.avis.index.delete'|trans({}, 'back') }}
+                                                    </button>
                                                 </td>
                                             </tr>
                                             {% else %}
@@ -280,12 +286,9 @@
                                                         <a href="{{ path('app_back_gallery_edit', { id: item.id }) }}" class="btn btn-sm btn-outline-primary">
                                                             {{ 'back.gallery.index.edit'|trans({}, 'back') }}
                                                         </a>
-                                                        <form method="post" action="{{ path('app_back_gallery_delete', { id: item.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.gallery.index.confirm_delete'|trans({}, 'back') }}');">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                                {{ 'back.gallery.index.delete'|trans({}, 'back') }}
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitDelete('{{ path('app_back_gallery_delete', { id: item.id }) }}', '{{ csrf_token('delete' ~ item.id) }}', '{{ 'back.gallery.index.confirm_delete'|trans({}, 'back') }}')">
+                                                            {{ 'back.gallery.index.delete'|trans({}, 'back') }}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -303,7 +306,7 @@
                                             <p class="text-muted mb-1">{{ 'back.about.photo.image_help'|trans({}, 'back') }}</p>
                                             <div class="d-flex align-items-center gap-2">
                                                 <span class="badge text-bg-dark">WEBP</span>
-                                                <span class="badge text-bg-secondary">960x550</span>
+                                                <span class="badge text-bg-secondary">Dimensions originales</span>
                                                 <span class="badge text-bg-light">{{ (about_photos|default([]))|length }} photo(s)</span>
                                             </div>
                                         </div>
@@ -312,9 +315,18 @@
                                         </a>
                                     </div>
 
-                                    <div class="row g-3">
+                                    {% if (about_photos|default([]))|length > 0 %}
+                                        <p class="text-muted small mb-2">{{ 'back.content.slider_reorder_hint'|trans({}, 'back') }}</p>
+                                    {% endif %}
+                                    <div class="row g-3"
+                                        {% if (about_photos|default([]))|length > 0 %}
+                                         data-controller="photo-reorder"
+                                         data-photo-reorder-url-value="{{ path('app_back_content_home_photos_reorder', { locale: locale }) }}"
+                                         data-photo-reorder-csrf-token-value="{{ csrf_token('reorder_home_photos') }}"
+                                         data-photo-reorder-success-message-value="{{ 'back.content.slider_reorder_saved'|trans({}, 'back')|e('html_attr') }}"
+                                        {% endif %}>
                                         {% for photo in about_photos|default([]) %}
-                                            <div class="col-md-6 col-lg-4">
+                                            <div class="col-md-6 col-lg-4" data-photo-id="{{ photo.id }}">
                                                 <div class="card h-100 shadow-sm">
                                                     {% if photo.image %}
                                                         <img src="{{ asset(photo.image) }}" class="card-img-top" alt="{{ photo.altFr|default('')|default(photo.image) }}" style="height: 220px; object-fit: cover;">
@@ -324,7 +336,10 @@
                                                         </div>
                                                     {% endif %}
                                                     <div class="card-body">
-                                                        <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-sortable-handle title="{{ 'back.content.slider_drag_handle'|trans({}, 'back') }}">
+                                                                <i class="bi bi-grip-vertical" aria-hidden="true"></i>
+                                                            </button>
                                                             <span class="badge text-bg-info">
                                                                 {{ 'back.about.photo.position'|trans({}, 'back') }} #{{ photo.position }}
                                                             </span>
@@ -337,12 +352,9 @@
                                                         <a href="{{ path('app_back_content_home_photo_edit', { locale: locale, id: photo.id }) }}" class="btn btn-sm btn-outline-primary">
                                                             {{ 'back.about.photos.index.edit'|trans({}, 'back') }}
                                                         </a>
-                                                        <form method="post" action="{{ path('app_back_content_home_photo_delete', { locale: locale, id: photo.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.about.photos.index.confirm_delete'|trans({}, 'back') }}');">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_home_photo' ~ photo.id) }}">
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                                {{ 'back.about.photos.index.delete'|trans({}, 'back') }}
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitDelete('{{ path('app_back_content_home_photo_delete', { locale: locale, id: photo.id }) }}', '{{ csrf_token('delete_home_photo' ~ photo.id) }}', '{{ 'back.about.photos.index.confirm_delete'|trans({}, 'back') }}')">
+                                                            {{ 'back.about.photos.index.delete'|trans({}, 'back') }}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -374,12 +386,9 @@
                                                         <a href="{{ path('app_back_content_services_why_card_edit', { locale: locale, id: card.id }) }}" class="btn btn-sm btn-outline-primary">
                                                             {{ 'back.avis.index.edit'|trans({}, 'back') }}
                                                         </a>
-                                                        <form method="post" action="{{ path('app_back_content_services_why_card_delete', { locale: locale, id: card.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.services_why_card.index.confirm_delete'|trans({}, 'back') }}');">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_services_why_card' ~ card.id) }}">
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                                {{ 'back.avis.index.delete'|trans({}, 'back') }}
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitDelete('{{ path('app_back_content_services_why_card_delete', { locale: locale, id: card.id }) }}', '{{ csrf_token('delete_services_why_card' ~ card.id) }}', '{{ 'back.services_why_card.index.confirm_delete'|trans({}, 'back') }}')">
+                                                            {{ 'back.avis.index.delete'|trans({}, 'back') }}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -391,6 +400,39 @@
                                             </div>
                                         {% endfor %}
                                     </div>
+                                {% elseif section_label == 'back.content.section.service_process_steps' and page_name starts with 'service_' and current_service %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <p class="text-muted mb-0">{{ 'back.service_process_step.section.help'|trans({}, 'back') }}</p>
+                                        <a href="{{ path('app_back_content_service_process_step_new', { locale: locale, slug: current_service.slug }) }}" class="btn btn-sm btn-primary">
+                                            {{ 'back.service_process_step.index.add'|trans({}, 'back') }}
+                                        </a>
+                                    </div>
+                                    <div class="row g-3">
+                                        {% for step in service_process_steps|default([]) %}
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="card h-100 shadow-sm">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">{{ (locale == 'de' ? step.labelDe : step.labelFr)|default('—') }}</h6>
+                                                        <span class="badge text-bg-info">{{ 'back.service_process_step.position'|trans({}, 'back') }} #{{ step.position }}</span>
+                                                    </div>
+                                                    <div class="card-footer bg-transparent d-flex gap-2">
+                                                        <a href="{{ path('app_back_content_service_process_step_edit', { locale: locale, slug: current_service.slug, id: step.id }) }}" class="btn btn-sm btn-outline-primary">
+                                                            {{ 'back.avis.index.edit'|trans({}, 'back') }}
+                                                        </a>
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitDelete('{{ path('app_back_content_service_process_step_delete', { locale: locale, slug: current_service.slug, id: step.id }) }}', '{{ csrf_token('delete_service_process_step' ~ step.id) }}', '{{ 'back.service_process_step.index.confirm_delete'|trans({}, 'back') }}')">
+                                                            {{ 'back.avis.index.delete'|trans({}, 'back') }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-12">
+                                                <div class="alert alert-info mb-0">
+                                                    {{ 'back.service_process_step.index.empty'|trans({}, 'back') }}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 {% endif %}
                                 {% if section_label == 'back.content.section.hero_photos' and page_name == 'home' %}
                                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -398,7 +440,7 @@
                                             <p class="text-muted mb-1">{{ 'back.home_hero.photo.image_help'|trans({}, 'back') }}</p>
                                             <div class="d-flex align-items-center gap-2">
                                                 <span class="badge text-bg-dark">WEBP</span>
-                                                <span class="badge text-bg-secondary">1920x550</span>
+                                                <span class="badge text-bg-secondary">Dimensions originales</span>
                                                 <span class="badge text-bg-light">{{ (home_hero_photos|default([]))|length }} photo(s)</span>
                                             </div>
                                         </div>
@@ -407,9 +449,18 @@
                                         </a>
                                     </div>
 
-                                    <div class="row g-3">
+                                    {% if (home_hero_photos|default([]))|length > 0 %}
+                                        <p class="text-muted small mb-2">{{ 'back.content.slider_reorder_hint'|trans({}, 'back') }}</p>
+                                    {% endif %}
+                                    <div class="row g-3"
+                                        {% if (home_hero_photos|default([]))|length > 0 %}
+                                         data-controller="photo-reorder"
+                                         data-photo-reorder-url-value="{{ path('app_back_content_home_hero_photos_reorder', { locale: locale }) }}"
+                                         data-photo-reorder-csrf-token-value="{{ csrf_token('reorder_home_hero_photos') }}"
+                                         data-photo-reorder-success-message-value="{{ 'back.content.slider_reorder_saved'|trans({}, 'back')|e('html_attr') }}"
+                                        {% endif %}>
                                         {% for photo in home_hero_photos|default([]) %}
-                                            <div class="col-md-6 col-lg-4">
+                                            <div class="col-md-6 col-lg-4" data-photo-id="{{ photo.id }}">
                                                 <div class="card h-100 shadow-sm">
                                                     {% if photo.image %}
                                                         <img src="{{ asset(photo.image) }}" class="card-img-top" alt="{{ photo.altFr|default('')|default(photo.image) }}" style="height: 220px; object-fit: cover;">
@@ -419,7 +470,10 @@
                                                         </div>
                                                     {% endif %}
                                                     <div class="card-body">
-                                                        <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-sortable-handle title="{{ 'back.content.slider_drag_handle'|trans({}, 'back') }}">
+                                                                <i class="bi bi-grip-vertical" aria-hidden="true"></i>
+                                                            </button>
                                                             <span class="badge text-bg-info">
                                                                 {{ 'back.home_hero.photo.position'|trans({}, 'back') }} #{{ photo.position }}
                                                             </span>
@@ -432,12 +486,9 @@
                                                         <a href="{{ path('app_back_content_home_hero_photo_edit', { locale: locale, id: photo.id }) }}" class="btn btn-sm btn-outline-primary">
                                                             {{ 'back.home_hero.photos.index.edit'|trans({}, 'back') }}
                                                         </a>
-                                                        <form method="post" action="{{ path('app_back_content_home_hero_photo_delete', { locale: locale, id: photo.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.home_hero.photos.index.confirm_delete'|trans({}, 'back') }}');">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_home_hero_photo' ~ photo.id) }}">
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                                {{ 'back.home_hero.photos.index.delete'|trans({}, 'back') }}
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitDelete('{{ path('app_back_content_home_hero_photo_delete', { locale: locale, id: photo.id }) }}', '{{ csrf_token('delete_home_hero_photo' ~ photo.id) }}', '{{ 'back.home_hero.photos.index.confirm_delete'|trans({}, 'back') }}')">
+                                                            {{ 'back.home_hero.photos.index.delete'|trans({}, 'back') }}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -451,6 +502,73 @@
                                     </div>
                                 {% endif %}
 
+                                {% if section_label == 'back.content.section.services_main' and page_name == 'services' %}
+                                    <div class="mb-4 pb-4 border-bottom">
+                                        <p class="text-muted small mb-3">{{ 'back.content.service_teaser_images.help'|trans({}, 'back') }}</p>
+                                        <div class="row g-3">
+                                            {% for svc in services|default([]) %}
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card h-100 shadow-sm">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title">{{ locale == 'de' ? (svc.titreDe|default(svc.titre)) : svc.titre }}</h6>
+                                                            <p class="small text-muted mb-2"><code>{{ svc.slug }}</code></p>
+                                                            {% if svc.image %}
+                                                                <div class="mb-2">
+                                                                    <img src="{{ asset(svc.image) }}" alt="" class="img-thumbnail w-100" style="max-height: 140px; object-fit: cover;">
+                                                                </div>
+                                                                <p class="small text-muted mb-2 text-break"><code>{{ svc.image }}</code></p>
+                                                            {% endif %}
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="file" class="form-control" name="image_file" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif" form="service_teaser_upload_{{ svc.id }}">
+                                                                <button type="submit" class="btn btn-outline-primary" form="service_teaser_upload_{{ svc.id }}">{{ 'back.content.service_teaser_image.upload'|trans({}, 'back') }}</button>
+                                                            </div>
+                                                            <hr class="my-3">
+                                                            <p class="small text-muted mb-2">{{ 'back.content.service_detail_hero_image.list_section_help'|trans({}, 'back') }}</p>
+                                                            <div class="fw-semibold small mb-2">{{ 'back.content.service_detail_hero_image.title'|trans({}, 'back') }}</div>
+                                                            {% if svc.detailHeroImage %}
+                                                                <div class="mb-2">
+                                                                    <img src="{{ asset(svc.detailHeroImage) }}" alt="" class="img-thumbnail w-100" style="max-height: 140px; object-fit: cover;">
+                                                                </div>
+                                                                <p class="small text-muted mb-2 text-break"><code>{{ svc.detailHeroImage }}</code></p>
+                                                            {% else %}
+                                                                <p class="small text-muted mb-2">{{ 'back.content.service_detail_hero_image.fallback_hint'|trans({}, 'back') }}</p>
+                                                            {% endif %}
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="file" class="form-control" name="image_file" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif" form="service_detail_hero_upload_list_{{ svc.id }}">
+                                                                <button type="submit" class="btn btn-outline-primary" form="service_detail_hero_upload_list_{{ svc.id }}">{{ 'back.content.service_detail_hero_image.upload'|trans({}, 'back') }}</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if section_label == 'back.content.section.service_hero' and page_name starts with 'service_' and current_service %}
+                                    <div class="mb-4 pb-4 border-bottom">
+                                        <p class="text-muted small mb-3">{{ 'back.content.service_detail_hero_image.help'|trans({}, 'back') }}</p>
+                                        <div class="card h-100 shadow-sm border-0 bg-light">
+                                            <div class="card-body">
+                                                <h6 class="card-title">{{ 'back.content.service_detail_hero_image.title'|trans({}, 'back') }}</h6>
+                                                <p class="small text-muted mb-2"><code>{{ current_service.slug }}</code></p>
+                                                {% if current_service.detailHeroImage %}
+                                                    <div class="mb-2">
+                                                        <img src="{{ asset(current_service.detailHeroImage) }}" alt="" class="img-thumbnail w-100" style="max-height: 220px; object-fit: cover;">
+                                                    </div>
+                                                    <p class="small text-muted mb-3 text-break"><code>{{ current_service.detailHeroImage }}</code></p>
+                                                {% else %}
+                                                    <p class="small text-muted mb-3">{{ 'back.content.service_detail_hero_image.fallback_hint'|trans({}, 'back') }}</p>
+                                                {% endif %}
+                                                <div class="input-group input-group-sm">
+                                                    <input type="file" class="form-control" name="image_file" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif" form="service_detail_hero_upload_{{ current_service.id }}">
+                                                    <button type="submit" class="btn btn-outline-primary" form="service_detail_hero_upload_{{ current_service.id }}">{{ 'back.content.service_detail_hero_image.upload'|trans({}, 'back') }}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
                                 {% for block_key in section_keys %}
                                     {% set config = definitions[block_key]|default(null) %}
                                     {% if config %}
@@ -458,7 +576,7 @@
                                             <div class="fw-semibold mb-3">
                                                 {{ ('back.content.block.' ~ block_key|replace({'.':'_'}))|trans({}, 'back') }}
                                             </div>
-                                            {% if block_key not in ['hero.custom_css', 'hero.text_shadow_color'] %}
+                                            {% if block_key not in ['hero.custom_css', 'hero.text_shadow_color'] and not (block_key starts with 'services.card' and block_key ends with '.image') %}
                                                 <div class="row g-2 mb-3">
                                                     <div class="col-md-6">
                                                         <label for="color_{{ block_key|replace({'.':'_'}) }}" class="form-label">
@@ -515,6 +633,20 @@
                                                     {% elseif config.type == 'rich' %}
                                                         <textarea id="content_{{ block_key|replace({'.':'_'}) }}_{{ locale }}" name="content[{{ block_key }}]" class="d-none">{{ content_values[block_key]|default('') }}</textarea>
                                                         <trix-editor input="content_{{ block_key|replace({'.':'_'}) }}_{{ locale }}"></trix-editor>
+                                                    {% elseif block_key starts with 'services.card' and block_key ends with '.image' %}
+                                                        {% set card_slot = block_key|replace({'services.card': '', '.image': ''}) %}
+                                                        {% if content_values[block_key]|default('') is not empty %}
+                                                            <div class="mb-2">
+                                                                <img src="{{ asset(content_values[block_key]) }}" alt="" class="img-thumbnail" style="max-height: 160px;">
+                                                            </div>
+                                                            <p class="small text-muted mb-2"><code>{{ content_values[block_key]|default('') }}</code></p>
+                                                        {% endif %}
+                                                        <div class="input-group input-group-sm mb-2">
+                                                            <input type="file" class="form-control" name="image_file" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif" form="home_service_card_upload_{{ card_slot }}">
+                                                            <button type="submit" class="btn btn-outline-primary" form="home_service_card_upload_{{ card_slot }}">{{ 'back.content.home_service_card_image.upload'|trans({}, 'back') }}</button>
+                                                        </div>
+                                                        <input type="hidden" name="content[{{ block_key }}]" value="{{ content_values[block_key]|default('') }}">
+                                                        <div class="form-text">{{ 'back.content.home_service_card_image.help'|trans({}, 'back') }}</div>
                                                     {% else %}
                                                         <input type="text" class="form-control" name="content[{{ block_key }}]" value="{{ content_values[block_key]|default('') }}">
                                                     {% endif %}
@@ -533,5 +665,28 @@
         </div>
     </div>
 </form>
+{% if page_name == 'home' %}
+    {% for slot in 1..5 %}
+        <form id="home_service_card_upload_{{ slot }}" method="post" action="{{ path('app_back_content_home_service_card_image_upload', { locale: locale, slot: slot }) }}" enctype="multipart/form-data" class="d-none" aria-hidden="true" tabindex="-1">
+            <input type="hidden" name="_token" value="{{ csrf_token('upload_home_service_card_' ~ slot) }}">
+        </form>
+    {% endfor %}
+{% endif %}
+{% if page_name == 'services' %}
+    {% for svc in services|default([]) %}
+        <form id="service_teaser_upload_{{ svc.id }}" method="post" action="{{ path('app_back_content_service_teaser_image_upload', { locale: locale, id: svc.id }) }}" enctype="multipart/form-data" class="d-none" aria-hidden="true" tabindex="-1">
+            <input type="hidden" name="_token" value="{{ csrf_token('upload_service_teaser_image_' ~ svc.id) }}">
+        </form>
+        <form id="service_detail_hero_upload_list_{{ svc.id }}" method="post" action="{{ path('app_back_content_service_detail_hero_image_upload', { locale: locale, slug: svc.slug }) }}" enctype="multipart/form-data" class="d-none" aria-hidden="true" tabindex="-1">
+            <input type="hidden" name="_token" value="{{ csrf_token('upload_service_detail_hero_' ~ svc.id) }}">
+            <input type="hidden" name="redirect_target" value="services_list">
+        </form>
+    {% endfor %}
+{% endif %}
+{% if page_name starts with 'service_' and current_service %}
+    <form id="service_detail_hero_upload_{{ current_service.id }}" method="post" action="{{ path('app_back_content_service_detail_hero_image_upload', { locale: locale, slug: current_service.slug }) }}" enctype="multipart/form-data" class="d-none" aria-hidden="true" tabindex="-1">
+        <input type="hidden" name="_token" value="{{ csrf_token('upload_service_detail_hero_' ~ current_service.id) }}">
+    </form>
+{% endif %}
 {% endblock %}
 

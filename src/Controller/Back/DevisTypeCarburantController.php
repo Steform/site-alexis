@@ -5,6 +5,10 @@ namespace App\Controller\Back;
 use App\Entity\DevisTypeCarburant;
 use App\Form\DevisTypeCarburantType;
 use App\Repository\DevisTypeCarburantRepository;
+use App\Service\AdminAuditActions;
+use App\Service\AdminAuditLogger;
+use App\Service\EntitySnapshotDomain;
+use App\Service\EntitySnapshotRecorder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +27,7 @@ class DevisTypeCarburantController extends AbstractController
     public function __construct(
         private readonly DevisTypeCarburantRepository $repository,
         private readonly EntityManagerInterface $em,
+        private readonly AdminAuditLogger $adminAuditLogger,
     ) {
     }
 
@@ -57,6 +62,15 @@ class DevisTypeCarburantController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($type);
             $this->em->flush();
+
+            $this->entitySnapshotRecorder->recordAfterCreate($this->em, $type, EntitySnapshotDomain::DEVIS_CARBURANT, $this->getUser());
+            $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::DEVIS_CARBURANT_CREATE, [
+                'id' => $type->getId(),
+                'code' => (string) ($type->getCode() ?? ''),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Type de carburant ajouté.');
 
             return $this->redirectToRoute(
@@ -85,7 +99,14 @@ class DevisTypeCarburantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->entitySnapshotRecorder->recordBeforeUpdate($this->em, $type, EntitySnapshotDomain::DEVIS_CARBURANT, $this->getUser());
             $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::DEVIS_CARBURANT_UPDATE, [
+                'id' => $type->getId(),
+                'code' => (string) ($type->getCode() ?? ''),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Type de carburant modifié.');
 
             return $this->redirectToRoute(
@@ -115,6 +136,13 @@ class DevisTypeCarburantController extends AbstractController
             return $this->redirectToRoute('app_back_devis_type_carburant_index');
         }
 
+        $this->entitySnapshotRecorder->recordBeforeDelete($this->em, $type, EntitySnapshotDomain::DEVIS_CARBURANT, $this->getUser());
+
+        $this->adminAuditLogger->log(AdminAuditActions::DEVIS_CARBURANT_DELETE, [
+            'id' => $type->getId(),
+            'code' => (string) ($type->getCode() ?? ''),
+        ], $this->getUser());
+
         $this->em->remove($type);
         $this->em->flush();
         $this->addFlash('success', 'Type de carburant supprimé.');
@@ -124,3 +152,4 @@ class DevisTypeCarburantController extends AbstractController
         );
     }
 }
+

@@ -154,8 +154,8 @@
         <div class="row g-4 justify-content-center">
             <div class="col-12 col-sm-6 col-lg-4">
                 <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugReparation }) }}">
-                        <img src="{{ asset('images/services/reparation.webp') }}" class="card-img-top" alt="{{ home_content['services.card1.title']|default('home.services.card1.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
+                    <a href="{{ path_locale('app_services_show', { slug: slugReparation }) }}" title="{{ home_content['services.card1.title']|default('home.services.card1.title'|trans) }}">
+                        <img src="{{ asset(home_content['services.card1.image']|default('images/services/reparation-carrosserie-peinture.webp')) }}" class="card-img-top" alt="{{ home_content['services.card1.title']|default('home.services.card1.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card" style="color: var(--color-services-card1-title, #fff);">{{ home_content['services.card1.title']|default('home.services.card1.title'|trans) }}</span>
                         </div>
@@ -164,8 +164,8 @@
             </div>
             <div class="col-12 col-sm-6 col-lg-4">
                 <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugDebosselage }) }}">
-                        <img src="{{ asset('images/services/debosselage.webp') }}" class="card-img-top" alt="{{ home_content['services.card2.title']|default('home.services.card2.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
+                    <a href="{{ path_locale('app_services_show', { slug: slugDebosselage }) }}" title="{{ home_content['services.card2.title']|default('home.services.card2.title'|trans) }}">
+                        <img src="{{ asset(home_content['services.card2.image']|default('images/services/debosselage.webp')) }}" class="card-img-top" alt="{{ home_content['services.card2.title']|default('home.services.card2.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card" style="color: var(--color-services-card2-title, #fff);">{{ home_content['services.card2.title']|default('home.services.card2.title'|trans) }}</span>
                         </div>
@@ -174,8 +174,8 @@
             </div>
             <div class="col-12 col-sm-6 col-lg-4">
                 <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugPareBrise }) }}">
-                        <img src="{{ asset('images/services/pare-brise.webp') }}" class="card-img-top" alt="{{ home_content['services.card3.title']|default('home.services.card3.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
+                    <a href="{{ path_locale('app_services_show', { slug: slugPareBrise }) }}" title="{{ home_content['services.card3.title']|default('home.services.card3.title'|trans) }}">
+                        <img src="{{ asset(home_content['services.card3.image']|default('images/services/pare-brise.webp')) }}" class="card-img-top" alt="{{ home_content['services.card3.title']|default('home.services.card3.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card" style="color: var(--color-services-card3-title, #fff);">{{ home_content['services.card3.title']|default('home.services.card3.title'|trans) }}</span>
                         </div>
@@ -184,8 +184,8 @@
             </div>
             <div class="col-12 col-sm-6 col-lg-4 mt-lg-5">
                 <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugEntretien }) }}">
-                        <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80" class="card-img-top" alt="{{ home_content['services.card5.title']|default('home.services.card5.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
+                    <a href="{{ path_locale('app_services_show', { slug: slugEntretien }) }}" title="{{ home_content['services.card5.title']|default('home.services.card5.title'|trans) }}">
+                        <img src="{{ asset(home_content['services.card5.image']|default('images/services/mecanique.webp')) }}" class="card-img-top" alt="{{ home_content['services.card5.title']|default('home.services.card5.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card" style="color: var(--color-services-card5-title, #fff);">{{ home_content['services.card5.title']|default('home.services.card5.title'|trans) }}</span>
                         </div>
@@ -194,8 +194,8 @@
             </div>
             <div class="col-12 col-sm-6 col-lg-4 mt-lg-5">
                 <div class="card service-card border-0 overflow-hidden h-100">
-                    <a href="{{ path_locale('app_services_show', { slug: slugVehicule }) }}">
-                        <img src="{{ asset('images/services/vehicule-pret-courtoisie.webp') }}" class="card-img-top" alt="{{ home_content['services.card4.title']|default('home.services.card4.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy">
+                    <a href="{{ path_locale('app_services_show', { slug: slugVehicule }) }}" title="{{ home_content['services.card4.title']|default('home.services.card4.title'|trans) }}">
+                        <img src="{{ asset(home_content['services.card4.image']|default('images/services/vehicule-pret-courtoisie.webp')) }}" class="card-img-top" alt="{{ home_content['services.card4.title']|default('home.services.card4.title'|trans) }}" style="height: 200px; object-fit: cover;" loading="lazy" decoding="async">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card" style="color: var(--color-services-card4-title, #fff);">{{ home_content['services.card4.title']|default('home.services.card4.title'|trans) }}</span>
                         </div>
@@ -232,7 +232,7 @@
     const heroSlidesCount = heroContainer ? heroContainer.querySelectorAll('.hero-slide').length : 0;
     if (heroContainer && heroSlidesCount > 1) {
         try {
-            const heroSlider = new StuSlider('homeHero', 6000, '100%', '550px', false, false, false, false);
+            const heroSlider = new StuSlider('hero', 6000, '100%', '550px', false, false, false, false);
             heroSlider.initialize();
         } catch (error) {
             console.error('Home hero slider init failed:', error);

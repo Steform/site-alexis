@@ -5,6 +5,10 @@ namespace App\Controller\Back;
 use App\Entity\Coordinates;
 use App\Form\CoordinatesType;
 use App\Repository\CoordinatesRepository;
+use App\Service\AdminAuditActions;
+use App\Service\AdminAuditLogger;
+use App\Service\EntitySnapshotDomain;
+use App\Service\EntitySnapshotRecorder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +35,8 @@ class CoordinatesController extends AbstractController
     public function __construct(
         private readonly CoordinatesRepository $coordinatesRepository,
         private readonly EntityManagerInterface $entityManager,
+        private readonly AdminAuditLogger $adminAuditLogger,
+        private readonly EntitySnapshotRecorder $entitySnapshotRecorder,
     ) {
     }
 
@@ -54,8 +60,21 @@ class CoordinatesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $wasNew = $coordinates->getId() === null;
+            if (!$wasNew) {
+                $this->entitySnapshotRecorder->recordBeforeUpdate($this->entityManager, $coordinates, EntitySnapshotDomain::COORDINATES, $this->getUser());
+            }
             $this->entityManager->persist($coordinates);
             $this->entityManager->flush();
+            if ($wasNew) {
+                $this->entitySnapshotRecorder->recordAfterCreate($this->entityManager, $coordinates, EntitySnapshotDomain::COORDINATES, $this->getUser());
+                $this->entityManager->flush();
+            }
+
+            $this->adminAuditLogger->log(AdminAuditActions::COORDINATES_UPDATE, [
+                'id' => $coordinates->getId(),
+                'companyName' => (string) ($coordinates->getCompanyName() ?? ''),
+            ], $this->getUser());
 
             $this->addFlash('success', 'Coordonnées mises à jour.');
 

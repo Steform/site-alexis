@@ -5,6 +5,10 @@ namespace App\Controller\Back;
 use App\Entity\DevisTypePrestation;
 use App\Form\DevisTypePrestationType;
 use App\Repository\DevisTypePrestationRepository;
+use App\Service\AdminAuditActions;
+use App\Service\AdminAuditLogger;
+use App\Service\EntitySnapshotDomain;
+use App\Service\EntitySnapshotRecorder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +27,8 @@ class DevisTypePrestationController extends AbstractController
     public function __construct(
         private readonly DevisTypePrestationRepository $repository,
         private readonly EntityManagerInterface $em,
+        private readonly AdminAuditLogger $adminAuditLogger,
+        private readonly EntitySnapshotRecorder $entitySnapshotRecorder,
     ) {
     }
 
@@ -42,6 +48,15 @@ class DevisTypePrestationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($type);
             $this->em->flush();
+
+            $this->entitySnapshotRecorder->recordAfterCreate($this->em, $type, EntitySnapshotDomain::DEVIS_PRESTATION, $this->getUser());
+            $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::DEVIS_PRESTATION_CREATE, [
+                'id' => $type->getId(),
+                'code' => (string) ($type->getCode() ?? ''),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Type de prestation ajouté.');
 
             return $this->redirectToRoute(
@@ -61,7 +76,14 @@ class DevisTypePrestationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->entitySnapshotRecorder->recordBeforeUpdate($this->em, $type, EntitySnapshotDomain::DEVIS_PRESTATION, $this->getUser());
             $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::DEVIS_PRESTATION_UPDATE, [
+                'id' => $type->getId(),
+                'code' => (string) ($type->getCode() ?? ''),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Type de prestation modifié.');
 
             return $this->redirectToRoute(
@@ -84,6 +106,13 @@ class DevisTypePrestationController extends AbstractController
             );
         }
 
+        $this->entitySnapshotRecorder->recordBeforeDelete($this->em, $type, EntitySnapshotDomain::DEVIS_PRESTATION, $this->getUser());
+
+        $this->adminAuditLogger->log(AdminAuditActions::DEVIS_PRESTATION_DELETE, [
+            'id' => $type->getId(),
+            'code' => (string) ($type->getCode() ?? ''),
+        ], $this->getUser());
+
         $this->em->remove($type);
         $this->em->flush();
         $this->addFlash('success', 'Type de prestation supprimé.');
@@ -93,3 +122,4 @@ class DevisTypePrestationController extends AbstractController
         );
     }
 }
+

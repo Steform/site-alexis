@@ -5,6 +5,10 @@ namespace App\Controller\Back;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\AdminAuditActions;
+use App\Service\AdminAuditLogger;
+use App\Service\EntitySnapshotDomain;
+use App\Service\EntitySnapshotRecorder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +29,8 @@ class UserController extends AbstractController
         private readonly UserRepository $repository,
         private readonly EntityManagerInterface $em,
         private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly AdminAuditLogger $adminAuditLogger,
+        private readonly EntitySnapshotRecorder $entitySnapshotRecorder,
     ) {
     }
 
@@ -47,6 +53,13 @@ class UserController extends AbstractController
             $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
             $this->em->persist($user);
             $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::USER_CREATE, [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'roles' => $user->getRoles(),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Utilisateur créé.');
 
             return $this->redirectToRoute('app_back_user_index');
@@ -65,10 +78,19 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
-            if ($plainPassword !== '' && $plainPassword !== null) {
+            $passwordChanged = $plainPassword !== '' && $plainPassword !== null;
+            if ($passwordChanged) {
                 $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
             }
             $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::USER_UPDATE, [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'roles' => $user->getRoles(),
+                'passwordChanged' => $passwordChanged,
+            ], $this->getUser());
+
             $this->addFlash('success', 'Utilisateur modifié.');
 
             return $this->redirectToRoute('app_back_user_index');
@@ -92,6 +114,13 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_back_user_index');
         }
 
+        $this->entitySnapshotRecorder->recordBeforeDelete($this->em, $user, EntitySnapshotDomain::USER, $this->getUser());
+
+        $this->adminAuditLogger->log(AdminAuditActions::USER_DELETE, [
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+        ], $this->getUser());
+
         $this->em->remove($user);
         $this->em->flush();
         $this->addFlash('success', 'Utilisateur supprimé.');
@@ -99,3 +128,4 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_back_user_index');
     }
 }
+

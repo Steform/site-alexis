@@ -4,6 +4,7 @@ namespace App\Controller\Public;
 
 use App\Repository\AvisRepository;
 use App\Repository\HorairesRepository;
+use App\Repository\ServiceProcessStepRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\ServicesWhyCardRepository;
 use App\Service\ContentBlockManager;
@@ -28,6 +29,7 @@ class ServicesController extends AbstractController
         private readonly OpeningHoursFormatter $openingHoursFormatter,
         private readonly ContentBlockManager $contentBlockManager,
         private readonly ServicesWhyCardRepository $servicesWhyCardRepository,
+        private readonly ServiceProcessStepRepository $serviceProcessStepRepository,
     ) {
     }
 
@@ -43,12 +45,15 @@ class ServicesController extends AbstractController
         $contentLocale = str_starts_with($locale, 'de') ? 'de' : 'fr';
         $horaires = $this->horairesRepository->findAllOrdered();
 
+        $services = $this->serviceRepository->findAllOrdered();
+
         return $this->render('public/services/index.html.twig', [
-            'services' => $this->serviceRepository->findAllOrdered(),
+            'services' => $services,
             'avis' => $this->avisRepository->findAllOrderedByDate(),
             'horaires' => $horaires,
             'horaires_compact' => $this->openingHoursFormatter->formatCompact($horaires, $locale),
             'services_content' => $this->contentBlockManager->getPageContent('services', $contentLocale),
+            'home_page_content' => $this->contentBlockManager->getPageContent('home', $contentLocale),
             'services_why_cards' => $this->servicesWhyCardRepository->findAllOrdered(),
         ]);
     }
@@ -102,6 +107,8 @@ class ServicesController extends AbstractController
             'service' => $service,
             'other_services' => $otherServices,
             'service_content' => $serviceContent,
+            'home_page_content' => $this->contentBlockManager->getPageContent('home', $contentLocale),
+            'service_process_steps' => $this->serviceProcessStepRepository->findByServiceOrdered($service),
         ]);
     }
 }

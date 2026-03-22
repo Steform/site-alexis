@@ -10,45 +10,93 @@
     </a>
 </div>
 
-<form method="get" class="mb-4">
-    <div class="row g-2 align-items-end">
-        <div class="col-md-3">
-            <label for="filter_page" class="form-label">{{ 'back.content.history.page'|trans({}, 'back') }}</label>
-            <select name="page" id="filter_page" class="form-select">
-                <option value="">{{ 'back.content.history.filter_all'|trans({}, 'back') }}</option>
-                <option value="home" {{ page_filter == 'home' ? 'selected' : '' }}>Accueil</option>
-                <option value="qui_sommes_nous" {{ page_filter == 'qui_sommes_nous' ? 'selected' : '' }}>Qui sommes-nous</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label for="filter_locale" class="form-label">{{ 'back.content.history.locale'|trans({}, 'back') }}</label>
-            <select name="locale" id="filter_locale" class="form-select">
-                <option value="">{{ 'back.content.history.filter_all'|trans({}, 'back') }}</option>
-                <option value="fr" {{ locale_filter == 'fr' ? 'selected' : '' }}>FR</option>
-                <option value="de" {{ locale_filter == 'de' ? 'selected' : '' }}>DE</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary">{{ 'back.content.history.filter'|trans({}, 'back') }}</button>
+<div class="accordion mb-4" id="historyFiltersAccordion">
+    <div class="accordion-item border shadow-sm">
+        <h2 class="accordion-header" id="historyFiltersHeading">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#historyFiltersCollapse" aria-expanded="false" aria-controls="historyFiltersCollapse">
+                {{ 'back.content.history.filters_accordion_title'|trans({}, 'back') }}
+            </button>
+        </h2>
+        <div id="historyFiltersCollapse" class="accordion-collapse collapse" aria-labelledby="historyFiltersHeading" data-bs-parent="#historyFiltersAccordion">
+            <div class="accordion-body">
+                <form method="get" class="history-filters-form">
+                    <div class="row g-3 mb-3">
+                        <div class="col-12">
+                            <span class="form-label d-block">{{ 'back.content.history.filter_kind_label'|trans({}, 'back') }}</span>
+                            <div class="d-flex flex-wrap gap-3">
+                                {% for kind in ['cms_block', 'upload', 'audit', 'entity_snapshot'] %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="kinds[]" value="{{ kind }}" id="kind_{{ kind }}" {{ kind in kinds_filter ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="kind_{{ kind }}">{{ ('back.content.history.filter_kind.' ~ kind)|trans({}, 'back') }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <span class="form-label d-block">{{ 'back.content.history.filter_domain_label'|trans({}, 'back') }}</span>
+                            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2">
+                                {% set domain_options = [
+                                    'cms:home', 'cms:qui_sommes_nous', 'cms:services', 'cms:devis', 'cms:gallery', 'cms:mentions_legales', 'cms:service_',
+                                    'upload:about', 'upload:home-hero', 'upload:gallery', 'upload:home-service-card', 'upload:service-teaser', 'upload:service-detail-hero',
+                                    'audit:horaires', 'audit:coordinates', 'audit:avis', 'audit:message', 'audit:user', 'audit:devis', 'audit:services', 'audit:maintenance', 'audit:backup', 'audit:slider', 'audit:gallery',
+                                    'entity:horaires', 'entity:coordinates', 'entity:avis', 'entity:message', 'entity:user', 'entity:devis_prestation', 'entity:devis_carburant', 'entity:services_why_card', 'entity:service_process_step', 'entity:service', 'entity:gallery_item', 'entity:about_photo', 'entity:home_hero_photo'
+                                ] %}
+                                {% for d in domain_options %}
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="domains[]" value="{{ d }}" id="dom_{{ d|replace({':': '_', '-': '_'}) }}" {{ d in domains_filter ? 'checked' : '' }}>
+                                            <label class="form-check-label small" for="dom_{{ d|replace({':': '_', '-': '_'}) }}">{{ ('back.content.history.filter_domain.' ~ d|replace({':': '_', '-': '_'}))|trans({}, 'back') }}</label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="filter_page" class="form-label">{{ 'back.content.history.page'|trans({}, 'back') }} <span class="text-muted small">({{ 'back.content.history.filter_cms_pages_hint'|trans({}, 'back') }})</span></label>
+                            <select name="page" id="filter_page" class="form-select">
+                                <option value="">{{ 'back.content.history.filter_all'|trans({}, 'back') }}</option>
+                                <option value="home" {{ page_filter == 'home' ? 'selected' : '' }}>Accueil</option>
+                                <option value="qui_sommes_nous" {{ page_filter == 'qui_sommes_nous' ? 'selected' : '' }}>Qui sommes-nous</option>
+                                <option value="services" {{ page_filter == 'services' ? 'selected' : '' }}>Services</option>
+                                <option value="devis" {{ page_filter == 'devis' ? 'selected' : '' }}>Devis</option>
+                                <option value="gallery" {{ page_filter == 'gallery' ? 'selected' : '' }}>Galerie</option>
+                                <option value="mentions_legales" {{ page_filter == 'mentions_legales' ? 'selected' : '' }}>Mentions légales</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="filter_locale" class="form-label">{{ 'back.content.history.locale'|trans({}, 'back') }}</label>
+                            <select name="locale" id="filter_locale" class="form-select">
+                                <option value="">{{ 'back.content.history.filter_all'|trans({}, 'back') }}</option>
+                                <option value="fr" {{ locale_filter == 'fr' ? 'selected' : '' }}>FR</option>
+                                <option value="de" {{ locale_filter == 'de' ? 'selected' : '' }}>DE</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">{{ 'back.content.history.filter'|trans({}, 'back') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</form>
+</div>
+
+<h2 class="h5 mb-3">{{ 'back.content.history.section_timeline'|trans({}, 'back') }}</h2>
 
 <div class="card shadow-sm border-0">
     <div class="card-body p-0">
-        {% if history_entries is empty %}
+        {% if timeline_items is empty %}
             <div class="p-4 text-center text-muted">
                 {{ 'back.content.history.empty'|trans({}, 'back') }}
             </div>
         {% else %}
             <div class="table-responsive">
-                <table class="table table-hover mb-0">
+                <table class="table table-hover mb-0 align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>{{ 'back.content.history.page'|trans({}, 'back') }}</th>
-                            <th>{{ 'back.content.history.block'|trans({}, 'back') }}</th>
-                            <th>{{ 'back.content.history.locale'|trans({}, 'back') }}</th>
-                            <th>{{ 'back.content.history.value'|trans({}, 'back') }}</th>
+                            <th>{{ 'back.content.history.timeline_col_type'|trans({}, 'back') }}</th>
+                            <th>{{ 'back.content.history.timeline_col_summary'|trans({}, 'back') }}</th>
+                            <th>{{ 'back.content.history.timeline_col_detail'|trans({}, 'back') }}</th>
                             <th>{{ 'back.content.history.color'|trans({}, 'back') }}</th>
                             <th>{{ 'back.content.history.date'|trans({}, 'back') }}</th>
                             <th>{{ 'back.content.history.user'|trans({}, 'back') }}</th>
@@ -56,27 +104,46 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for entry in history_entries %}
+                        {% for row in timeline_items %}
                             <tr>
-                                <td>{{ entry.pageName == 'home' ? 'Accueil' : (entry.pageName == 'qui_sommes_nous' ? 'Qui sommes-nous' : entry.pageName) }}</td>
-                                <td>{{ ('back.content.block.' ~ entry.blockKey|replace({'.': '_'}))|trans({}, 'back') }}</td>
-                                <td><span class="badge bg-secondary">{{ entry.locale|upper }}</span></td>
-                                <td class="text-break" style="max-width: 200px;">{{ entry.value|striptags|slice(0, 80) }}{{ entry.value|length > 80 ? '…' : '' }}</td>
                                 <td>
-                                    {% if entry.color %}
-                                        <span class="d-inline-block rounded" style="width: 1.2rem; height: 1.2rem; background: {{ entry.color }};" title="{{ entry.color }}"></span>
-                                        {{ entry.color }}
+                                    {% set type_label = row.typeTranslationKey|trans({}, 'back') %}
+                                    {% if type_label == row.typeTranslationKey %}
+                                        <span class="badge bg-secondary">{{ row.summary }}</span>
+                                    {% else %}
+                                        <span class="badge bg-light text-dark border">{{ type_label }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-break small" style="max-width: 220px;">{{ row.summary }}</td>
+                                <td class="text-break small text-muted" style="max-width: 280px;">{{ row.detail }}</td>
+                                <td>
+                                    {% if row.kind == 'entity_snapshot' %}
+                                        —
+                                    {% elseif row.kind == 'block' %}
+                                        {% if row.blockColorHex %}
+                                            <span class="d-inline-block rounded border" style="width: 1.1rem; height: 1.1rem; background: {{ row.blockColorHex }};" title="{{ row.blockColorHex }}"></span>
+                                            <span class="small">{{ row.blockColorHex }}</span>
+                                        {% else %}
+                                            —
+                                        {% endif %}
                                     {% else %}
                                         —
                                     {% endif %}
                                 </td>
-                                <td>{{ entry.createdAt|date('d/m/Y H:i') }}</td>
-                                <td>{{ entry.createdBy ? (entry.createdBy.nom|default(entry.createdBy.email)) : '—' }}</td>
-                                <td>
-                                    <form method="post" action="{{ path('app_back_content_rollback', { id: entry.id }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.content.history.restore_confirm'|trans({}, 'back') }}');">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('rollback_content_' ~ entry.id) }}">
-                                        <button type="submit" class="btn btn-sm btn-outline-primary">{{ 'back.content.history.restore'|trans({}, 'back') }}</button>
-                                    </form>
+                                <td class="text-nowrap small">{{ row.occurredAt|date('d/m/Y H:i') }}</td>
+                                <td class="small">{{ row.userDisplayName ?? '—' }}</td>
+                                <td class="text-nowrap">
+                                    {% if row.rollbackBlockHistoryId is not null %}
+                                        <form method="post" action="{{ path('app_back_content_rollback', { id: row.rollbackBlockHistoryId }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.content.history.restore_confirm'|trans({}, 'back') }}');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('rollback_content_' ~ row.rollbackBlockHistoryId) }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">{{ 'back.content.history.restore'|trans({}, 'back') }}</button>
+                                        </form>
+                                    {% elseif row.rollbackEntitySnapshotId is not null %}
+                                        <form method="post" action="{{ path('app_back_content_entity_snapshot_rollback', { id: row.rollbackEntitySnapshotId }) }}" class="d-inline" onsubmit="return confirm('{{ 'back.content.history.entity_snapshot_restore_confirm'|trans({}, 'back') }}');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('rollback_entity_snapshot_' ~ row.rollbackEntitySnapshotId) }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">{{ 'back.content.history.entity_snapshot_restore'|trans({}, 'back') }}</button>
+                                        </form>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

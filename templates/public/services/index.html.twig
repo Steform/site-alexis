@@ -16,6 +16,7 @@
 
 {% block body %}
 {% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
+{% set home_page_content = home_page_content|default({}) %}
 {% include 'partials/_navbar_public.html.twig' %}
 
 {# Pourquoi nous choisir — section masquée si aucune carte #}
@@ -41,18 +42,11 @@
 <section class="py-5 section-soft-blue">
     <div class="container">
         <h2 class="section-title text-center mb-5">{{ services_content['list.title']|default('services.list.title'|trans) }}</h2>
-        {% set unsplash_images = {
-            'reparation-carrosserie-peinture': 'https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=800&q=80',
-            'debosselage': 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80',
-            'pare-brise-optique': 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800&q=80',
-            'entretien-mecanique': 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80',
-            'vehicule-pret-courtoisie': 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80'
-        } %}
         <div class="row justify-content-center g-4">
             {% for service in services %}
             {% set serviceTitle = currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre %}
             {% set serviceTeaser = ('services.teaser.' ~ service.slug)|trans %}
-            {% set serviceImage = unsplash_images[service.slug] ?? asset(service.image) %}
+            {% set serviceImage = asset(service_home_card_image(service, home_page_content)) %}
             <div class="col-12 col-lg-10">
                 <a href="{{ path_locale('app_services_show', { slug: service.getSlugForLocale(currentLocale) }) }}" class="service-teaser-row row g-0 text-decoration-none text-reset rounded overflow-hidden bg-white shadow-sm">
                     <div class="col-12 col-md-6 service-teaser-thumb">

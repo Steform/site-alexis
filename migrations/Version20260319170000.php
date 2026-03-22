@@ -52,7 +52,7 @@ final class Version20260319170000 extends AbstractMigration
         ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
 
         $services = [
-            ['reparation-carrosserie-peinture', 'Réparation carrosserie & peinture', 'Reparatur & Lackierung', 'images/services/reparation.webp', 1],
+            ['reparation-carrosserie-peinture', 'Réparation carrosserie & peinture', 'Reparatur & Lackierung', 'images/services/reparation-carrosserie-peinture.webp', 1],
             ['debosselage', 'Débosselage', 'Ausbeulen', 'images/services/debosselage.webp', 2],
             ['pare-brise-optique', 'Pare-brise & optique', 'Scheiben & Verglasung', 'images/services/pare-brise.webp', 3],
             ['entretien-mecanique', 'Entretien & mécanique', 'Wartung & Mechanik', 'images/services/entretien-et-mecanique.svg', 4],

@@ -59,5 +59,22 @@ class HomeHeroPhotoRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @brief Returns the next position value for a new hero photo (max + 1, or 0 if none).
+     *
+     * @return int The next position index.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function getNextPosition(): int
+    {
+        $max = $this->createQueryBuilder('p')
+            ->select('MAX(p.position)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $max === null ? 0 : (int) $max + 1;
+    }
 }
 

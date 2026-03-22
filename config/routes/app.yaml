@@ -338,6 +338,21 @@ app_back_content_services_de:
   controller: App\Controller\Back\ContentController::servicesDe
   methods: [GET, POST]
 
+app_back_content_service_teaser_image_upload:
+  path: /back/content/services/{locale}/teaser-image/{id}
+  controller: App\Controller\Back\ContentController::uploadServiceTeaserImage
+  methods: POST
+  requirements:
+    locale: fr|de
+    id: \d+
+
+app_back_content_service_detail_hero_image_upload:
+  path: /back/content/services/{locale}/{slug}/detail-hero-image
+  controller: App\Controller\Back\ContentController::uploadServiceDetailHeroImage
+  methods: POST
+  requirements:
+    locale: fr|de
+
 app_back_content_service_detail_fr:
   path: /back/content/services/fr/{slug}
   controller: App\Controller\Back\ContentController::serviceDetailFr
@@ -347,6 +362,29 @@ app_back_content_service_detail_de:
   path: /back/content/services/de/{slug}
   controller: App\Controller\Back\ContentController::serviceDetailDe
   methods: [GET, POST]
+
+app_back_content_service_process_step_new:
+  path: /back/content/services/{locale}/{slug}/process-steps/new
+  controller: App\Controller\Back\ContentController::serviceProcessStepNew
+  methods: [GET, POST]
+  requirements:
+    locale: fr|de
+
+app_back_content_service_process_step_edit:
+  path: /back/content/services/{locale}/{slug}/process-steps/{id}/edit
+  controller: App\Controller\Back\ContentController::serviceProcessStepEdit
+  methods: [GET, POST]
+  requirements:
+    locale: fr|de
+    id: \d+
+
+app_back_content_service_process_step_delete:
+  path: /back/content/services/{locale}/{slug}/process-steps/{id}/delete
+  controller: App\Controller\Back\ContentController::serviceProcessStepDelete
+  methods: POST
+  requirements:
+    locale: fr|de
+    id: \d+
 
 app_back_content_mentions_legales_fr:
   path: /back/content/mentions-legales/fr
@@ -389,6 +427,13 @@ app_back_content_rollback:
   controller: App\Controller\Back\ContentController::rollback
   methods: [POST]
 
+app_back_content_entity_snapshot_rollback:
+  path: /back/content/history/entity-snapshot/{id}/rollback
+  controller: App\Controller\Back\ContentController::rollbackEntitySnapshot
+  methods: [POST]
+  requirements:
+    id: \d+
+
 app_back_content_home_photo_new:
   path: /back/content/home/{locale}/photos/new
   controller: App\Controller\Back\ContentController::homePhotoNew
@@ -406,6 +451,13 @@ app_back_content_home_photo_edit:
 app_back_content_home_photo_delete:
   path: /back/content/home/{locale}/photos/{id}/delete
   controller: App\Controller\Back\ContentController::homePhotoDelete
+  methods: POST
+  requirements:
+    locale: fr|de
+
+app_back_content_home_photos_reorder:
+  path: /back/content/home/{locale}/photos/reorder
+  controller: App\Controller\Back\ContentController::reorderHomePhotos
   methods: POST
   requirements:
     locale: fr|de
@@ -430,6 +482,21 @@ app_back_content_home_hero_photo_delete:
   methods: POST
   requirements:
     locale: fr|de
+
+app_back_content_home_hero_photos_reorder:
+  path: /back/content/home/{locale}/hero-photos/reorder
+  controller: App\Controller\Back\ContentController::reorderHomeHeroPhotos
+  methods: POST
+  requirements:
+    locale: fr|de
+
+app_back_content_home_service_card_image_upload:
+  path: /back/content/home/{locale}/service-cards/{slot}/image
+  controller: App\Controller\Back\ContentController::uploadHomeServiceCardImage
+  methods: POST
+  requirements:
+    locale: fr|de
+    slot: '[1-5]'
 
 app_back_backup_index:
   path: /back/backup

@@ -42,6 +42,12 @@ class Service
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    /**
+     * Optional wide hero image for the public service detail page (list vignette uses `image`).
+     */
+    #[ORM\Column(name: 'detail_hero_image', length: 500, nullable: true)]
+    private ?string $detailHeroImage = null;
+
     #[ORM\Column(type: Types::SMALLINT, options: ['default' => 0])]
     private ?int $ordre = 0;
 
@@ -138,6 +144,33 @@ class Service
     public function setImage(string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @brief Returns the optional public detail-page hero image path (relative to public/).
+     *
+     * @return string|null The path or null when using list image as fallback.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function getDetailHeroImage(): ?string
+    {
+        return $this->detailHeroImage;
+    }
+
+    /**
+     * @brief Sets the optional public detail-page hero image path.
+     *
+     * @param string|null $detailHeroImage The relative path or null to clear.
+     * @return $this
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function setDetailHeroImage(?string $detailHeroImage): static
+    {
+        $this->detailHeroImage = $detailHeroImage;
 
         return $this;
     }

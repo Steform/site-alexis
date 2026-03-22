@@ -38,4 +38,8 @@ return [
     'stuslider' => [
         'version' => '0.5.3',
     ],
+    // Local path avoids "vendor asset is missing" when a version pin exists without assets/vendor files.
+    'sortablejs' => [
+        'path' => './assets/vendor/sortablejs/sortablejs.index.js',
+    ],
 ];

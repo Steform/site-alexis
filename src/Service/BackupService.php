@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ParameterType;
 
 /**
  * @brief Handles full site backup (database + uploaded files) and restore operations.
@@ -13,6 +12,11 @@ use Doctrine\DBAL\ParameterType;
  */
 class BackupService
 {
+    /**
+     * @brief Semantic version of the backup archive layout (ZIP contents and naming convention).
+     */
+    public const BACKUP_ARCHIVE_FORMAT_VERSION = '0.2';
+
     private const BACKUP_DIR = 'var/backups';
     private const UPLOADS_DIR = 'public/uploads';
 
@@ -38,7 +42,7 @@ class BackupService
     {
         $this->ensureBackupDir();
 
-        $filename = 'backup_' . date('Ymd_His') . '.zip';
+        $filename = 'backup_' . $this->formatVersionFileSegment() . '_' . date('Ymd_His') . '.zip';
         $zipPath = $this->backupDir . '/' . $filename;
 
         $zip = new \ZipArchive();
@@ -151,7 +155,7 @@ class BackupService
         $this->ensureBackupDir();
 
         $originalName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-        $filename = $originalName . '_' . date('Ymd_His') . '.zip';
+        $filename = $originalName . '_' . $this->formatVersionFileSegment() . '_' . date('Ymd_His') . '.zip';
         $uploadedFile->move($this->backupDir, $filename);
 
         $this->restoreBackup($filename);
@@ -194,6 +198,18 @@ class BackupService
     }
 
     /**
+     * @brief Builds the version segment used in backup archive filenames (e.g. v0.2).
+     *
+     * @return string Version segment including the leading "v".
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function formatVersionFileSegment(): string
+    {
+        return 'v' . self::BACKUP_ARCHIVE_FORMAT_VERSION;
+    }
+
+    /**
      * @brief Generates a complete SQL dump of all tables (structure + data).
      *
      * @return string The SQL dump content.
@@ -202,7 +218,8 @@ class BackupService
      */
     private function generateSqlDump(): string
     {
-        $sql = "-- Site backup: " . date('Y-m-d H:i:s') . "\n";
+        $sql = '-- Site backup: ' . date('Y-m-d H:i:s') . ', archive format v' . self::BACKUP_ARCHIVE_FORMAT_VERSION
+            . '; uploads: full tree under public/uploads (restore mirrors entire directory)' . "\n";
         $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n";
         $sql .= "SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\n";
         $sql .= "SET NAMES utf8mb4;\n\n";
@@ -333,32 +350,29 @@ class BackupService
     }
 
     /**
-     * @brief Replaces the uploads directory with the contents from the backup.
+     * @brief Replaces the entire public/uploads tree with the extracted backup (full mirror).
      *
-     * @param string $sourceDir Path to the extracted uploads directory.
+     * Clears the current uploads root then copies every file and subdirectory from the archive,
+     * matching the scope of addDirectoryToZip() used when creating backups.
+     *
+     * @param string $sourceDir Path to the extracted uploads directory (e.g. temp/uploads).
      * @return void
-     * @date 2026-03-21
+     * @date 2026-03-22
      * @author Stephane H.
      */
     private function restoreUploads(string $sourceDir): void
     {
-        $subDirs = ['gallery', 'about', 'home-hero'];
-
-        foreach ($subDirs as $sub) {
-            $targetSub = $this->uploadsDir . '/' . $sub;
-            $sourceSub = $sourceDir . '/' . $sub;
-
-            if (is_dir($targetSub)) {
-                $this->clearDirectory($targetSub);
-            }
-
-            if (is_dir($sourceSub)) {
-                if (!is_dir($targetSub)) {
-                    mkdir($targetSub, 0775, true);
-                }
-                $this->copyDirectory($sourceSub, $targetSub);
-            }
+        if (!is_dir($sourceDir)) {
+            return;
         }
+
+        if (!is_dir($this->uploadsDir)) {
+            mkdir($this->uploadsDir, 0775, true);
+        } else {
+            $this->clearDirectory($this->uploadsDir);
+        }
+
+        $this->copyDirectory($sourceDir, $this->uploadsDir);
     }
 
     /**

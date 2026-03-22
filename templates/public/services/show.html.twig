@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% set service_content = service_content|default({}) %}
+{% set home_page_content = home_page_content|default({}) %}
 {% set currentLocale = app.request.locale starts with 'de' ? 'de' : 'fr' %}
 {% set serviceTitle = currentLocale == 'de' and service.titreDe ? service.titreDe : service.titre %}
 {% set serviceDescription = (service_content.description|default(''))|trim %}
@@ -24,6 +25,7 @@
 {% if not serviceTeaser %}
     {% set serviceTeaser = ('services.teaser.' ~ service.slug)|trans %}
 {% endif %}
+{% set serviceHeroImage = service.detailHeroImage ? service.detailHeroImage : service.image %}
 
 {% block title %}{{ serviceTitle }} - Carrosserie Lino{% endblock %}
 
@@ -42,7 +44,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="service-hero-image-wrapper rounded overflow-hidden mb-4 mb-md-5">
-                    <img src="{{ asset(service.image) }}" alt="{{ serviceTitle }}" class="img-fluid w-100 service-detail-hero-img" loading="eager">
+                    <img src="{{ asset(serviceHeroImage) }}" alt="{{ serviceTitle }}" class="img-fluid w-100 service-detail-hero-img" loading="eager">
                 </div>
                 <h1 class="section-title text-center mb-2">{{ serviceTitle }}</h1>
                 {% if serviceTeaser and serviceTeaser is not same as ('services.teaser.' ~ service.slug) %}
@@ -94,36 +96,31 @@
 </section>
 
 {# Processus #}
+{% if service_process_steps|default([]) is not empty %}
 <section class="py-5 section-soft-blue">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <h2 class="h4 mb-4 text-center">{{ (service_content.process_title|default(''))|trim ?: 'services.detail.process_title'|trans }}</h2>
                 <div class="service-process-steps d-flex flex-wrap justify-content-center gap-3 gap-md-4">
+                    {% for step in service_process_steps %}
+                    {% set loc = app.request.locale|slice(0, 2) %}
+                    {% set primary = loc == 'de' ? step.labelDe : step.labelFr %}
+                    {% set fallback = loc == 'de' ? step.labelFr : step.labelDe %}
                     <div class="service-process-step">
-                        <span class="service-process-num">1</span>
-                        <span>{{ (service_content['process.step1']|default(''))|trim ?: 'services.detail.process.step1'|trans }}</span>
+                        <span class="service-process-num">{{ loop.index }}</span>
+                        <span>{{ (primary|trim) ? primary|trim : fallback|trim }}</span>
                     </div>
+                    {% if not loop.last %}
                     <span class="service-process-arrow d-none d-md-inline" aria-hidden="true">→</span>
-                    <div class="service-process-step">
-                        <span class="service-process-num">2</span>
-                        <span>{{ (service_content['process.step2']|default(''))|trim ?: 'services.detail.process.step2'|trans }}</span>
-                    </div>
-                    <span class="service-process-arrow d-none d-md-inline" aria-hidden="true">→</span>
-                    <div class="service-process-step">
-                        <span class="service-process-num">3</span>
-                        <span>{{ (service_content['process.step3']|default(''))|trim ?: 'services.detail.process.step3'|trans }}</span>
-                    </div>
-                    <span class="service-process-arrow d-none d-md-inline" aria-hidden="true">→</span>
-                    <div class="service-process-step">
-                        <span class="service-process-num">4</span>
-                        <span>{{ (service_content['process.step4']|default(''))|trim ?: 'services.detail.process.step4'|trans }}</span>
-                    </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 </section>
+{% endif %}
 
 {# CTA #}
 <section class="py-5">
@@ -148,7 +145,7 @@
             <div class="col-12 col-sm-6 col-lg-3">
                 <div class="card service-card border-0 overflow-hidden h-100">
                     <a href="{{ path_locale('app_services_show', { slug: other.getSlugForLocale(currentLocale) }) }}">
-                        <img src="{{ asset(other.image) }}" class="card-img-top" alt="{{ otherTitle }}" style="height: 200px; object-fit: cover;" loading="lazy">
+                        <img src="{{ asset(service_home_card_image(other, home_page_content)) }}" class="card-img-top" alt="{{ otherTitle }}" style="height: 200px; object-fit: cover;" loading="lazy">
                         <div class="card-body p-0 d-flex justify-content-center">
                             <span class="btn btn-service-card text-white">{{ otherTitle }}</span>
                         </div>

@@ -1,0 +1,51 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}
+    {% if step.id %}
+        {{ 'back.service_process_step.form.title_edit'|trans({}, 'back') }}
+    {% else %}
+        {{ 'back.service_process_step.form.title_new'|trans({}, 'back') }}
+    {% endif %}
+{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block back_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">
+        {% if step.id %}
+            {{ 'back.service_process_step.form.heading_edit'|trans({}, 'back') }}
+        {% else %}
+            {{ 'back.service_process_step.form.heading_new'|trans({}, 'back') }}
+        {% endif %}
+    </h1>
+    <a href="{{ path(locale == 'de' ? 'app_back_content_service_detail_de' : 'app_back_content_service_detail_fr', { slug: service.slug }) }}" class="btn btn-outline-secondary btn-sm">
+        {{ 'back.service_process_step.form.back_to_content'|trans({}, 'back') }}
+    </a>
+</div>
+
+{{ form_start(form) }}
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+        <div class="row g-4">
+            <div class="col-md-6">
+                {{ form_row(form.labelFr) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.labelDe) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.position) }}
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">{{ 'back.service_process_step.form.save'|trans({}, 'back') }}</button>
+            <a href="{{ path(locale == 'de' ? 'app_back_content_service_detail_de' : 'app_back_content_service_detail_fr', { slug: service.slug }) }}" class="btn btn-outline-secondary">
+                {{ 'back.service_process_step.form.cancel'|trans({}, 'back') }}
+            </a>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+{% endblock %}

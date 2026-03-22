@@ -5,6 +5,10 @@ namespace App\Controller\Back;
 use App\Entity\Message;
 use App\Form\MessageType;
 use App\Repository\MessageRepository;
+use App\Service\AdminAuditActions;
+use App\Service\AdminAuditLogger;
+use App\Service\EntitySnapshotDomain;
+use App\Service\EntitySnapshotRecorder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +27,8 @@ class MessageController extends AbstractController
     public function __construct(
         private readonly MessageRepository $repository,
         private readonly EntityManagerInterface $em,
+        private readonly AdminAuditLogger $adminAuditLogger,
+        private readonly EntitySnapshotRecorder $entitySnapshotRecorder,
     ) {
     }
 
@@ -46,32 +52,18 @@ class MessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($message);
             $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::MESSAGE_CREATE, [
+                'id' => $message->getId(),
+                'contenuPreview' => $this->shortPreview($message->getContenu()),
+                'dateDebut' => $message->getDateDebut()?->format(\DateTimeInterface::ATOM),
+                'dateFin' => $message->getDateFin()?->format(\DateTimeInterface::ATOM),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Message ajouté.');
 
             return $this->redirectToRoute('app_back_message_index');
         }
-
-        // #region agent log
-        @file_put_contents(
-            (string) $this->getParameter('kernel.project_dir') . '/debug-8a5f96.log',
-            json_encode([
-                'sessionId' => '8a5f96',
-                'runId' => 'pre-fix',
-                'hypothesisId' => 'H1',
-                'location' => 'MessageController.php:new',
-                'message' => 'Form fields created for new message',
-                'data' => [
-                    'fields' => array_keys(iterator_to_array($form, true)),
-                    'hasContenu' => $form->has('contenu'),
-                    'hasContenuDe' => $form->has('contenuDe'),
-                    'hasDateDebut' => $form->has('dateDebut'),
-                    'hasDateFin' => $form->has('dateFin'),
-                ],
-                'timestamp' => (int) round(microtime(true) * 1000),
-            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL,
-            FILE_APPEND
-        );
-        // #endregion
 
         return $this->render('back/message/form.html.twig', [
             'message' => $message,
@@ -85,31 +77,20 @@ class MessageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->entitySnapshotRecorder->recordBeforeUpdate($this->em, $message, EntitySnapshotDomain::MESSAGE, $this->getUser());
             $this->em->flush();
+
+            $this->adminAuditLogger->log(AdminAuditActions::MESSAGE_UPDATE, [
+                'id' => $message->getId(),
+                'contenuPreview' => $this->shortPreview($message->getContenu()),
+                'dateDebut' => $message->getDateDebut()?->format(\DateTimeInterface::ATOM),
+                'dateFin' => $message->getDateFin()?->format(\DateTimeInterface::ATOM),
+            ], $this->getUser());
+
             $this->addFlash('success', 'Message modifié.');
 
             return $this->redirectToRoute('app_back_message_index');
         }
-
-        // #region agent log
-        @file_put_contents(
-            (string) $this->getParameter('kernel.project_dir') . '/debug-8a5f96.log',
-            json_encode([
-                'sessionId' => '8a5f96',
-                'runId' => 'pre-fix',
-                'hypothesisId' => 'H2',
-                'location' => 'MessageController.php:edit',
-                'message' => 'Form fields created for edit message',
-                'data' => [
-                    'messageId' => $message->getId(),
-                    'fields' => array_keys(iterator_to_array($form, true)),
-                    'hasContenuDe' => $form->has('contenuDe'),
-                ],
-                'timestamp' => (int) round(microtime(true) * 1000),
-            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL,
-            FILE_APPEND
-        );
-        // #endregion
 
         return $this->render('back/message/form.html.twig', [
             'message' => $message,
@@ -123,10 +104,39 @@ class MessageController extends AbstractController
             $this->addFlash('error', 'Token invalide.');
             return $this->redirectToRoute('app_back_message_index');
         }
+
+        $this->entitySnapshotRecorder->recordBeforeDelete($this->em, $message, EntitySnapshotDomain::MESSAGE, $this->getUser());
+
+        $this->adminAuditLogger->log(AdminAuditActions::MESSAGE_DELETE, [
+            'id' => $message->getId(),
+            'contenuPreview' => $this->shortPreview($message->getContenu()),
+        ], $this->getUser());
+
         $this->em->remove($message);
         $this->em->flush();
         $this->addFlash('success', 'Message supprimé.');
 
         return $this->redirectToRoute('app_back_message_index');
+    }
+
+    /**
+     * @brief Truncates message text for audit payloads (no full body stored).
+     *
+     * @param string|null $text The raw text.
+     * @return string Short preview.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function shortPreview(?string $text): string
+    {
+        $t = trim((string) $text);
+        if ($t === '') {
+            return '';
+        }
+        if (strlen($t) <= 120) {
+            return $t;
+        }
+
+        return substr($t, 0, 120) . '…';
     }
 }

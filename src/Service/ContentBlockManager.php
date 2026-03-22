@@ -31,18 +31,17 @@ class ContentBlockManager
             'about.lead' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'about.body' => ['light' => '#6C757D', 'dark' => '#b7bdc8'],
             'about.cta' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
-            'quick.card1.title' => ['light' => '#0a396a', 'dark' => '#7bbcff'],
-            'quick.card1.text' => ['light' => '#5c6773', 'dark' => '#b7bdc8'],
-            'quick.card2.title' => ['light' => '#18416d', 'dark' => '#84c3ff'],
-            'quick.card2.text' => ['light' => '#5c6773', 'dark' => '#b7bdc8'],
-            'quick.card3.title' => ['light' => '#09365f', 'dark' => '#75b7ff'],
-            'quick.card3.text' => ['light' => '#5c6773', 'dark' => '#b7bdc8'],
             'services.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'services.card1.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card1.image' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'services.card2.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card2.image' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'services.card3.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card3.image' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'services.card4.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card4.image' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'services.card5.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
+            'services.card5.image' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'services.cta' => ['light' => '#FFFFFF', 'dark' => '#FFFFFF'],
             'reviews.title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'reviews.default.text' => ['light' => '#2c3e50', 'dark' => '#d0d5dc'],
@@ -88,10 +87,6 @@ class ContentBlockManager
             'process_title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'cta_lead' => ['light' => '#212529', 'dark' => '#e4e6eb'],
             'other_services_title' => ['light' => '#212529', 'dark' => '#e4e6eb'],
-            'process.step1' => ['light' => '#212529', 'dark' => '#e4e6eb'],
-            'process.step2' => ['light' => '#212529', 'dark' => '#e4e6eb'],
-            'process.step3' => ['light' => '#212529', 'dark' => '#e4e6eb'],
-            'process.step4' => ['light' => '#212529', 'dark' => '#e4e6eb'],
         ],
         'mentions_legales' => [
             'editor' => ['light' => '#212529', 'dark' => '#e4e6eb'],
@@ -116,18 +111,17 @@ class ContentBlockManager
             'about.lead' => ['type' => 'plain', 'translation_key' => 'home.about.lead'],
             'about.body' => ['type' => 'rich', 'translation_key' => 'home.about.text'],
             'about.cta' => ['type' => 'plain', 'translation_key' => 'home.about.cta'],
-            'quick.card1.title' => ['type' => 'plain', 'translation_key' => 'home.quick.card1.title'],
-            'quick.card1.text' => ['type' => 'plain', 'translation_key' => 'home.quick.card1.text'],
-            'quick.card2.title' => ['type' => 'plain', 'translation_key' => 'home.quick.card2.title'],
-            'quick.card2.text' => ['type' => 'plain', 'translation_key' => 'home.quick.card2.text'],
-            'quick.card3.title' => ['type' => 'plain', 'translation_key' => 'home.quick.card3.title'],
-            'quick.card3.text' => ['type' => 'plain', 'translation_key' => 'home.quick.card3.text'],
             'services.title' => ['type' => 'plain', 'translation_key' => 'home.services.title'],
             'services.card1.title' => ['type' => 'plain', 'translation_key' => 'home.services.card1.title'],
+            'services.card1.image' => ['type' => 'plain', 'translation_key' => 'home.services.card1.image'],
             'services.card2.title' => ['type' => 'plain', 'translation_key' => 'home.services.card2.title'],
+            'services.card2.image' => ['type' => 'plain', 'translation_key' => 'home.services.card2.image'],
             'services.card3.title' => ['type' => 'plain', 'translation_key' => 'home.services.card3.title'],
+            'services.card3.image' => ['type' => 'plain', 'translation_key' => 'home.services.card3.image'],
             'services.card4.title' => ['type' => 'plain', 'translation_key' => 'home.services.card4.title'],
+            'services.card4.image' => ['type' => 'plain', 'translation_key' => 'home.services.card4.image'],
             'services.card5.title' => ['type' => 'plain', 'translation_key' => 'home.services.card5.title'],
+            'services.card5.image' => ['type' => 'plain', 'translation_key' => 'home.services.card5.image'],
             'services.cta' => ['type' => 'plain', 'translation_key' => 'home.services.cta'],
             'reviews.title' => ['type' => 'plain', 'translation_key' => 'home.reviews.title'],
             'reviews.default.text' => ['type' => 'plain', 'translation_key' => 'home.reviews.default.text'],
@@ -236,10 +230,6 @@ class ContentBlockManager
             'process_title' => ['type' => 'plain', 'translation_key' => 'services.detail.process_title'],
             'cta_lead' => ['type' => 'plain', 'translation_key' => 'services.detail.cta_lead'],
             'other_services_title' => ['type' => 'plain', 'translation_key' => 'services.detail.other_services_title'],
-            'process.step1' => ['type' => 'plain', 'translation_key' => 'services.detail.process.step1'],
-            'process.step2' => ['type' => 'plain', 'translation_key' => 'services.detail.process.step2'],
-            'process.step3' => ['type' => 'plain', 'translation_key' => 'services.detail.process.step3'],
-            'process.step4' => ['type' => 'plain', 'translation_key' => 'services.detail.process.step4'],
         ];
     }
 
@@ -431,6 +421,9 @@ class ContentBlockManager
             if ($pageName === 'home' && $key === 'hero.text_shadow_color') {
                 $value = preg_match('/^#[0-9a-fA-F]{6}$/', $value) === 1 ? strtoupper($value) : '#000000';
             }
+            if ($pageName === 'home' && preg_match('/^services\.card[1-5]\.image$/', $key) === 1) {
+                $value = $this->normalizePublicAssetPath($value);
+            }
             $defaults = $this->getDefaultColors($pageName, $key);
             $requestedColor = $colors[$key] ?? null;
             $requestedColorDark = $colorsDark[$key] ?? null;
@@ -485,6 +478,81 @@ class ContentBlockManager
         if ($flush) {
             $this->entityManager->flush();
         }
+    }
+
+    /**
+     * @brief Returns the raw stored value for one block and locale (empty string if missing).
+     *
+     * @param string $pageName The page name.
+     * @param string $blockKey The block key.
+     * @param string $locale The locale.
+     * @return string The stored value or empty string.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function getBlockValueForLocale(string $pageName, string $blockKey, string $locale): string
+    {
+        $block = $this->repository->findOneByComposite($pageName, $blockKey, $locale);
+
+        return $block !== null ? (string) ($block->getValue() ?? '') : '';
+    }
+
+    /**
+     * @brief Updates home service card image path for both FR and DE with CMS history.
+     *
+     * @param int $slot Card index from 1 to 5.
+     * @param string $relativePath Public-relative path (e.g. uploads/home-service-cards/x.webp).
+     * @param UserInterface|null $user The acting user.
+     * @return void
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function updateHomeServiceCardImage(int $slot, string $relativePath, ?UserInterface $user = null): void
+    {
+        if ($slot < 1 || $slot > 5) {
+            throw new \InvalidArgumentException('Invalid service card slot.');
+        }
+
+        $blockKey = sprintf('services.card%d.image', $slot);
+        $definitions = $this->getPageDefinitions('home');
+        if (!isset($definitions[$blockKey])) {
+            throw new \InvalidArgumentException('Unknown block key.');
+        }
+
+        $definition = $definitions[$blockKey];
+        $value = $this->normalizePublicAssetPath($relativePath);
+        if ($value === '') {
+            throw new \InvalidArgumentException('Invalid asset path.');
+        }
+
+        $now = new \DateTimeImmutable();
+
+        foreach (['fr', 'de'] as $locale) {
+            $editedBlock = $this->repository->findOneByComposite('home', $blockKey, $locale);
+            $blockExisted = $editedBlock !== null;
+            if ($editedBlock === null) {
+                $editedBlock = $this->findOrCreateContentBlock('home', $blockKey, $locale, $definition['type']);
+            }
+
+            $defaults = $this->getDefaultColors('home', $blockKey);
+            $color = $defaults['light'];
+            $colorDark = $defaults['dark'];
+
+            if ($blockExisted) {
+                $oldValue = $editedBlock->getValue() ?? '';
+                if ($oldValue !== $value) {
+                    $this->pushToHistory($editedBlock, $now, $user);
+                }
+            }
+
+            $editedBlock
+                ->setValue($value)
+                ->setColor($color)
+                ->setColorDark($colorDark)
+                ->setUpdatedAt($now);
+        }
+
+        $this->entityManager->flush();
     }
 
     /**
@@ -692,6 +760,33 @@ class ContentBlockManager
         }
 
         return $fallback;
+    }
+
+    /**
+     * @brief Normalizes a public asset path for CMS image blocks (no leading slash, allowed roots only).
+     *
+     * @param string $value Raw submitted path.
+     * @return string Normalized path or empty string when invalid.
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    private function normalizePublicAssetPath(string $value): string
+    {
+        $trimmed = trim($value);
+        if ($trimmed === '') {
+            return '';
+        }
+
+        $path = ltrim($trimmed, '/');
+        if (str_contains($path, '..')) {
+            return '';
+        }
+
+        if (preg_match('#^(images|uploads)/#', $path) !== 1) {
+            return '';
+        }
+
+        return $path;
     }
 
     /**

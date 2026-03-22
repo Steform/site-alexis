@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Back;
 
+use App\Service\AdminAuditActions;
+use App\Service\AdminAuditLogger;
 use App\Service\MaintenanceService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +29,8 @@ class MaintenanceController extends AbstractController
     public function __construct(
         private readonly MaintenanceService $maintenanceService,
         private readonly RequestStack $requestStack,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly AdminAuditLogger $adminAuditLogger,
     ) {
     }
 
@@ -52,10 +55,16 @@ class MaintenanceController extends AbstractController
         if ($this->maintenanceService->isActive()) {
             $this->maintenanceService->disable();
             $this->addFlash('success', $this->translator->trans('back.maintenance.disabled', [], 'back'));
+            $enabledAfter = false;
         } else {
             $this->maintenanceService->enable();
             $this->addFlash('success', $this->translator->trans('back.maintenance.enabled', [], 'back'));
+            $enabledAfter = true;
         }
+
+        $this->adminAuditLogger->log(AdminAuditActions::MAINTENANCE_TOGGLE, [
+            'maintenanceEnabled' => $enabledAfter,
+        ], $this->getUser());
 
         return $this->redirectToRoute('app_back_dashboard');
     }

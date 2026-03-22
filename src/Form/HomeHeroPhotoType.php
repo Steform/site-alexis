@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\PositiveOrZero;
 
 /**
  * @brief Form type for HomeHeroPhoto entity.
@@ -43,7 +44,10 @@ class HomeHeroPhotoType extends AbstractType
             ])
             ->add('position', IntegerType::class, [
                 'label' => 'back.home_hero.photo.position',
-                'attr' => ['min' => 0],
+                'required' => false,
+                'constraints' => [
+                    new PositiveOrZero(),
+                ],
             ])
             ->add('isActive', CheckboxType::class, [
                 'label' => 'back.home_hero.photo.is_active',
@@ -58,8 +62,8 @@ class HomeHeroPhotoType extends AbstractType
                     !$options['is_edit'] ? new NotBlank(message: 'Image requise.') : null,
                     new File(
                         maxSize: '6M',
-                        mimeTypes: ['image/jpeg', 'image/jpg', 'image/png'],
-                        mimeTypesMessage: 'Format accepté : JPEG ou PNG.'
+                        mimeTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'],
+                        mimeTypesMessage: 'Format accepté : JPEG, PNG, WebP ou GIF.'
                     ),
                 ]),
             ])
