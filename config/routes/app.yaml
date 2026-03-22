@@ -121,6 +121,11 @@ app_setup_restore:
   controller: App\Controller\SetupController::restoreBackup
   methods: POST
 
+app_setup_upload:
+  path: /setup/upload-backup
+  controller: App\Controller\SetupController::uploadBackup
+  methods: POST
+
 # Security
 app_login:
   path: /login

@@ -134,4 +134,46 @@ class SetupController extends AbstractController
 
         return $this->redirectToRoute('app_login');
     }
+
+    /**
+     * @brief Uploads a ZIP backup file and restores the site from it during initial setup.
+     *
+     * @param Request $request
+     * @return Response
+     * @date 2026-03-22
+     * @author Stephane H.
+     */
+    public function uploadBackup(Request $request): Response
+    {
+        if ($this->userRepository->count([]) > 0) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if (!$this->isCsrfTokenValid('setup_upload', $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token CSRF invalide.');
+            return $this->redirectToRoute('app_setup');
+        }
+
+        $file = $request->files->get('backup_file');
+
+        if ($file === null) {
+            $this->addFlash('error', 'setup.error.no_file');
+            return $this->redirectToRoute('app_setup');
+        }
+
+        if ($file->getClientOriginalExtension() !== 'zip' && $file->getMimeType() !== 'application/zip') {
+            $this->addFlash('error', 'setup.error.invalid_file');
+            return $this->redirectToRoute('app_setup');
+        }
+
+        try {
+            $this->backupService->importAndRestore($file);
+            $this->addFlash('success', 'setup.flash.upload_restored');
+        } catch (\Throwable $e) {
+            $this->addFlash('error', 'setup.flash.restore_error');
+            return $this->redirectToRoute('app_setup');
+        }
+
+        return $this->redirectToRoute('app_login');
+    }
 }

@@ -114,6 +114,37 @@
             </div>
         </div>
 
+        <div class="setup-divider">
+            <span>{{ 'setup.or'|trans }}</span>
+        </div>
+
+        <div class="card setup-card mb-4">
+            <div class="card-header bg-success text-white">
+                <i class="bi bi-upload me-2"></i>{{ 'setup.upload.title'|trans }}
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted mb-4">{{ 'setup.upload.description'|trans }}</p>
+                <form method="post" action="{{ path('app_setup_upload') }}" enctype="multipart/form-data">
+                    <input type="hidden" name="_token" value="{{ csrf_token('setup_upload') }}">
+
+                    <div class="mb-3">
+                        <label for="setup_upload_file" class="form-label">{{ 'setup.upload.label'|trans }}</label>
+                        <input type="file" name="backup_file" id="setup_upload_file" class="form-control" accept=".zip" required>
+                    </div>
+
+                    <div class="alert alert-info small mb-3">
+                        <i class="bi bi-info-circle me-1"></i>
+                        {{ 'setup.upload.warning'|trans }}
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-upload me-1"></i>
+                        {{ 'setup.upload.submit'|trans }}
+                    </button>
+                </form>
+            </div>
+        </div>
+
         {% if backups|length > 0 %}
         <div class="setup-divider">
             <span>{{ 'setup.or'|trans }}</span>
